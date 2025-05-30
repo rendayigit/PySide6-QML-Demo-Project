@@ -11,8 +11,8 @@ A demonstration project showcasing PySide6 integration with QML for creating mod
 
 ## Project Structure
 
-```
-qml6Denemeler/
+```bash
+./
 ├── main.py          # Python application entry point
 ├── main.qml         # QML user interface
 ├── requirements.txt # Python dependencies
@@ -23,10 +23,13 @@ qml6Denemeler/
 
 1. Make sure you have Python 3.7+ installed
 2. Install PySide6:
+
    ```bash
    pip install -r requirements.txt
    ```
+
    Or directly:
+
    ```bash
    pip install PySide6
    ```
@@ -40,12 +43,14 @@ python main.py
 ## What This Demo Shows
 
 ### Python Side (`main.py`)
+
 - **Backend Class**: A QObject that exposes properties and methods to QML
 - **Signal/Slot System**: Communication mechanism between Python and QML
 - **Property Binding**: Automatic UI updates when Python data changes
 - **QML Registration**: Making Python classes available in QML
 
 ### QML Side (`main.qml`)
+
 - **Modern UI Components**: Using QtQuick.Controls 2.15
 - **Layout Management**: Responsive design with ColumnLayout and RowLayout
 - **Animations**: Smooth transitions and visual feedback
@@ -66,15 +71,6 @@ python main.py
    - Material Design inspired interface
    - Smooth animations and transitions
    - Responsive layout
-
-## Extending the Demo
-
-You can extend this demo by:
-- Adding more complex Python business logic
-- Creating additional QML components
-- Implementing file I/O operations
-- Adding database connectivity
-- Creating custom QML types in Python
 
 ## Requirements
 
