@@ -172,6 +172,7 @@ ApplicationWindow {
                             Layout.fillWidth: true
                             placeholderText: "Enter your message here..."
                             font.pixelSize: 14
+                            color: "#2c3e50"
 
                             background: Rectangle {
                                 color: "white"

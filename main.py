@@ -14,16 +14,16 @@ from PySide6.QtCore import QObject, Signal, Slot, Property
 class Backend(QObject):
     """
     Backend class to demonstrate Python-QML integration.
-    
+
     This class serves as a bridge between Python logic and QML UI components,
     providing properties and methods that can be accessed from QML. It manages
     a message property and a counter to demonstrate bidirectional communication
     between Python and QML.
-    
+
     Attributes:
         _message (str): Private storage for the message property
         _counter (int): Private counter for tracking button clicks
-        
+
     Signals:
         messageChanged: Emitted when the message property changes
     """
@@ -34,7 +34,7 @@ class Backend(QObject):
     def __init__(self):
         """
         Initialize the Backend instance.
-        
+
         Sets up the initial state with a default message and zero counter value.
         """
         super().__init__()
@@ -45,10 +45,10 @@ class Backend(QObject):
     def message(self):
         """
         Get the current message.
-        
+
         This property is exposed to QML and automatically notifies QML
         when the value changes through the messageChanged signal.
-        
+
         Returns:
             str: The current message string
         """
@@ -58,10 +58,10 @@ class Backend(QObject):
     def message(self, value):
         """
         Set the message property.
-        
+
         Updates the message only if the new value is different from the current
         value, and emits the messageChanged signal to notify QML of the change.
-        
+
         Args:
             value (str): The new message string to set
         """
@@ -73,23 +73,24 @@ class Backend(QObject):
     def increment_counter(self):
         """
         Increment the internal counter and update the message.
-        
+
         This slot can be called from QML to increment the counter and
         automatically update the message to show the current count.
         The message will display "Button clicked X times!" where X is
         the number of times this method has been called.
         """
         self._counter += 1
-        self.message = "Button clicked " + str(self._counter) + " times!"
+        self._message = f"Button clicked {self._counter} times!"
+        self.messageChanged.emit(self._message)
 
     @Slot(str)
     def update_message(self, new_message):
         """
         Update the message from QML.
-        
+
         This slot allows QML components to directly set a new message
         by calling this method with the desired message text.
-        
+
         Args:
             new_message (str): The new message to set
         """
