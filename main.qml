@@ -9,18 +9,18 @@ ApplicationWindow {
     width: 800
     height: 600
     title: "PySide6 + QML Demo"
-    
+
     // Create a Backend instance
     Backend {
         id: backendInstance
     }
-    
+
     // Main content
     ColumnLayout {
         anchors.fill: parent
         anchors.margins: 20
         spacing: 20
-        
+
         // Title
         Text {
             text: "PySide6 + QML Integration Demo"
@@ -29,7 +29,7 @@ ApplicationWindow {
             color: "#2c3e50"
             Layout.alignment: Qt.AlignHCenter
         }
-        
+
         // Card-like container
         Rectangle {
             Layout.fillWidth: true
@@ -38,19 +38,19 @@ ApplicationWindow {
             radius: 10
             border.color: "#bdc3c7"
             border.width: 1
-            
+
             ColumnLayout {
                 anchors.fill: parent
                 anchors.margins: 30
                 spacing: 30
-                
+
                 // Message display
                 Rectangle {
                     Layout.fillWidth: true
                     height: 80
                     color: "#3498db"
                     radius: 8
-                    
+
                     Text {
                         id: messageText
                         text: backend.message
@@ -59,7 +59,7 @@ ApplicationWindow {
                         font.bold: true
                         anchors.centerIn: parent
                         wrapMode: Text.WordWrap
-                        
+
                         // Animation for text changes
                         Behavior on text {
                             SequentialAnimation {
@@ -83,15 +83,15 @@ ApplicationWindow {
                         }
                     }
                 }
-                
+
                 // Button section
                 RowLayout {
                     Layout.alignment: Qt.AlignHCenter
                     spacing: 20
-                    
+
                     Button {
-                        text: "Click Me!"
                         id: clickButton
+                        text: "Click Me!"
                         font.pixelSize: 16
                         background: Rectangle {
                             color: parent.pressed ? "#27ae60" : "#2ecc71"
@@ -105,13 +105,13 @@ ApplicationWindow {
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter
                         }
-                        
+
                         onClicked: {
-                            backend.incrementCounter()
+                            backend.increment_counter();
                             // Add a little animation
-                            clickAnimation.start()
+                            clickAnimation.start();
                         }
-                        
+
                         // Click animation
                         SequentialAnimation {
                             id: clickAnimation
@@ -129,7 +129,7 @@ ApplicationWindow {
                             }
                         }
                     }
-                    
+
                     Button {
                         text: "Reset"
                         font.pixelSize: 16
@@ -145,53 +145,53 @@ ApplicationWindow {
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter
                         }
-                        
+
                         onClicked: {
-                            backend.updateMessage("Reset! Ready for new clicks.")
+                            backend.update_message("Reset! Ready for new clicks.");
                         }
                     }
                 }
-                
+
                 // Text input section
                 ColumnLayout {
                     Layout.fillWidth: true
                     spacing: 10
-                    
+
                     Text {
                         text: "Send custom message to Python backend:"
                         font.pixelSize: 14
                         color: "#34495e"
                     }
-                    
+
                     RowLayout {
                         Layout.fillWidth: true
                         spacing: 10
-                        
+
                         TextField {
                             id: messageInput
                             Layout.fillWidth: true
                             placeholderText: "Enter your message here..."
                             font.pixelSize: 14
-                            
+
                             background: Rectangle {
                                 color: "white"
                                 border.color: "#bdc3c7"
                                 border.width: 1
                                 radius: 4
                             }
-                            
+
                             onAccepted: {
                                 if (text.length > 0) {
-                                    backend.updateMessage(text)
-                                    text = ""
+                                    backend.update_message(text);
+                                    text = "";
                                 }
                             }
                         }
-                        
+
                         Button {
                             text: "Send"
                             enabled: messageInput.text.length > 0
-                            
+
                             background: Rectangle {
                                 color: parent.enabled ? (parent.pressed ? "#8e44ad" : "#9b59b6") : "#bdc3c7"
                                 radius: 4
@@ -203,17 +203,17 @@ ApplicationWindow {
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
                             }
-                            
+
                             onClicked: {
                                 if (messageInput.text.length > 0) {
-                                    backend.updateMessage(messageInput.text)
-                                    messageInput.text = ""
+                                    backend.update_message(messageInput.text);
+                                    messageInput.text = "";
                                 }
                             }
                         }
                     }
                 }
-                
+
                 // Info section
                 Rectangle {
                     Layout.fillWidth: true
@@ -221,7 +221,7 @@ ApplicationWindow {
                     color: "#f8f9fa"
                     radius: 5
                     border.color: "#dee2e6"
-                    
+
                     Text {
                         anchors.fill: parent
                         anchors.margins: 15
