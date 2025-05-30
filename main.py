@@ -80,7 +80,7 @@ class Backend(QObject):
         the number of times this method has been called.
         """
         self._counter += 1
-        self.message = f"Button clicked {self._counter} times!"
+        self.message = "Button clicked " + str(self._counter) + " times!"
 
     @Slot(str)
     def update_message(self, new_message):
