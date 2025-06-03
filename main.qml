@@ -1,7 +1,6 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
-import Demo 1.0
 
 ApplicationWindow {
     id: window
@@ -9,11 +8,6 @@ ApplicationWindow {
     width: 1200
     height: 700
     title: "Galactron GUI - Simulator Control"
-
-    // Create a Backend instance
-    Backend {
-        id: backendInstance
-    }
 
     property string simulationTime: "0.000"
     property bool isRunning: false
