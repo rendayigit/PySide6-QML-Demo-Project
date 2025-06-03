@@ -1,6 +1,6 @@
-import QtQuick 2.15
-import QtQuick.Controls 2.15
-import QtQuick.Layouts 1.15
+import QtQuick 6.0
+import QtQuick.Controls 6.0
+import QtQuick.Layouts 6.0
 
 ApplicationWindow {
     id: window
@@ -234,174 +234,21 @@ ApplicationWindow {
             }
         }
 
-        // Main Content Area with Split Layout
-        Rectangle {
+        // Main Content Area with Resizable Split Layout
+        SplitView {
             Layout.fillWidth: true
             Layout.fillHeight: true
-            color: "white"
+            orientation: Qt.Horizontal
 
-            RowLayout {
-                anchors.fill: parent
-                anchors.margins: 5
-                spacing: 5
+            // Main left section with simulation models and variables
+            SplitView {
+                SplitView.fillWidth: true
+                orientation: Qt.Horizontal
 
-                // Left side - Variables Section
+                // Simulation Models Panel
                 Rectangle {
-                    Layout.fillHeight: true
-                    Layout.preferredWidth: parent.width * 0.7
-                    color: "white"
-                    border.color: "#dee2e6"
-                    border.width: 1
-
-                    RowLayout {
-                        anchors.fill: parent
-                        anchors.margins: 5
-                        spacing: 5
-
-                        // Tree Panel
-                        Rectangle {
-                            Layout.preferredWidth: 300
-                            Layout.fillHeight: true
-                            color: "white"
-                            border.color: "#dee2e6"
-                            border.width: 1
-
-                            ColumnLayout {
-                                anchors.fill: parent
-                                anchors.margins: 5
-                                spacing: 5
-
-                                Text {
-                                    text: "Simulation Models"
-                                    font.pixelSize: 14
-                                    font.bold: true
-                                    color: "#333"
-                                }
-
-                                ScrollView {
-                                    Layout.fillWidth: true
-                                    Layout.fillHeight: true
-                                    
-                                    ListView {
-                                        id: modelsTree
-                                        model: ListModel {
-                                            ListElement { name: "System Models"; level: 0 }
-                                            ListElement { name: "  - Spacecraft"; level: 1 }
-                                            ListElement { name: "  - Orbit"; level: 1 }
-                                            ListElement { name: "  - Environment"; level: 1 }
-                                            ListElement { name: "Control Systems"; level: 0 }
-                                            ListElement { name: "  - ADCS"; level: 1 }
-                                            ListElement { name: "  - Power"; level: 1 }
-                                        }
-
-                                        delegate: Rectangle {
-                                            width: modelsTree.width
-                                            height: 25
-                                            color: mouseArea.containsMouse ? "#e9ecef" : "transparent"
-
-                                            MouseArea {
-                                                id: mouseArea
-                                                anchors.fill: parent
-                                                hoverEnabled: true
-                                                onClicked: console.log("Selected:", model.name)
-                                            }
-
-                                            Text {
-                                                anchors.left: parent.left
-                                                anchors.leftMargin: 10
-                                                anchors.verticalCenter: parent.verticalCenter
-                                                text: model.name
-                                                font.pixelSize: 12
-                                                color: "#333"
-                                                font.bold: model.level === 0
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
-                        // Variable List Panel
-                        Rectangle {
-                            Layout.fillWidth: true
-                            Layout.fillHeight: true
-                            color: "white"
-                            border.color: "#dee2e6"
-                            border.width: 1
-
-                            ColumnLayout {
-                                anchors.fill: parent
-                                anchors.margins: 5
-                                spacing: 5
-
-                                Text {
-                                    text: "Variables"
-                                    font.pixelSize: 14
-                                    font.bold: true
-                                    color: "#333"
-                                }
-
-                                // Variable table header
-                                Rectangle {
-                                    Layout.fillWidth: true
-                                    height: 30
-                                    color: "#f8f9fa"
-                                    border.color: "#dee2e6"
-                                    border.width: 1
-
-                                    RowLayout {
-                                        anchors.fill: parent
-                                        anchors.margins: 5
-                                        spacing: 0
-
-                                        Text { text: "Variable"; Layout.preferredWidth: 200; font.bold: true; font.pixelSize: 12 }
-                                        Text { text: "Description"; Layout.fillWidth: true; font.bold: true; font.pixelSize: 12 }
-                                        Text { text: "Value"; Layout.preferredWidth: 150; font.bold: true; font.pixelSize: 12 }
-                                        Text { text: "Type"; Layout.preferredWidth: 100; font.bold: true; font.pixelSize: 12 }
-                                    }
-                                }
-
-                                ScrollView {
-                                    Layout.fillWidth: true
-                                    Layout.fillHeight: true
-
-                                    ListView {
-                                        model: ListModel {
-                                            ListElement { variable: "sim.time"; description: "Simulation time"; value: "0.000"; type: "double" }
-                                            ListElement { variable: "orbit.altitude"; description: "Orbital altitude"; value: "400.0"; type: "double" }
-                                            ListElement { variable: "spacecraft.mass"; description: "Spacecraft mass"; value: "1500.0"; type: "double" }
-                                            ListElement { variable: "power.battery"; description: "Battery charge"; value: "85.5"; type: "double" }
-                                            ListElement { variable: "adcs.attitude"; description: "Spacecraft attitude"; value: "[0,0,0,1]"; type: "quaternion" }
-                                            ListElement { variable: "orbit.velocity"; description: "Orbital velocity"; value: "7654.2"; type: "double" }
-                                        }
-
-                                        delegate: Rectangle {
-                                            width: parent ? parent.width : 0
-                                            height: 25
-                                            color: index % 2 ? "#f8f9fa" : "white"
-
-                                            RowLayout {
-                                                anchors.fill: parent
-                                                anchors.margins: 5
-                                                spacing: 0
-
-                                                Text { text: model.variable; Layout.preferredWidth: 200; font.pixelSize: 11; color: "#333" }
-                                                Text { text: model.description; Layout.fillWidth: true; font.pixelSize: 11; color: "#333" }
-                                                Text { text: model.value; Layout.preferredWidth: 150; font.pixelSize: 11; color: "#333" }
-                                                Text { text: model.type; Layout.preferredWidth: 100; font.pixelSize: 11; color: "#666" }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-
-                // Right side - Event Logs
-                Rectangle {
-                    Layout.fillHeight: true
-                    Layout.preferredWidth: parent.width * 0.3
+                    SplitView.minimumWidth: 200
+                    SplitView.preferredWidth: 300
                     color: "white"
                     border.color: "#dee2e6"
                     border.width: 1
@@ -412,13 +259,76 @@ ApplicationWindow {
                         spacing: 5
 
                         Text {
-                            text: "Event Logs"
+                            text: "Simulation Models"
                             font.pixelSize: 14
                             font.bold: true
                             color: "#333"
                         }
 
-                        // Log table header
+                        ScrollView {
+                            Layout.fillWidth: true
+                            Layout.fillHeight: true
+                            
+                            ListView {
+                                id: modelsTree
+                                model: ListModel {
+                                    ListElement { name: "System Models"; level: 0 }
+                                    ListElement { name: "  - Spacecraft"; level: 1 }
+                                    ListElement { name: "  - Orbit"; level: 1 }
+                                    ListElement { name: "  - Environment"; level: 1 }
+                                    ListElement { name: "Control Systems"; level: 0 }
+                                    ListElement { name: "  - ADCS"; level: 1 }
+                                    ListElement { name: "  - Power"; level: 1 }
+                                }
+
+                                delegate: Rectangle {
+                                    width: modelsTree.width
+                                    height: 25
+                                    color: mouseArea.containsMouse ? "#e9ecef" : "transparent"
+
+                                    MouseArea {
+                                        id: mouseArea
+                                        anchors.fill: parent
+                                        hoverEnabled: true
+                                        onClicked: console.log("Selected:", model.name)
+                                    }
+
+                                    Text {
+                                        anchors.left: parent.left
+                                        anchors.leftMargin: 10
+                                        anchors.verticalCenter: parent.verticalCenter
+                                        text: model.name
+                                        font.pixelSize: 12
+                                        color: "#333"
+                                        font.bold: model.level === 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // Variables Panel
+                Rectangle {
+                    SplitView.fillWidth: true
+                    SplitView.minimumWidth: 400
+                    color: "white"
+                    border.color: "#dee2e6"
+                    border.width: 1
+
+                    ColumnLayout {
+                        anchors.fill: parent
+                        anchors.margins: 5
+                        spacing: 5
+
+                        Text {
+                            text: "Variables"
+                            font.pixelSize: 14
+                            font.bold: true
+                            color: "#333"
+                        }
+
+                        // Variable table header
                         Rectangle {
                             Layout.fillWidth: true
                             height: 30
@@ -431,8 +341,10 @@ ApplicationWindow {
                                 anchors.margins: 5
                                 spacing: 0
 
-                                Text { text: "Level"; Layout.preferredWidth: 70; font.bold: true; font.pixelSize: 12 }
-                                Text { text: "Log"; Layout.fillWidth: true; font.bold: true; font.pixelSize: 12 }
+                                Text { text: "Variable"; Layout.preferredWidth: 200; font.bold: true; font.pixelSize: 12 }
+                                Text { text: "Description"; Layout.fillWidth: true; font.bold: true; font.pixelSize: 12 }
+                                Text { text: "Value"; Layout.preferredWidth: 150; font.bold: true; font.pixelSize: 12 }
+                                Text { text: "Type"; Layout.preferredWidth: 100; font.bold: true; font.pixelSize: 12 }
                             }
                         }
 
@@ -442,57 +354,130 @@ ApplicationWindow {
 
                             ListView {
                                 model: ListModel {
-                                    ListElement { level: "INFO"; log: "Simulator initialized successfully" }
-                                    ListElement { level: "INFO"; log: "Loading spacecraft configuration..." }
-                                    ListElement { level: "WARN"; log: "Battery level below optimal range" }
-                                    ListElement { level: "INFO"; log: "Orbit propagation started" }
-                                    ListElement { level: "DEBUG"; log: "Attitude control system active" }
-                                    ListElement { level: "INFO"; log: "Telemetry data received" }
-                                    ListElement { level: "ERROR"; log: "Communication timeout" }
-                                    ListElement { level: "INFO"; log: "System recovery completed" }
+                                    ListElement { variable: "sim.time"; description: "Simulation time"; value: "0.000"; type: "double" }
+                                    ListElement { variable: "orbit.altitude"; description: "Orbital altitude"; value: "400.0"; type: "double" }
+                                    ListElement { variable: "spacecraft.mass"; description: "Spacecraft mass"; value: "1500.0"; type: "double" }
+                                    ListElement { variable: "power.battery"; description: "Battery charge"; value: "85.5"; type: "double" }
+                                    ListElement { variable: "adcs.attitude"; description: "Spacecraft attitude"; value: "[0,0,0,1]"; type: "quaternion" }
+                                    ListElement { variable: "orbit.velocity"; description: "Orbital velocity"; value: "7654.2"; type: "double" }
                                 }
 
                                 delegate: Rectangle {
                                     width: parent ? parent.width : 0
-                                    height: 40
-                                    color: {
-                                        if (model.level === "ERROR") return "#ffe6e6"
-                                        if (model.level === "WARN") return "#fff3cd"
-                                        return index % 2 ? "#f8f9fa" : "white"
-                                    }
+                                    height: 25
+                                    color: index % 2 ? "#f8f9fa" : "white"
 
                                     RowLayout {
                                         anchors.fill: parent
                                         anchors.margins: 5
-                                        spacing: 5
+                                        spacing: 0
 
-                                        Rectangle {
-                                            Layout.preferredWidth: 60
-                                            height: 25
-                                            color: {
-                                                if (model.level === "ERROR") return "#dc3545"
-                                                if (model.level === "WARN") return "#ffc107"
-                                                if (model.level === "INFO") return "#17a2b8"
-                                                return "#6c757d"
-                                            }
-                                            radius: 3
+                                        Text { text: model.variable; Layout.preferredWidth: 200; font.pixelSize: 11; color: "#333" }
+                                        Text { text: model.description; Layout.fillWidth: true; font.pixelSize: 11; color: "#333" }
+                                        Text { text: model.value; Layout.preferredWidth: 150; font.pixelSize: 11; color: "#333" }
+                                        Text { text: model.type; Layout.preferredWidth: 100; font.pixelSize: 11; color: "#666" }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
 
-                                            Text {
-                                                anchors.centerIn: parent
-                                                text: model.level
-                                                color: "white"
-                                                font.pixelSize: 10
-                                                font.bold: true
-                                            }
+            // Event Logs Panel
+            Rectangle {
+                SplitView.minimumWidth: 250
+                SplitView.preferredWidth: 350
+                color: "white"
+                border.color: "#dee2e6"
+                border.width: 1
+
+                ColumnLayout {
+                    anchors.fill: parent
+                    anchors.margins: 5
+                    spacing: 5
+
+                    Text {
+                        text: "Event Logs"
+                        font.pixelSize: 14
+                        font.bold: true
+                        color: "#333"
+                    }
+
+                    // Log table header
+                    Rectangle {
+                        Layout.fillWidth: true
+                        height: 30
+                        color: "#f8f9fa"
+                        border.color: "#dee2e6"
+                        border.width: 1
+
+                        RowLayout {
+                            anchors.fill: parent
+                            anchors.margins: 5
+                            spacing: 0
+
+                            Text { text: "Level"; Layout.preferredWidth: 70; font.bold: true; font.pixelSize: 12 }
+                            Text { text: "Log"; Layout.fillWidth: true; font.bold: true; font.pixelSize: 12 }
+                        }
+                    }
+
+                    ScrollView {
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+
+                        ListView {
+                            model: ListModel {
+                                ListElement { level: "INFO"; log: "Simulator initialized successfully" }
+                                ListElement { level: "INFO"; log: "Loading spacecraft configuration..." }
+                                ListElement { level: "WARN"; log: "Battery level below optimal range" }
+                                ListElement { level: "INFO"; log: "Orbit propagation started" }
+                                ListElement { level: "DEBUG"; log: "Attitude control system active" }
+                                ListElement { level: "INFO"; log: "Telemetry data received" }
+                                ListElement { level: "ERROR"; log: "Communication timeout" }
+                                ListElement { level: "INFO"; log: "System recovery completed" }
+                            }
+
+                            delegate: Rectangle {
+                                width: parent ? parent.width : 0
+                                height: 40
+                                color: {
+                                    if (model.level === "ERROR") return "#ffe6e6"
+                                    if (model.level === "WARN") return "#fff3cd"
+                                    return index % 2 ? "#f8f9fa" : "white"
+                                }
+
+                                RowLayout {
+                                    anchors.fill: parent
+                                    anchors.margins: 5
+                                    spacing: 5
+
+                                    Rectangle {
+                                        Layout.preferredWidth: 60
+                                        height: 25
+                                        color: {
+                                            if (model.level === "ERROR") return "#dc3545"
+                                            if (model.level === "WARN") return "#ffc107"
+                                            if (model.level === "INFO") return "#17a2b8"
+                                            return "#6c757d"
                                         }
+                                        radius: 3
 
                                         Text {
-                                            Layout.fillWidth: true
-                                            text: model.log
-                                            font.pixelSize: 11
-                                            color: "#333"
-                                            wrapMode: Text.WordWrap
+                                            anchors.centerIn: parent
+                                            text: model.level
+                                            color: "white"
+                                            font.pixelSize: 10
+                                            font.bold: true
                                         }
+                                    }
+
+                                    Text {
+                                        Layout.fillWidth: true
+                                        text: model.log
+                                        font.pixelSize: 11
+                                        color: "#333"
+                                        wrapMode: Text.WordWrap
                                     }
                                 }
                             }
