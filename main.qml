@@ -18,6 +18,99 @@ ApplicationWindow {
     property string simulationTime: "0.000"
     property bool isRunning: false
 
+    // Menu Bar
+    menuBar: MenuBar {
+        Menu {
+            title: "&File"
+            
+            MenuItem {
+                text: "Simulator Controls"
+                onTriggered: console.log("Simulator Controls menu")
+            }
+            MenuItem {
+                text: "&Run/Hold\tCtrl+R"
+                onTriggered: {
+                    window.isRunning = !window.isRunning;
+                    console.log(window.isRunning ? "Running" : "Holding");
+                }
+            }
+            MenuItem {
+                text: "Reset\tCtrl+X"
+                onTriggered: {
+                    window.isRunning = false;
+                    window.simulationTime = "0.000";
+                    console.log("Reset");
+                }
+            }
+            MenuItem {
+                text: "Step"
+                onTriggered: console.log("Step")
+            }
+            MenuItem {
+                text: "Progress Simulation"
+                onTriggered: console.log("Progress Simulation")
+            }
+            MenuItem {
+                text: "Store"
+                onTriggered: console.log("Store")
+            }
+            MenuItem {
+                text: "Restore"
+                onTriggered: console.log("Restore")
+            }
+            MenuItem {
+                text: "Speed"
+                onTriggered: console.log("Speed")
+            }
+            MenuSeparator {}
+            MenuItem {
+                text: "Settings"
+                onTriggered: console.log("Settings")
+            }
+            MenuSeparator {}
+            MenuItem {
+                text: "&Quit\tCtrl+Q"
+                onTriggered: Qt.quit()
+            }
+        }
+        
+        Menu {
+            title: "&Variable Display"
+            
+            MenuItem {
+                text: "&Plot Selected Variables\tCtrl+P"
+                onTriggered: console.log("Plot Selected Variables")
+            }
+            MenuSeparator {}
+            MenuItem {
+                text: "&Save Variables"
+                onTriggered: console.log("Save Variables")
+            }
+            MenuItem {
+                text: "&Load Variables"
+                onTriggered: console.log("Load Variables")
+            }
+            MenuSeparator {}
+            MenuItem {
+                text: "&Clear Table"
+                onTriggered: console.log("Clear Table")
+            }
+        }
+        
+        Menu {
+            title: "&Help"
+            
+            MenuItem {
+                text: "&Manual\tF1"
+                onTriggered: console.log("Manual")
+            }
+            MenuItem {
+                text: "&About"
+                onTriggered: console.log("About Galactron")
+            }
+        }
+    }
+
     // Main content
     ColumnLayout {
         anchors.fill: parent
