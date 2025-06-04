@@ -68,14 +68,10 @@ class Subscriber:
                     if hasattr(self.main_window, 'update_simulation_time'):
                         self.main_window.update_simulation_time(sim_time)
                 elif topic == "STATUS":
-                    if command_json["schedulerIsRunning"] is True:
-                        # TODO: Set the run button to "Hold" in the GUI
-                        # TODO: Set the status text to "Simulation executing" in the GUI
-                        pass
-                    else:
-                        # TODO: Set the run button to "Run" in the GUI
-                        # TODO: Set the status text to "Simulation standing by" in the GUI
-                        pass
+                    scheduler_running = command_json["schedulerIsRunning"]
+                    # Update simulation status in GUI
+                    if hasattr(self.main_window, 'update_simulation_status'):
+                        self.main_window.update_simulation_status(scheduler_running)
                 elif topic == "EVENT":
                     log_level = command_json["level"]
                     log_message = command_json["log"]

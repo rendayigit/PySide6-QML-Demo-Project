@@ -10,14 +10,21 @@ ApplicationWindow {
     title: "Galactron GUI - Simulator Control"
 
     // Use backend's simulation time property
-    property bool isRunning: false
+    property bool isRunning: backend ? backend.isRunning : false
     property string currentSimTime: backend ? backend.simulationTime : "0.000"
+    property string statusText: backend ? backend.statusText : "Simulator ready"
     
     // Connect to backend simulation time changes
     Connections {
         target: backend
         function onSimulationTimeChanged() {
             window.currentSimTime = backend.simulationTime
+        }
+        function onSimulationStatusChanged() {
+            window.isRunning = backend.isRunning
+        }
+        function onStatusTextChanged() {
+            window.statusText = backend.statusText
         }
     }
 
@@ -509,7 +516,7 @@ ApplicationWindow {
                 anchors.left: parent.left
                 anchors.leftMargin: 10
                 anchors.verticalCenter: parent.verticalCenter
-                text: "Simulator ready"
+                text: window.statusText
                 font.pixelSize: 12
                 color: "#333"
             }
