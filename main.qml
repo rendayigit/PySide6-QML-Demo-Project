@@ -1,6 +1,6 @@
-import QtQuick 6.0
-import QtQuick.Controls 6.0
-import QtQuick.Layouts 6.0
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
 
 ApplicationWindow {
     id: window
@@ -9,8 +9,17 @@ ApplicationWindow {
     height: 700
     title: "Galactron GUI - Simulator Control"
 
-    property string simulationTime: "0.000"
+    // Use backend's simulation time property
     property bool isRunning: false
+    property string currentSimTime: backend ? backend.simulationTime : "0.000"
+    
+    // Connect to backend simulation time changes
+    Connections {
+        target: backend
+        function onSimulationTimeChanged() {
+            window.currentSimTime = backend.simulationTime
+        }
+    }
 
     // Menu Bar
     menuBar: MenuBar {
@@ -221,9 +230,10 @@ ApplicationWindow {
 
                 TextField {
                     id: simTimeDisplay
-                    text: window.simulationTime
+                    text: window.currentSimTime
                     readOnly: true
                     implicitWidth: 100
+                    color: "#333"
                     background: Rectangle {
                         color: "#f8f9fa"
                         border.color: "#ced4da"
