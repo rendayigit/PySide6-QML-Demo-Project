@@ -13,6 +13,7 @@ class Backend(QObject):
     simulationStatusChanged = Signal(bool)
     statusTextChanged = Signal(str)
     eventLogReceived = Signal(str, str)  # level, message
+    modelTreeUpdated = Signal('QVariant')  # model tree data
     
     def __init__(self):
         super().__init__()
@@ -68,6 +69,45 @@ class Backend(QObject):
     def send_event_log(self, level, message):
         """Called by subscriber to send event log to GUI"""
         self.eventLogReceived.emit(level, message)
+    
+    def update_fields(self, fields_data):
+        """Called by subscriber to handle FIELDS topic - individual field variables"""
+        # TODO: Implement field variable updates
+        # For now, just print the received fields data
+        print(f"Received FIELDS data: {len(fields_data)} fields")
+        for field in fields_data:
+            print(f"  {field.get('variablePath', 'Unknown')}: {field.get('variableValue', 'None')}")
+    
+    def update_model_tree(self, model_tree_data):
+        """Called by subscriber to update model tree from MODEL_TREE topic"""
+        # Convert the hierarchical model tree data to a flat list for QML
+        tree_items = []
+        
+        def process_node(node_data, parent_name="", level=0):
+            """Recursively process model tree nodes"""
+            if isinstance(node_data, dict):
+                for key, children in node_data.items():
+                    # Add the current node
+                    full_path = f"{parent_name}.{key}" if parent_name else key
+                    tree_items.append({
+                        "name": "  " * level + key,
+                        "level": level,
+                        "fullPath": full_path
+                    })
+                    
+                    # Process children
+                    if isinstance(children, list) and children:
+                        for child in children:
+                            process_node(child, full_path, level + 1)
+            elif isinstance(node_data, list):
+                for item in node_data:
+                    process_node(item, parent_name, level)
+        
+        # Process the model tree data
+        process_node(model_tree_data)
+        
+        # Emit signal to update QML model
+        self.modelTreeUpdated.emit(tree_items)
     
     def start_subscriber(self):
         """Start the ZMQ subscriber"""

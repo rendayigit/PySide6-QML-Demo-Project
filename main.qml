@@ -32,6 +32,12 @@ ApplicationWindow {
                 "log": message
             });
         }
+        function onModelTreeUpdated(treeData) {
+            modelsTreeModel.clear();
+            for (var i = 0; i < treeData.length; i++) {
+                modelsTreeModel.append(treeData[i]);
+            }
+        }
     }
 
     // Menu Bar
@@ -295,8 +301,9 @@ ApplicationWindow {
                             Layout.fillHeight: true
 
                             ListView {
-                                id: modelsTree
+                                id: modelsTreeListView
                                 model: ListModel {
+                                    id: modelsTreeModel
                                     ListElement {
                                         name: "System Models"
                                         level: 0
@@ -328,7 +335,7 @@ ApplicationWindow {
                                 }
 
                                 delegate: Rectangle {
-                                    width: modelsTree.width
+                                    width: modelsTreeListView.width
                                     height: 25
                                     color: mouseArea.containsMouse ? "#e9ecef" : "transparent"
 
