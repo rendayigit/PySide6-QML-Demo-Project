@@ -75,7 +75,9 @@ class Subscriber:
                 elif topic == "EVENT":
                     log_level = command_json["level"]
                     log_message = command_json["log"]
-                    # TODO:Send log to gui
+                    # Send log to gui
+                    if hasattr(self.main_window, 'send_event_log'):
+                        self.main_window.send_event_log(log_level, log_message)
                 elif topic == "FIELDS":
                     # TODO: Update the variable values in the GUI
                     # The command_json example output is as follows:

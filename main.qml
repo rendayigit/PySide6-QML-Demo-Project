@@ -26,6 +26,9 @@ ApplicationWindow {
         function onStatusTextChanged() {
             window.statusText = backend.statusText
         }
+        function onEventLogReceived(level, message) {
+            eventLogsModel.append({"level": level, "log": message})
+        }
     }
 
     // Menu Bar
@@ -444,15 +447,18 @@ ApplicationWindow {
                         Layout.fillHeight: true
 
                         ListView {
+                            id: eventLogsListView
                             model: ListModel {
+                                id: eventLogsModel
                                 ListElement { level: "INFO"; log: "Simulator initialized successfully" }
                                 ListElement { level: "INFO"; log: "Loading spacecraft configuration..." }
-                                ListElement { level: "WARN"; log: "Battery level below optimal range" }
+                                ListElement { level: "WARNING"; log: "Battery level below optimal range" }
                                 ListElement { level: "INFO"; log: "Orbit propagation started" }
                                 ListElement { level: "DEBUG"; log: "Attitude control system active" }
                                 ListElement { level: "INFO"; log: "Telemetry data received" }
                                 ListElement { level: "ERROR"; log: "Communication timeout" }
                                 ListElement { level: "INFO"; log: "System recovery completed" }
+                                ListElement { level: "CRITICAL"; log: "Critical failure in power system" }
                             }
 
                             delegate: Rectangle {
@@ -460,7 +466,8 @@ ApplicationWindow {
                                 height: 40
                                 color: {
                                     if (model.level === "ERROR") return "#ffe6e6"
-                                    if (model.level === "WARN") return "#fff3cd"
+                                    if (model.level === "WARNING") return "#fff3cd"
+                                    if (model.level === "CRITICAL") return "#ff0000"
                                     return index % 2 ? "#f8f9fa" : "white"
                                 }
 
@@ -474,8 +481,10 @@ ApplicationWindow {
                                         height: 25
                                         color: {
                                             if (model.level === "ERROR") return "#dc3545"
-                                            if (model.level === "WARN") return "#ffc107"
+                                            if (model.level === "WARNING") return "#ffc107"
+                                            if (model.level === "CRITICAL") return "#000000"
                                             if (model.level === "INFO") return "#17a2b8"
+                                            if (model.level === "DEBUG") return "#6c757d"
                                             return "#6c757d"
                                         }
                                         radius: 3

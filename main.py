@@ -12,6 +12,7 @@ class Backend(QObject):
     simulationTimeChanged = Signal(str)
     simulationStatusChanged = Signal(bool)
     statusTextChanged = Signal(str)
+    eventLogReceived = Signal(str, str)  # level, message
     
     def __init__(self):
         super().__init__()
@@ -63,6 +64,10 @@ class Backend(QObject):
             self.set_status_text("Simulation executing")
         else:
             self.set_status_text("Simulation standing by")
+    
+    def send_event_log(self, level, message):
+        """Called by subscriber to send event log to GUI"""
+        self.eventLogReceived.emit(level, message)
     
     def start_subscriber(self):
         """Start the ZMQ subscriber"""
