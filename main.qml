@@ -13,6 +13,7 @@ ApplicationWindow {
     property bool isRunning: backend ? backend.isRunning : false
     property string currentSimTime: backend ? backend.simulationTime : "0.000"
     property string statusText: backend ? backend.statusText : "Simulator ready"
+    property bool commandInProgress: false  // Track if a command is being executed
 
     // Connect to backend simulation time changes
     Connections {
@@ -67,8 +68,15 @@ ApplicationWindow {
             MenuItem {
                 text: "&Run/Hold\tCtrl+R"
                 onTriggered: {
-                    window.isRunning = !window.isRunning;
-                    console.log(window.isRunning ? "Running" : "Holding");
+                    console.log("Menu Run/Hold triggered");
+                    if (backend) {
+                        var success = backend.toggleSimulation();
+                        if (success) {
+                            console.log("Command sent successfully from menu");
+                        } else {
+                            console.log("Command failed from menu");
+                        }
+                    }
                 }
             }
             MenuItem {
@@ -189,21 +197,32 @@ ApplicationWindow {
                     id: runButton
                     text: window.isRunning ? "Hold" : "Run"
                     background: Rectangle {
-                        color: parent.pressed ? "#e6b800" : "#ffcc00"
+                        color: {
+                            if (parent.pressed) return window.isRunning ? "#cc6600" : "#e6b800";
+                            return window.isRunning ? "#ff8800" : "#ffcc00";
+                        }
                         radius: 4
-                        border.color: "#d4af37"
+                        border.color: window.isRunning ? "#cc6600" : "#d4af37"
                         border.width: 1
                     }
                     contentItem: Text {
                         text: parent.text
                         color: "black"
                         font.pixelSize: 12
+                        font.bold: window.isRunning
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                     }
                     onClicked: {
-                        window.isRunning = !window.isRunning;
-                        console.log(window.isRunning ? "Running" : "Holding");
+                        console.log("Toggle simulation button clicked");
+                        if (backend) {
+                            var success = backend.toggleSimulation();
+                            if (success) {
+                                console.log("Command sent successfully");
+                            } else {
+                                console.log("Command failed");
+                            }
+                        }
                     }
                 }
 

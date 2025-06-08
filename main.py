@@ -4,7 +4,6 @@ from PySide6.QtGui import QGuiApplication
 from PySide6.QtQml import QQmlApplicationEngine, qmlRegisterType
 from PySide6.QtCore import QObject, Signal, Property, Slot
 from subscriber import Subscriber
-from commanding import Commanding
 
 class Backend(QObject):
     """Backend class to handle communication between Python and QML"""
@@ -17,6 +16,7 @@ class Backend(QObject):
     modelTreeUpdated = Signal('QVariant')  # model tree data
     variableAdded = Signal('QVariant')  # variable data
     variableUpdated = Signal(str, 'QVariant')  # variable path, complete variable data
+    commandExecuted = Signal(str, bool)  # command name, success status
     
     def __init__(self):
         super().__init__()
@@ -25,6 +25,8 @@ class Backend(QObject):
         self._status_text = "Simulator ready"
         self._subscriber = None
         self._watched_variables = {}  # Store watched variables: {variablePath: {data}}
+        self._commanding = None  # Commanding instance
+        self._last_command_success = True  # Track last command success for UI feedback
         
     @Property(str, notify=simulationTimeChanged)
     def simulationTime(self):
@@ -55,6 +57,13 @@ class Backend(QObject):
         if self._status_text != value:
             self._status_text = value
             self.statusTextChanged.emit(value)
+    
+    def get_commanding_instance(self):
+        """Get or create commanding instance"""
+        if self._commanding is None:
+            from commanding import Commanding
+            self._commanding = Commanding()
+        return self._commanding
     
     def update_simulation_time(self, time_value):
         """Called by subscriber to update simulation time"""
@@ -214,7 +223,7 @@ class Backend(QObject):
         """Request the model tree from the Galactron Engine"""
         try:
             # Create commanding instance and request model tree
-            commanding = Commanding()
+            commanding = self.get_commanding_instance()
             response = commanding.request({"command": "MODEL_TREE"})
             
             print(f"Model tree request successful: {response}")
@@ -226,6 +235,16 @@ class Backend(QObject):
             error_msg = f"Model tree request timeout: {e}"
             print(error_msg)
             self.send_event_log("WARNING", "Model tree request timed out")
+            
+        except (ConnectionError, OSError) as e:
+            error_msg = f"Model tree request connection failed: {e}"
+            print(error_msg)
+            self.send_event_log("ERROR", f"Model tree request connection failed: {str(e)}")
+            
+        except ValueError as e:
+            error_msg = f"Model tree request data error: {e}"
+            print(error_msg)
+            self.send_event_log("ERROR", f"Model tree request data error: {str(e)}")
             
         except Exception as e:
             error_msg = f"Model tree request failed: {e}"
@@ -239,6 +258,138 @@ class Backend(QObject):
         """QML-callable method to request model tree from engine"""
         response = self.request_model_tree()
         return response is not None
+
+    def run_simulation(self):
+        """Send RUN command to the Galactron Engine"""
+        try:
+            commanding = self.get_commanding_instance()
+            response = commanding.request({"command": "RUN"})
+            
+            print(f"RUN command successful: {response}")
+            self.send_event_log("INFO", "RUN command sent to engine")
+            
+            # Verify status after command
+            self.verify_simulation_status()
+            
+            return response
+            
+        except TimeoutError as e:
+            error_msg = f"RUN command timeout: {e}"
+            print(error_msg)
+            self.send_event_log("WARNING", "RUN command timed out")
+            
+        except (ConnectionError, OSError) as e:
+            error_msg = f"RUN command connection failed: {e}"
+            print(error_msg)
+            self.send_event_log("ERROR", f"RUN command connection failed: {str(e)}")
+            
+        except ValueError as e:
+            error_msg = f"RUN command data error: {e}"
+            print(error_msg)
+            self.send_event_log("ERROR", f"RUN command data error: {str(e)}")
+            
+        except Exception as e:
+            error_msg = f"RUN command failed: {e}"
+            print(error_msg)
+            self.send_event_log("ERROR", f"RUN command failed: {str(e)}")
+            
+        return None
+    
+    def hold_simulation(self):
+        """Send HOLD command to the Galactron Engine"""
+        try:
+            commanding = self.get_commanding_instance()
+            response = commanding.request({"command": "HOLD"})
+            
+            print(f"HOLD command successful: {response}")
+            self.send_event_log("INFO", "HOLD command sent to engine")
+            
+            # Verify status after command
+            self.verify_simulation_status()
+            
+            return response
+            
+        except TimeoutError as e:
+            error_msg = f"HOLD command timeout: {e}"
+            print(error_msg)
+            self.send_event_log("WARNING", "HOLD command timed out")
+            
+        except (ConnectionError, OSError) as e:
+            error_msg = f"HOLD command connection failed: {e}"
+            print(error_msg)
+            self.send_event_log("ERROR", f"HOLD command connection failed: {str(e)}")
+            
+        except ValueError as e:
+            error_msg = f"HOLD command data error: {e}"
+            print(error_msg)
+            self.send_event_log("ERROR", f"HOLD command data error: {str(e)}")
+            
+        except Exception as e:
+            error_msg = f"HOLD command failed: {e}"
+            print(error_msg)
+            self.send_event_log("ERROR", f"HOLD command failed: {str(e)}")
+            
+        return None
+    
+    def verify_simulation_status(self):
+        """Verify the current simulation status by requesting STATUS from engine"""
+        try:
+            commanding = self.get_commanding_instance()
+            response = commanding.request({"command": "STATUS"})
+            
+            if response and "schedulerIsRunning" in response:
+                scheduler_running = response["schedulerIsRunning"]
+                print(f"Status verification: schedulerIsRunning = {scheduler_running}")
+                
+                # Update the simulation status based on engine response
+                self.update_simulation_status(scheduler_running)
+                
+                return response
+            else:
+                print("Invalid STATUS response from engine")
+                self.send_event_log("WARNING", "Invalid STATUS response from engine")
+            
+        except TimeoutError as e:
+            error_msg = f"STATUS verification timeout: {e}"
+            print(error_msg)
+            self.send_event_log("WARNING", "STATUS verification timed out")
+            
+        except (ConnectionError, OSError) as e:
+            error_msg = f"STATUS verification connection failed: {e}"
+            print(error_msg)
+            self.send_event_log("ERROR", f"STATUS verification connection failed: {str(e)}")
+            
+        except ValueError as e:
+            error_msg = f"STATUS verification data error: {e}"
+            print(error_msg)
+            self.send_event_log("ERROR", f"STATUS verification data error: {str(e)}")
+            
+        except Exception as e:
+            error_msg = f"STATUS verification failed: {e}"
+            print(error_msg)
+            self.send_event_log("ERROR", f"STATUS verification failed: {str(e)}")
+            
+        return None
+    
+    @Slot(result=bool)
+    def runSimulation(self):
+        """QML-callable method to run the simulation"""
+        response = self.run_simulation()
+        return response is not None
+    
+    @Slot(result=bool)
+    def holdSimulation(self):
+        """QML-callable method to hold the simulation"""
+        response = self.hold_simulation()
+        return response is not None
+    
+    @Slot(result=bool)
+    def toggleSimulation(self):
+        """QML-callable method to toggle simulation run/hold state"""
+        if self._is_running:
+            return self.holdSimulation()
+        else:
+            return self.runSimulation()
 
 def main():
     app = QGuiApplication(sys.argv)
