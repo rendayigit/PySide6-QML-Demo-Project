@@ -54,6 +54,13 @@ ApplicationWindow {
                 }
             }
         }
+        function onCommandExecuted(commandName, success) {
+            if (success) {
+                console.log(commandName + " command executed successfully");
+            } else {
+                console.log(commandName + " command failed");
+            }
+        }
     }
 
     // Menu Bar

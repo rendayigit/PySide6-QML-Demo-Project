@@ -268,8 +268,11 @@ class Backend(QObject):
             print(f"RUN command successful: {response}")
             self.send_event_log("INFO", "RUN command sent to engine")
             
-            # Verify status after command
+            # Request status update - actual status will come via STATUS topic
             self.verify_simulation_status()
+            
+            # Emit command executed signal for UI feedback
+            self.commandExecuted.emit("RUN", True)
             
             return response
             
@@ -277,21 +280,25 @@ class Backend(QObject):
             error_msg = f"RUN command timeout: {e}"
             print(error_msg)
             self.send_event_log("WARNING", "RUN command timed out")
+            self.commandExecuted.emit("RUN", False)
             
         except (ConnectionError, OSError) as e:
             error_msg = f"RUN command connection failed: {e}"
             print(error_msg)
             self.send_event_log("ERROR", f"RUN command connection failed: {str(e)}")
+            self.commandExecuted.emit("RUN", False)
             
         except ValueError as e:
             error_msg = f"RUN command data error: {e}"
             print(error_msg)
             self.send_event_log("ERROR", f"RUN command data error: {str(e)}")
+            self.commandExecuted.emit("RUN", False)
             
         except Exception as e:
             error_msg = f"RUN command failed: {e}"
             print(error_msg)
             self.send_event_log("ERROR", f"RUN command failed: {str(e)}")
+            self.commandExecuted.emit("RUN", False)
             
         return None
     
@@ -304,8 +311,11 @@ class Backend(QObject):
             print(f"HOLD command successful: {response}")
             self.send_event_log("INFO", "HOLD command sent to engine")
             
-            # Verify status after command
+            # Request status update - actual status will come via STATUS topic
             self.verify_simulation_status()
+            
+            # Emit command executed signal for UI feedback
+            self.commandExecuted.emit("HOLD", True)
             
             return response
             
@@ -313,61 +323,60 @@ class Backend(QObject):
             error_msg = f"HOLD command timeout: {e}"
             print(error_msg)
             self.send_event_log("WARNING", "HOLD command timed out")
+            self.commandExecuted.emit("HOLD", False)
             
         except (ConnectionError, OSError) as e:
             error_msg = f"HOLD command connection failed: {e}"
             print(error_msg)
             self.send_event_log("ERROR", f"HOLD command connection failed: {str(e)}")
+            self.commandExecuted.emit("HOLD", False)
             
         except ValueError as e:
             error_msg = f"HOLD command data error: {e}"
             print(error_msg)
             self.send_event_log("ERROR", f"HOLD command data error: {str(e)}")
+            self.commandExecuted.emit("HOLD", False)
             
         except Exception as e:
             error_msg = f"HOLD command failed: {e}"
             print(error_msg)
             self.send_event_log("ERROR", f"HOLD command failed: {str(e)}")
+            self.commandExecuted.emit("HOLD", False)
             
         return None
     
     def verify_simulation_status(self):
-        """Verify the current simulation status by requesting STATUS from engine"""
+        """Request status update from engine - status will come via STATUS topic through subscriber"""
         try:
             commanding = self.get_commanding_instance()
             response = commanding.request({"command": "STATUS"})
             
-            if response and "schedulerIsRunning" in response:
-                scheduler_running = response["schedulerIsRunning"]
-                print(f"Status verification: schedulerIsRunning = {scheduler_running}")
-                
-                # Update the simulation status based on engine response
-                self.update_simulation_status(scheduler_running)
-                
-                return response
-            else:
-                print("Invalid STATUS response from engine")
-                self.send_event_log("WARNING", "Invalid STATUS response from engine")
+            # The STATUS command just triggers the engine to publish status via STATUS topic
+            # The actual status update will come through the subscriber's STATUS topic handler
+            print(f"STATUS command sent successfully: {response}")
+            self.send_event_log("INFO", "Status update requested from engine")
+            
+            return response
             
         except TimeoutError as e:
-            error_msg = f"STATUS verification timeout: {e}"
+            error_msg = f"STATUS command timeout: {e}"
             print(error_msg)
-            self.send_event_log("WARNING", "STATUS verification timed out")
+            self.send_event_log("WARNING", "STATUS command timed out")
             
         except (ConnectionError, OSError) as e:
-            error_msg = f"STATUS verification connection failed: {e}"
+            error_msg = f"STATUS command connection failed: {e}"
             print(error_msg)
-            self.send_event_log("ERROR", f"STATUS verification connection failed: {str(e)}")
+            self.send_event_log("ERROR", f"STATUS command connection failed: {str(e)}")
             
         except ValueError as e:
-            error_msg = f"STATUS verification data error: {e}"
+            error_msg = f"STATUS command data error: {e}"
             print(error_msg)
-            self.send_event_log("ERROR", f"STATUS verification data error: {str(e)}")
+            self.send_event_log("ERROR", f"STATUS command data error: {str(e)}")
             
         except Exception as e:
-            error_msg = f"STATUS verification failed: {e}"
+            error_msg = f"STATUS command failed: {e}"
             print(error_msg)
-            self.send_event_log("ERROR", f"STATUS verification failed: {str(e)}")
+            self.send_event_log("ERROR", f"STATUS command failed: {str(e)}")
             
         return None
     
