@@ -38,6 +38,22 @@ ApplicationWindow {
                 modelsTreeModel.append(treeData[i]);
             }
         }
+        function onVariableAdded(variableData) {
+            variablesModel.append(variableData);
+        }
+        function onVariableUpdated(variablePath, variableData) {
+            // Find and update the variable in the model
+            for (var i = 0; i < variablesModel.count; i++) {
+                if (variablesModel.get(i).variablePath === variablePath) {
+                    // Update all properties of the variable
+                    variablesModel.setProperty(i, "value", variableData.value);
+                    variablesModel.setProperty(i, "type", variableData.type);
+                    variablesModel.setProperty(i, "description", variableData.description);
+                    console.log("Updated variable:", variablePath, "Type:", variableData.type, "Value:", variableData.value);
+                    break;
+                }
+            }
+        }
     }
 
     // Menu Bar
@@ -298,40 +314,11 @@ ApplicationWindow {
 
                         ScrollView {
                             Layout.fillWidth: true
-                            Layout.fillHeight: true
-
+                            Layout.fillHeight: true           
                             ListView {
                                 id: modelsTreeListView
                                 model: ListModel {
                                     id: modelsTreeModel
-                                    ListElement {
-                                        name: "System Models"
-                                        level: 0
-                                    }
-                                    ListElement {
-                                        name: "  - Spacecraft"
-                                        level: 1
-                                    }
-                                    ListElement {
-                                        name: "  - Orbit"
-                                        level: 1
-                                    }
-                                    ListElement {
-                                        name: "  - Environment"
-                                        level: 1
-                                    }
-                                    ListElement {
-                                        name: "Control Systems"
-                                        level: 0
-                                    }
-                                    ListElement {
-                                        name: "  - ADCS"
-                                        level: 1
-                                    }
-                                    ListElement {
-                                        name: "  - Power"
-                                        level: 1
-                                    }
                                 }
 
                                 delegate: Rectangle {
@@ -343,7 +330,23 @@ ApplicationWindow {
                                         id: mouseArea
                                         anchors.fill: parent
                                         hoverEnabled: true
-                                        onClicked: console.log("Selected:", model.name)
+                                        onClicked: {
+                                            console.log("Selected:", model.name);
+                                        }
+                                        onDoubleClicked: {
+                                            // Only add leaf nodes (items with fullPath) to variables
+                                            if (model.fullPath && model.fullPath !== "") {
+                                                console.log("Adding to watch:", model.fullPath);
+                                                if (backend) {
+                                                    var success = backend.addVariableToWatch(model.fullPath, model.name.trim().replace(/^[-\s]*/, ''));
+                                                    if (success) {
+                                                        console.log("Successfully added:", model.fullPath);
+                                                    } else {
+                                                        console.log("Variable already being watched:", model.fullPath);
+                                                    }
+                                                }
+                                            }
+                                        }
                                     }
 
                                     Text {
@@ -426,43 +429,10 @@ ApplicationWindow {
                             Layout.fillHeight: true
 
                             ListView {
+                                id: variablesListView
                                 model: ListModel {
-                                    ListElement {
-                                        variable: "sim.time"
-                                        description: "Simulation time"
-                                        value: "0.000"
-                                        type: "double"
-                                    }
-                                    ListElement {
-                                        variable: "orbit.altitude"
-                                        description: "Orbital altitude"
-                                        value: "400.0"
-                                        type: "double"
-                                    }
-                                    ListElement {
-                                        variable: "spacecraft.mass"
-                                        description: "Spacecraft mass"
-                                        value: "1500.0"
-                                        type: "double"
-                                    }
-                                    ListElement {
-                                        variable: "power.battery"
-                                        description: "Battery charge"
-                                        value: "85.5"
-                                        type: "double"
-                                    }
-                                    ListElement {
-                                        variable: "adcs.attitude"
-                                        description: "Spacecraft attitude"
-                                        value: "[0,0,0,1]"
-                                        type: "quaternion"
-                                    }
-                                    ListElement {
-                                        variable: "orbit.velocity"
-                                        description: "Orbital velocity"
-                                        value: "7654.2"
-                                        type: "double"
-                                    }
+                                    id: variablesModel
+                                    // Dynamic model - variables added via backend signals
                                 }
 
                                 delegate: Rectangle {
@@ -476,19 +446,19 @@ ApplicationWindow {
                                         spacing: 0
 
                                         Text {
-                                            text: model.variable
+                                            text: model.variablePath || model.variable || ""
                                             Layout.preferredWidth: 200
                                             font.pixelSize: 11
                                             color: "#333"
                                         }
                                         Text {
-                                            text: model.description
+                                            text: model.description || ""
                                             Layout.fillWidth: true
                                             font.pixelSize: 11
                                             color: "#333"
                                         }
                                         Text {
-                                            text: model.value
+                                            text: model.value || ""
                                             Layout.preferredWidth: 150
                                             font.pixelSize: 11
                                             color: "#333"

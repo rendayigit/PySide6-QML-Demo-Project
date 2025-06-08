@@ -2,7 +2,7 @@ import sys
 import os
 from PySide6.QtGui import QGuiApplication
 from PySide6.QtQml import QQmlApplicationEngine, qmlRegisterType
-from PySide6.QtCore import QObject, Signal, Property
+from PySide6.QtCore import QObject, Signal, Property, Slot
 from subscriber import Subscriber
 
 class Backend(QObject):
@@ -14,6 +14,8 @@ class Backend(QObject):
     statusTextChanged = Signal(str)
     eventLogReceived = Signal(str, str)  # level, message
     modelTreeUpdated = Signal('QVariant')  # model tree data
+    variableAdded = Signal('QVariant')  # variable data
+    variableUpdated = Signal(str, 'QVariant')  # variable path, complete variable data
     
     def __init__(self):
         super().__init__()
@@ -21,6 +23,7 @@ class Backend(QObject):
         self._is_running = False
         self._status_text = "Simulator ready"
         self._subscriber = None
+        self._watched_variables = {}  # Store watched variables: {variablePath: {data}}
         
     @Property(str, notify=simulationTimeChanged)
     def simulationTime(self):
@@ -72,11 +75,89 @@ class Backend(QObject):
     
     def update_fields(self, fields_data):
         """Called by subscriber to handle FIELDS topic - individual field variables"""
-        # TODO: Implement field variable updates
-        # For now, just print the received fields data
-        print(f"Received FIELDS data: {len(fields_data)} fields")
+        # Update watched variables with new values
         for field in fields_data:
-            print(f"  {field.get('variablePath', 'Unknown')}: {field.get('variableValue', 'None')}")
+            variable_path = field.get("variablePath", "")
+            variable_value = field.get("variableValue", "")
+            
+            # If this variable is being watched, update it
+            if variable_path in self._watched_variables:
+                # Format the value for display
+                formatted_value = self._format_variable_value(variable_value)
+                
+                # Determine the variable type from the actual value
+                variable_type = self._get_variable_type(variable_value)
+                
+                # Update the stored variable data
+                self._watched_variables[variable_path]["value"] = formatted_value
+                self._watched_variables[variable_path]["type"] = variable_type
+                
+                # Create updated variable data for QML
+                updated_data = {
+                    "variablePath": variable_path,
+                    "description": self._watched_variables[variable_path]["description"],
+                    "value": formatted_value,
+                    "type": variable_type
+                }
+                
+                # Emit signal to update QML with complete data
+                self.variableUpdated.emit(variable_path, updated_data)
+    
+    def _format_variable_value(self, value):
+        """Format variable value for display"""
+        if isinstance(value, (int, float)):
+            return f"{value:.3f}" if isinstance(value, float) else str(value)
+        elif isinstance(value, bool):
+            return "true" if value else "false"
+        elif isinstance(value, list):
+            return str(value)
+        elif isinstance(value, dict):
+            return str(value)
+        else:
+            return str(value)
+    
+    def _get_variable_type(self, value):
+        """Determine variable type from value"""
+        if isinstance(value, bool):
+            return "boolean"
+        elif isinstance(value, int):
+            return "integer"
+        elif isinstance(value, float):
+            return "double"
+        elif isinstance(value, list):
+            return "array"
+        elif isinstance(value, dict):
+            return "struct"
+        else:
+            return "string"
+    
+    def add_variable_to_watch(self, variable_path, description=""):
+        """Add a variable to the watch list"""
+        if variable_path not in self._watched_variables:
+            # Create variable data
+            variable_data = {
+                "variablePath": variable_path,
+                "description": description or variable_path.split(".")[-1],
+                "value": "N/A",
+                "type": "unknown"
+            }
+            
+            # Store in watched variables
+            self._watched_variables[variable_path] = variable_data
+            
+            # Emit signal to add to QML
+            self.variableAdded.emit(variable_data)
+            
+            print(f"Added variable to watch: {variable_path}")
+            return True
+        else:
+            print(f"Variable already being watched: {variable_path}")
+            return False
+    
+    @Slot(str, str, result=bool)
+    def addVariableToWatch(self, variable_path, description=""):
+        """QML-callable method to add a variable to the watch list"""
+        return self.add_variable_to_watch(variable_path, description)
     
     def update_model_tree(self, model_tree_data):
         """Called by subscriber to update model tree from MODEL_TREE topic"""
