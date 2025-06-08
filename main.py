@@ -4,6 +4,7 @@ from PySide6.QtGui import QGuiApplication
 from PySide6.QtQml import QQmlApplicationEngine, qmlRegisterType
 from PySide6.QtCore import QObject, Signal, Property, Slot
 from subscriber import Subscriber
+from commanding import Commanding
 
 class Backend(QObject):
     """Backend class to handle communication between Python and QML"""
@@ -208,6 +209,36 @@ class Backend(QObject):
         if self._subscriber:
             self._subscriber.stop()
             print("ZMQ Subscriber stopped")
+    
+    def request_model_tree(self):
+        """Request the model tree from the Galactron Engine"""
+        try:
+            # Create commanding instance and request model tree
+            commanding = Commanding()
+            response = commanding.request({"command": "MODEL_TREE"})
+            
+            print(f"Model tree request successful: {response}")
+            self.send_event_log("INFO", "Model tree requested from engine")
+            
+            return response
+            
+        except TimeoutError as e:
+            error_msg = f"Model tree request timeout: {e}"
+            print(error_msg)
+            self.send_event_log("WARNING", "Model tree request timed out")
+            
+        except Exception as e:
+            error_msg = f"Model tree request failed: {e}"
+            print(error_msg)
+            self.send_event_log("ERROR", f"Model tree request failed: {str(e)}")
+            
+        return None
+    
+    @Slot(result=bool)
+    def requestModelTree(self):
+        """QML-callable method to request model tree from engine"""
+        response = self.request_model_tree()
+        return response is not None
 
 def main():
     app = QGuiApplication(sys.argv)
@@ -238,6 +269,10 @@ def main():
     
     # Start the ZMQ subscriber
     backend.start_subscriber()
+    
+    # Request model tree from engine after subscriber is ready
+    print("Requesting model tree from Galactron Engine...")
+    backend.request_model_tree()
     
     # Handle application quit to properly stop subscriber
     def cleanup():

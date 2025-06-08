@@ -49,7 +49,6 @@ ApplicationWindow {
                     variablesModel.setProperty(i, "value", variableData.value);
                     variablesModel.setProperty(i, "type", variableData.type);
                     variablesModel.setProperty(i, "description", variableData.description);
-                    console.log("Updated variable:", variablePath, "Type:", variableData.type, "Value:", variableData.value);
                     break;
                 }
             }
