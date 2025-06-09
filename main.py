@@ -1,5 +1,6 @@
 import sys
 import os
+import json  # Add import for JSON handling
 from PySide6.QtGui import QGuiApplication
 from PySide6.QtQml import QQmlApplicationEngine, qmlRegisterType
 from PySide6.QtCore import QObject, Signal, Property, Slot
@@ -127,7 +128,9 @@ class Backend(QObject):
     
     def send_event_log(self, level, message):
         """Called by subscriber to send event log to GUI"""
-        self.eventLogReceived.emit(level, message)
+        # Format JSON in the message if it contains JSON
+        formatted_message = self._format_message_for_display(message)
+        self.eventLogReceived.emit(level, formatted_message)
     
     def update_fields(self, fields_data):
         """Called by subscriber to handle FIELDS topic - individual field variables"""
@@ -159,56 +162,117 @@ class Backend(QObject):
                 # Emit signal to update QML with complete data
                 self.variableUpdated.emit(variable_path, updated_data)
     
+    def _is_json_string(self, value_str):
+        """Check if a string represents JSON data"""
+        if not isinstance(value_str, str):
+            return False
+        
+        # Remove surrounding whitespace
+        value_str = value_str.strip()
+        
+        # Check if it looks like JSON (starts with { or [)
+        if not (value_str.startswith('{') or value_str.startswith('[')):
+            return False
+        
+        try:
+            json.loads(value_str)
+            return True
+        except (ValueError, json.JSONDecodeError):
+            return False
+    
+    def _format_json_for_display(self, json_str):
+        """Format JSON string for human-readable display"""
+        try:
+            # Parse the JSON
+            parsed_json = json.loads(json_str)
+            
+            # Convert to a more readable format
+            if isinstance(parsed_json, dict):
+                return self._format_dict_for_display(parsed_json)
+            elif isinstance(parsed_json, list):
+                return self._format_list_for_display(parsed_json)
+            else:
+                return str(parsed_json)
+        except (ValueError, json.JSONDecodeError):
+            return json_str  # Return original if parsing fails
+    
+    def _format_dict_for_display(self, data, indent_level=0):
+        """Format dictionary for readable display without brackets and commas"""
+        if not data:
+            return "No data"
+        
+        # Use 4 spaces for each indentation level to make hierarchy more visible
+        indent = "    " * indent_level
+        next_indent = "    " * (indent_level + 1)
+        
+        items = []
+        for key, value in data.items():
+            if isinstance(value, dict):
+                if value:  # Only format non-empty dicts
+                    formatted_value = f"\n{self._format_dict_for_display(value, indent_level + 1)}"
+                    items.append(f"{next_indent}{key}:{formatted_value}")
+                else:
+                    # Empty dict - just show the key without colon
+                    items.append(f"{next_indent}{key}")
+            elif isinstance(value, list):
+                if value:  # Only format non-empty lists
+                    formatted_value = f"\n{self._format_list_for_display(value, indent_level + 1)}"
+                    items.append(f"{next_indent}{key}:{formatted_value}")
+                else:
+                    # Empty list - show just the key name (this is a leaf node)
+                    items.append(f"{next_indent}{key}")
+            elif isinstance(value, str):
+                items.append(f"{next_indent}{key}: {value}")  # No quotes around strings
+            else:
+                items.append(f"{next_indent}{key}: {str(value)}")
+        
+        return "\n".join(items)
+    
+    def _format_list_for_display(self, data, indent_level=0):
+        """Format list for readable display without brackets and commas"""
+        if not data:
+            return ""  # Return empty string for empty lists
+        
+        # Use 4 spaces for each indentation level to make hierarchy more visible
+        indent = "    " * indent_level
+        next_indent = "    " * (indent_level + 1)
+        
+        items = []
+        for item in data:  # Remove the enumerate to get rid of [i] indices
+            if isinstance(item, dict):
+                if item:  # Only format non-empty dicts
+                    # Don't add "Item:" prefix, just format the dictionary content directly
+                    formatted_item = self._format_dict_for_display(item, indent_level)
+                    items.append(formatted_item)
+                # Skip empty dicts entirely
+            elif isinstance(item, list):
+                if item:  # Only format non-empty lists
+                    formatted_item = self._format_list_for_display(item, indent_level)
+                    items.append(formatted_item)
+                # Skip empty lists entirely
+            elif isinstance(item, str):
+                items.append(f"{next_indent}{item}")  # No "Item:" prefix for simple strings
+            else:
+                items.append(f"{next_indent}{str(item)}")  # No "Item:" prefix for simple values
+        
+        return "\n".join(items)
+    
     def _format_variable_value(self, value):
         """Format variable value for display"""
         if isinstance(value, (int, float)):
             return f"{value:.3f}" if isinstance(value, float) else str(value)
         elif isinstance(value, bool):
             return "true" if value else "false"
-        elif isinstance(value, list):
-            return str(value)
-        elif isinstance(value, dict):
-            return str(value)
+        elif isinstance(value, (list, dict)):
+            # Convert to JSON string first, then format for display
+            json_str = json.dumps(value)
+            return self._format_json_for_display(json_str)
         else:
-            return str(value)
-    
-    def _get_variable_type(self, value):
-        """Determine variable type from value"""
-        if isinstance(value, bool):
-            return "boolean"
-        elif isinstance(value, int):
-            return "integer"
-        elif isinstance(value, float):
-            return "double"
-        elif isinstance(value, list):
-            return "array"
-        elif isinstance(value, dict):
-            return "struct"
-        else:
-            return "string"
-    
-    def add_variable_to_watch(self, variable_path, description=""):
-        """Add a variable to the watch list"""
-        if variable_path not in self._watched_variables:
-            # Create variable data
-            variable_data = {
-                "variablePath": variable_path,
-                "description": description or variable_path.split(".")[-1],
-                "value": "N/A",
-                "type": "unknown"
-            }
-            
-            # Store in watched variables
-            self._watched_variables[variable_path] = variable_data
-            
-            # Emit signal to add to QML
-            self.variableAdded.emit(variable_data)
-            
-            print(f"Added variable to watch: {variable_path}")
-            return True
-        else:
-            print(f"Variable already being watched: {variable_path}")
-            return False
+            value_str = str(value)
+            # Check if the string value is JSON and format it
+            if self._is_json_string(value_str):
+                return self._format_json_for_display(value_str)
+            return value_str
     
     @Slot(str, str, result=bool)
     def addVariableToWatch(self, variable_path, description=""):
@@ -631,6 +695,130 @@ class Backend(QObject):
         """QML-callable method to set the simulation rate scale"""
         response = self.set_simulation_rate(scale_value)
         return response is not None
+
+    def _get_variable_type(self, value):
+        """Determine the type of a variable based on its value"""
+        if isinstance(value, bool):
+            return "bool"
+        elif isinstance(value, int):
+            return "int"
+        elif isinstance(value, float):
+            return "float"
+        elif isinstance(value, (list, dict)):
+            return "json" if isinstance(value, dict) else "array"
+        elif isinstance(value, str):
+            # Check if string contains JSON
+            if self._is_json_string(value):
+                return "json"
+            else:
+                return "string"
+        else:
+            return "unknown"
+
+    def add_variable_to_watch(self, variable_path, description=""):
+        """Add a variable to the watch list"""
+        if variable_path in self._watched_variables:
+            print(f"Variable '{variable_path}' is already being watched")
+            return False
+        
+        # Add the variable to watch list with initial values
+        self._watched_variables[variable_path] = {
+            "variablePath": variable_path,
+            "description": description,
+            "value": "-",  # Default value until updated
+            "type": "unknown",
+            "selected": False
+        }
+        
+        print(f"Variable '{variable_path}' added to watch list")
+        
+        # Emit signal to notify QML to add the variable to the model
+        self.variableAdded.emit(self._watched_variables[variable_path])
+        return True
+
+    def _format_message_for_display(self, message):
+        """Format message for display, handling embedded JSON"""
+        if not isinstance(message, str):
+            message = str(message)
+        
+        # Check if the entire message is JSON
+        if self._is_json_string(message):
+            return self._format_json_for_display(message)
+        
+        # Look for JSON patterns within the message using more sophisticated parsing
+        import re
+        
+        def find_and_format_json(text):
+            """Find JSON objects and arrays in text and format them"""
+            result = []
+            i = 0
+            
+            while i < len(text):
+                char = text[i]
+                
+                # Look for start of JSON object or array
+                if char in ['{', '[']:
+                    # Try to extract a complete JSON structure
+                    json_start = i
+                    bracket_count = 0
+                    in_string = False
+                    escape_next = False
+                    
+                    # Find the complete JSON structure
+                    for j in range(i, len(text)):
+                        current_char = text[j]
+                        
+                        if escape_next:
+                            escape_next = False
+                            continue
+                            
+                        if current_char == '\\':
+                            escape_next = True
+                            continue
+                            
+                        if current_char == '"' and not escape_next:
+                            in_string = not in_string
+                            continue
+                            
+                        if not in_string:
+                            if current_char in ['{', '[']:
+                                bracket_count += 1
+                            elif current_char in ['}', ']']:
+                                bracket_count -= 1
+                                
+                                if bracket_count == 0:
+                                    # Found complete JSON structure
+                                    json_candidate = text[json_start:j+1]
+                                    
+                                    if self._is_json_string(json_candidate):
+                                        # Add text before JSON
+                                        if json_start > 0:
+                                            result.append(text[i:json_start])
+                                        
+                                        # Add formatted JSON with simple separation
+                                        formatted_json = self._format_json_for_display(json_candidate)
+                                        result.append(f"\n\n{formatted_json}\n")
+                                        
+                                        # Move past this JSON
+                                        i = j + 1
+                                        break
+                                    else:
+                                        # Not valid JSON, continue character by character
+                                        result.append(char)
+                                        i += 1
+                                        break
+                    else:
+                        # Reached end without finding complete JSON
+                        result.append(char)
+                        i += 1
+                else:
+                    result.append(char)
+                    i += 1
+            
+            return ''.join(result)
+        
+        formatted_message = find_and_format_json(message)
+        return formatted_message
 
 def main():
     app = QGuiApplication(sys.argv)

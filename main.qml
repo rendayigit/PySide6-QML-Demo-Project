@@ -905,7 +905,7 @@ ApplicationWindow {
                                 MouseArea {
                                     anchors.fill: parent
                                     acceptedButtons: Qt.RightButton
-                                    onClicked: {
+                                    onClicked: function(mouse) {
                                         if (mouse.button === Qt.RightButton) {
                                             variableContextMenu.popup()
                                         }
@@ -944,7 +944,7 @@ ApplicationWindow {
 
                                 delegate: Rectangle {
                                     width: parent ? parent.width : 0
-                                    height: 25
+                                    height: Math.max(25, Math.max(variableText.contentHeight, Math.max(descriptionText.contentHeight, valueText.contentHeight)) + 20)
                                     color: {
                                         if (model.selected) {
                                             return "#007bff";  // Blue for selected
@@ -955,7 +955,7 @@ ApplicationWindow {
                                     MouseArea {
                                         anchors.fill: parent
                                         acceptedButtons: Qt.LeftButton | Qt.RightButton
-                                        onClicked: {
+                                        onClicked: function(mouse) {
                                             if (mouse.button === Qt.LeftButton) {
                                                 // Handle selection on left click
                                                 if (mouse.modifiers & Qt.ControlModifier) {
@@ -979,6 +979,7 @@ ApplicationWindow {
                                     }
 
                                     Row {
+                                        id: contentRow
                                         anchors.fill: parent
                                         anchors.margins: 5
                                         spacing: 0
@@ -991,6 +992,7 @@ ApplicationWindow {
                                             clip: true
                                             
                                             Text {
+                                                id: variableText
                                                 anchors.left: parent.left
                                                 anchors.verticalCenter: parent.verticalCenter
                                                 anchors.leftMargin: 5
@@ -999,10 +1001,11 @@ ApplicationWindow {
                                                 text: model.variablePath || model.variable || ""
                                                 font.pixelSize: 11
                                                 color: model.selected ? "white" : "#333"
-                                                elide: Text.ElideRight
+                                                wrapMode: Text.Wrap
+                                                width: parent.width - 10
                                                 
                                                 ToolTip.text: model.variablePath || model.variable || ""
-                                                ToolTip.visible: truncated && parent.parent.parent.parent.hoverEnabled
+                                                ToolTip.visible: (model.variablePath || model.variable || "").length > 50
                                             }
                                         }
 
@@ -1014,6 +1017,7 @@ ApplicationWindow {
                                             clip: true
                                             
                                             Text {
+                                                id: descriptionText
                                                 anchors.left: parent.left
                                                 anchors.verticalCenter: parent.verticalCenter
                                                 anchors.leftMargin: 5
@@ -1022,10 +1026,11 @@ ApplicationWindow {
                                                 text: model.description || ""
                                                 font.pixelSize: 11
                                                 color: model.selected ? "white" : "#333"
-                                                elide: Text.ElideRight
+                                                wrapMode: Text.Wrap
+                                                width: parent.width - 10
                                                 
                                                 ToolTip.text: model.description || ""
-                                                ToolTip.visible: truncated && parent.parent.parent.parent.hoverEnabled
+                                                ToolTip.visible: (model.description || "").length > 50
                                             }
                                         }
 
@@ -1037,6 +1042,7 @@ ApplicationWindow {
                                             clip: true
                                             
                                             Text {
+                                                id: valueText
                                                 anchors.left: parent.left
                                                 anchors.verticalCenter: parent.verticalCenter
                                                 anchors.leftMargin: 5
@@ -1045,10 +1051,11 @@ ApplicationWindow {
                                                 text: model.value || ""
                                                 font.pixelSize: 11
                                                 color: model.selected ? "white" : "#333"
-                                                elide: Text.ElideRight
+                                                wrapMode: Text.Wrap
+                                                width: parent.width - 10
                                                 
                                                 ToolTip.text: model.value || ""
-                                                ToolTip.visible: truncated && parent.parent.parent.parent.hoverEnabled
+                                                ToolTip.visible: (model.value || "").length > 50
                                             }
                                         }
 
@@ -1071,7 +1078,7 @@ ApplicationWindow {
                                                 elide: Text.ElideRight
                                                 
                                                 ToolTip.text: model.type || ""
-                                                ToolTip.visible: truncated && parent.parent.parent.parent.hoverEnabled
+                                                ToolTip.visible: truncated
                                             }
                                         }
                                     }
@@ -1187,7 +1194,7 @@ ApplicationWindow {
 
                                 delegate: Rectangle {
                                     width: parent ? parent.width : 0
-                                    height: 40
+                                    height: Math.max(40, logText.contentHeight + 20)
                                     color: {
                                         if (model.level === "ERROR")
                                             return "#ffe6e6";
@@ -1205,6 +1212,7 @@ ApplicationWindow {
 
                                         Rectangle {
                                             Layout.preferredWidth: 60
+                                            Layout.alignment: Qt.AlignTop
                                             height: 25
                                             color: {
                                                 if (model.level === "ERROR")
@@ -1231,11 +1239,13 @@ ApplicationWindow {
                                         }
 
                                         Text {
+                                            id: logText
                                             Layout.fillWidth: true
                                             text: model.log
                                             font.pixelSize: 11
                                             color: "#333"
-                                            wrapMode: Text.WordWrap
+                                            wrapMode: Text.Wrap
+                                            width: parent.width - 75 // Account for level badge width and margins
                                         }
                                     }
                                 }
