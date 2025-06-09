@@ -485,6 +485,7 @@ ApplicationWindow {
                         ScrollView {
                             Layout.fillWidth: true
                             Layout.fillHeight: true
+                            clip: true
                             ListView {
                                 id: modelsTreeListView
                                 model: ListModel {
@@ -854,6 +855,7 @@ ApplicationWindow {
                         ScrollView {
                             Layout.fillWidth: true
                             Layout.fillHeight: true
+                            clip: true
 
                             ListView {
                                 id: variablesListView
@@ -1132,6 +1134,7 @@ ApplicationWindow {
 
                         ScrollView {
                             anchors.fill: parent
+                            clip: true
 
                             ListView {
                                 id: eventLogsListView
