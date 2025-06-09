@@ -19,6 +19,7 @@ class Backend(QObject):
     modelTreeUpdated = Signal('QVariant')  # model tree data
     variableAdded = Signal('QVariant')  # variable data
     variableUpdated = Signal(str, 'QVariant')  # variable path, complete variable data
+    variableRemoved = Signal(str)  # variable path when removed
     variablesCleared = Signal()  # signal when all variables are cleared
     commandExecuted = Signal(str, bool)  # command name, success status
     
@@ -226,6 +227,23 @@ class Backend(QObject):
     def clearVariableTable(self):
         """QML-callable method to clear all variables from the watch list"""
         return self.clear_variable_table()
+    
+    def remove_variable_from_watch(self, variable_path):
+        """Remove a specific variable from the watch list"""
+        if variable_path in self._watched_variables:
+            del self._watched_variables[variable_path]
+            print(f"Variable '{variable_path}' removed from watch list")
+            # Emit signal to notify QML to remove the variable from the model
+            self.variableRemoved.emit(variable_path)
+            return True
+        else:
+            print(f"Variable '{variable_path}' not found in watch list")
+            return False
+    
+    @Slot(str, result=bool)
+    def removeVariableFromWatch(self, variable_path):
+        """QML-callable method to remove a variable from the watch list"""
+        return self.remove_variable_from_watch(variable_path)
     
     def update_model_tree(self, model_tree_data):
         """Called by subscriber to update model tree from MODEL_TREE topic"""

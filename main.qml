@@ -49,6 +49,8 @@ ApplicationWindow {
             }
         }
         function onVariableAdded(variableData) {
+            // Ensure the selected property is initialized
+            variableData.selected = false;
             variablesModel.append(variableData);
         }
         function onVariableUpdated(variablePath, variableData) {
@@ -66,6 +68,15 @@ ApplicationWindow {
         function onVariablesCleared() {
             // Clear all variables from the model
             variablesModel.clear();
+        }
+        function onVariableRemoved(variablePath) {
+            // Remove the specific variable from the model
+            for (var i = 0; i < variablesModel.count; i++) {
+                if (variablesModel.get(i).variablePath === variablePath) {
+                    variablesModel.remove(i);
+                    break;
+                }
+            }
         }
         function onCommandExecuted(commandName, success) {
             if (success) {
@@ -594,6 +605,45 @@ ApplicationWindow {
                                     // Dynamic model - variables added via backend signals
                                 }
 
+                                // Selection properties
+                                property var selectedItems: []
+                                
+                                // Helper function to toggle selection
+                                function toggleSelection(index) {
+                                    var item = variablesModel.get(index);
+                                    if (!item) return;
+                                    
+                                    var isSelected = item.selected || false;
+                                    variablesModel.setProperty(index, "selected", !isSelected);
+                                    
+                                    // Update selectedItems array
+                                    updateSelectedItems();
+                                }
+                                
+                                // Helper function to clear all selections
+                                function clearSelection() {
+                                    for (var i = 0; i < variablesModel.count; i++) {
+                                        variablesModel.setProperty(i, "selected", false);
+                                    }
+                                    selectedItems = [];
+                                }
+                                
+                                // Helper function to update selectedItems array
+                                function updateSelectedItems() {
+                                    var selected = [];
+                                    for (var i = 0; i < variablesModel.count; i++) {
+                                        var item = variablesModel.get(i);
+                                        if (item.selected) {
+                                            selected.push({
+                                                index: i,
+                                                variablePath: item.variablePath,
+                                                description: item.description
+                                            });
+                                        }
+                                    }
+                                    selectedItems = selected;
+                                }
+
                                 // Context menu for right-click actions
                                 MouseArea {
                                     anchors.fill: parent
@@ -616,12 +666,60 @@ ApplicationWindow {
                                             }
                                         }
                                     }
+                                    MenuSeparator {}
+                                    MenuItem {
+                                        text: "Remove Selection (" + variablesListView.selectedItems.length + ")"
+                                        enabled: variablesListView.selectedItems.length > 0
+                                        onTriggered: {
+                                            console.log("Remove Selection from context menu");
+                                            if (backend && variablesListView.selectedItems.length > 0) {
+                                                // Remove selected variables from backend
+                                                for (var i = 0; i < variablesListView.selectedItems.length; i++) {
+                                                    var item = variablesListView.selectedItems[i];
+                                                    backend.removeVariableFromWatch(item.variablePath);
+                                                }
+                                                // Clear selection after removal
+                                                variablesListView.clearSelection();
+                                            }
+                                        }
+                                    }
                                 }
 
                                 delegate: Rectangle {
                                     width: parent ? parent.width : 0
                                     height: 25
-                                    color: index % 2 ? "#f8f9fa" : "white"
+                                    color: {
+                                        if (model.selected) {
+                                            return "#007bff";  // Blue for selected
+                                        }
+                                        return index % 2 ? "#f8f9fa" : "white";
+                                    }
+
+                                    MouseArea {
+                                        anchors.fill: parent
+                                        acceptedButtons: Qt.LeftButton | Qt.RightButton
+                                        onClicked: {
+                                            if (mouse.button === Qt.LeftButton) {
+                                                // Handle selection on left click
+                                                if (mouse.modifiers & Qt.ControlModifier) {
+                                                    // Ctrl+click: toggle selection
+                                                    variablesListView.toggleSelection(index);
+                                                } else {
+                                                    // Normal click: clear all selections and select this one
+                                                    variablesListView.clearSelection();
+                                                    variablesListView.toggleSelection(index);
+                                                }
+                                            } else if (mouse.button === Qt.RightButton) {
+                                                // Right click: show context menu
+                                                // If this item is not selected, select it first
+                                                if (!model.selected) {
+                                                    variablesListView.clearSelection();
+                                                    variablesListView.toggleSelection(index);
+                                                }
+                                                variableContextMenu.popup();
+                                            }
+                                        }
+                                    }
 
                                     RowLayout {
                                         anchors.fill: parent
@@ -632,25 +730,25 @@ ApplicationWindow {
                                             text: model.variablePath || model.variable || ""
                                             Layout.preferredWidth: 200
                                             font.pixelSize: 11
-                                            color: "#333"
+                                            color: model.selected ? "white" : "#333"
                                         }
                                         Text {
                                             text: model.description || ""
                                             Layout.fillWidth: true
                                             font.pixelSize: 11
-                                            color: "#333"
+                                            color: model.selected ? "white" : "#333"
                                         }
                                         Text {
                                             text: model.value || ""
                                             Layout.preferredWidth: 150
                                             font.pixelSize: 11
-                                            color: "#333"
+                                            color: model.selected ? "white" : "#333"
                                         }
                                         Text {
                                             text: model.type
                                             Layout.preferredWidth: 100
                                             font.pixelSize: 11
-                                            color: "#666"
+                                            color: model.selected ? "white" : "#666"
                                         }
                                     }
                                 }
