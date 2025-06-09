@@ -29,11 +29,11 @@ RowLayout {
         background: Rectangle {
             color: {
                 if (parent.pressed)
-                    return root.isRunning ? "#cc6600" : "#e6b800";
-                return root.isRunning ? "#ff8800" : "#ffcc00";
+                    return root.isRunning ? "#2563eb" : "#059669";
+                return root.isRunning ? "#3b82f6" : "#10b981";
             }
             radius: 4
-            border.color: root.isRunning ? "#cc6600" : "#d4af37"
+            border.color: root.isRunning ? "#1d4ed8" : "#047857"
             border.width: 1
         }
         contentItem: Text {
@@ -57,9 +57,9 @@ RowLayout {
         Layout.preferredWidth: 80
         Layout.preferredHeight: 25
         background: Rectangle {
-            color: parent.pressed ? "#cc3636" : "#ff4545"
+            color: parent.pressed ? "#dc2626" : "#ef4444"
             radius: 4
-            border.color: "#cc3636"
+            border.color: "#b91c1c"
             border.width: 1
         }
         contentItem: Text {
@@ -82,9 +82,9 @@ RowLayout {
         Layout.preferredWidth: 80
         Layout.preferredHeight: 25
         background: Rectangle {
-            color: parent.pressed ? "#5599cc" : "#66b3ff"
+            color: parent.pressed ? "#0891b2" : "#06b6d4"
             radius: 4
-            border.color: "#4d79a4"
+            border.color: "#0e7490"
             border.width: 1
         }
         contentItem: Text {
