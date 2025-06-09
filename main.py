@@ -392,6 +392,55 @@ class Backend(QObject):
         response = self.hold_simulation()
         return response is not None
     
+    def step_simulation(self):
+        """Send STEP command to the Galactron Engine"""
+        try:
+            commanding = self.get_commanding_instance()
+            response = commanding.request({"command": "STEP"})
+            
+            print(f"STEP command successful: {response}")
+            self.send_event_log("INFO", "STEP command sent to engine")
+            
+            # Request status update after step - actual status will come via STATUS topic
+            self.verify_simulation_status()
+            
+            # Emit command executed signal for UI feedback
+            self.commandExecuted.emit("STEP", True)
+            
+            return response
+            
+        except TimeoutError as e:
+            error_msg = f"STEP command timeout: {e}"
+            print(error_msg)
+            self.send_event_log("WARNING", "STEP command timed out")
+            self.commandExecuted.emit("STEP", False)
+            
+        except (ConnectionError, OSError) as e:
+            error_msg = f"STEP command connection failed: {e}"
+            print(error_msg)
+            self.send_event_log("ERROR", f"STEP command connection failed: {str(e)}")
+            self.commandExecuted.emit("STEP", False)
+            
+        except ValueError as e:
+            error_msg = f"STEP command data error: {e}"
+            print(error_msg)
+            self.send_event_log("ERROR", f"STEP command data error: {str(e)}")
+            self.commandExecuted.emit("STEP", False)
+            
+        except Exception as e:
+            error_msg = f"STEP command failed: {e}"
+            print(error_msg)
+            self.send_event_log("ERROR", f"STEP command failed: {str(e)}")
+            self.commandExecuted.emit("STEP", False)
+            
+        return None
+
+    @Slot(result=bool)
+    def stepSimulation(self):
+        """QML-callable method to step the simulation"""
+        response = self.step_simulation()
+        return response is not None
+
     @Slot(result=bool)
     def toggleSimulation(self):
         """QML-callable method to toggle simulation run/hold state"""

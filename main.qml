@@ -96,7 +96,17 @@ ApplicationWindow {
             }
             MenuItem {
                 text: "Step"
-                onTriggered: console.log("Step")
+                onTriggered: {
+                    console.log("Menu Step triggered");
+                    if (backend) {
+                        var success = backend.stepSimulation();
+                        if (success) {
+                            console.log("STEP command sent successfully from menu");
+                        } else {
+                            console.log("STEP command failed from menu");
+                        }
+                    }
+                }
             }
             MenuItem {
                 text: "Progress Simulation"
@@ -259,7 +269,30 @@ ApplicationWindow {
                 Button {
                     id: stepButton
                     text: "Step"
-                    onClicked: console.log("Step")
+                    background: Rectangle {
+                        color: parent.pressed ? "#5599cc" : "#66b3ff"
+                        radius: 4
+                        border.color: "#4d79a4"
+                        border.width: 1
+                    }
+                    contentItem: Text {
+                        text: parent.text
+                        color: "white"
+                        font.pixelSize: 12
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                    }
+                    onClicked: {
+                        console.log("Step button clicked");
+                        if (backend) {
+                            var success = backend.stepSimulation();
+                            if (success) {
+                                console.log("STEP command sent successfully");
+                            } else {
+                                console.log("STEP command failed");
+                            }
+                        }
+                    }
                 }
 
                 Button {
