@@ -21,6 +21,15 @@ ApplicationWindow {
         function onSimulationTimeChanged() {
             window.currentSimTime = backend.simulationTime;
         }
+        function onMissionTimeChanged() {
+            // Mission time is automatically updated via binding
+        }
+        function onEpochTimeChanged() {
+            // Epoch time is automatically updated via binding
+        }
+        function onZuluTimeChanged() {
+            // Zulu time is automatically updated via binding
+        }
         function onSimulationStatusChanged() {
             window.isRunning = backend.isRunning;
         }
@@ -323,23 +332,124 @@ ApplicationWindow {
                     Layout.fillWidth: true
                 } // Spacer
 
-                Text {
-                    text: "Simulation Time (s)"
-                    font.pixelSize: 12
-                    color: "#333"
-                }
+                // Time displays
+                RowLayout {
+                    spacing: 15
 
-                TextField {
-                    id: simTimeDisplay
-                    text: window.currentSimTime
-                    readOnly: true
-                    implicitWidth: 100
-                    color: "#333"
-                    background: Rectangle {
-                        color: "#f8f9fa"
-                        border.color: "#ced4da"
-                        border.width: 1
-                        radius: 3
+                    // Simulation Time
+                    ColumnLayout {
+                        spacing: 2
+                        Text {
+                            text: "Simulation Time (s)"
+                            font.pixelSize: 10
+                            color: "#333"
+                            horizontalAlignment: Text.AlignHCenter
+                        }
+                        TextField {
+                            id: simTimeDisplay
+                            text: backend ? backend.simulationTime : "-"
+                            readOnly: true
+                            implicitWidth: 130
+                            color: "#333"
+                            font.pixelSize: 11
+                            horizontalAlignment: TextInput.AlignHCenter
+                            background: Rectangle {
+                                color: "#f8f9fa"
+                                border.color: "#ced4da"
+                                border.width: 1
+                                radius: 3
+                            }
+                            ToolTip.text: "Simulation elapsed time in seconds"
+                            ToolTip.visible: hovered
+                            ToolTip.delay: 500
+                        }
+                    }
+
+                    // Mission Time
+                    ColumnLayout {
+                        spacing: 2
+                        Text {
+                            text: "Mission Time"
+                            font.pixelSize: 10
+                            color: "#333"
+                            horizontalAlignment: Text.AlignHCenter
+                        }
+                        TextField {
+                            id: missionTimeDisplay
+                            text: backend ? backend.missionTime : "-"
+                            readOnly: true
+                            implicitWidth: 130
+                            color: "#333"
+                            font.pixelSize: 11
+                            horizontalAlignment: TextInput.AlignHCenter
+                            background: Rectangle {
+                                color: "#f8f9fa"
+                                border.color: "#ced4da"
+                                border.width: 1
+                                radius: 3
+                            }
+                            ToolTip.text: "Mission elapsed time"
+                            ToolTip.visible: hovered
+                            ToolTip.delay: 500
+                        }
+                    }
+
+                    // Epoch Time
+                    ColumnLayout {
+                        spacing: 2
+                        Text {
+                            text: "Epoch Time"
+                            font.pixelSize: 10
+                            color: "#333"
+                            horizontalAlignment: Text.AlignHCenter
+                        }
+                        TextField {
+                            id: epochTimeDisplay
+                            text: backend ? backend.epochTime : "-"
+                            readOnly: true
+                            implicitWidth: 130
+                            color: "#333"
+                            font.pixelSize: 11
+                            horizontalAlignment: TextInput.AlignHCenter
+                            background: Rectangle {
+                                color: "#f8f9fa"
+                                border.color: "#ced4da"
+                                border.width: 1
+                                radius: 3
+                            }
+                            ToolTip.text: "Time since epoch"
+                            ToolTip.visible: hovered
+                            ToolTip.delay: 500
+                        }
+                    }
+
+                    // Zulu Time
+                    ColumnLayout {
+                        spacing: 2
+                        Text {
+                            text: "Zulu Time"
+                            font.pixelSize: 10
+                            color: "#333"
+                            horizontalAlignment: Text.AlignHCenter
+                        }
+                        TextField {
+                            id: zuluTimeDisplay
+                            text: backend ? backend.zuluTime : "-"
+                            readOnly: true
+                            implicitWidth: 130
+                            color: "#333"
+                            font.pixelSize: 11
+                            horizontalAlignment: TextInput.AlignHCenter
+                            background: Rectangle {
+                                color: "#f8f9fa"
+                                border.color: "#ced4da"
+                                border.width: 1
+                                radius: 3
+                            }
+                            ToolTip.text: "Wall clock time (UTC + 0)"
+                            ToolTip.visible: hovered
+                            ToolTip.delay: 500
+                        }
                     }
                 }
             }

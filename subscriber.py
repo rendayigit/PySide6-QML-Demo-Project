@@ -63,10 +63,15 @@ class Subscriber:
 
             try:
                 if topic == "TIME":
-                    sim_time = command_json["simulationTime"]
-                    # Send sim time to gui
-                    if hasattr(self.main_window, 'update_simulation_time'):
-                        self.main_window.update_simulation_time(sim_time)
+                    # Extract all time fields from the TIME topic
+                    sim_time = command_json.get("simulationTime", "-")
+                    mission_time = command_json.get("missionTime", "-")
+                    epoch_time = command_json.get("epochTime", "-")
+                    zulu_time = command_json.get("zuluTime", "-")
+                    
+                    # Send all time fields to gui
+                    if hasattr(self.main_window, 'update_all_times'):
+                        self.main_window.update_all_times(sim_time, mission_time, epoch_time, zulu_time)
                 elif topic == "STATUS":
                     scheduler_running = command_json["schedulerIsRunning"]
                     # Update simulation status in GUI

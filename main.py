@@ -10,6 +10,9 @@ class Backend(QObject):
     
     # Signals to notify QML of changes
     simulationTimeChanged = Signal(str)
+    missionTimeChanged = Signal(str)
+    epochTimeChanged = Signal(str)
+    zuluTimeChanged = Signal(str)
     simulationStatusChanged = Signal(bool)
     statusTextChanged = Signal(str)
     eventLogReceived = Signal(str, str)  # level, message
@@ -20,7 +23,10 @@ class Backend(QObject):
     
     def __init__(self):
         super().__init__()
-        self._simulation_time = "0.000"
+        self._simulation_time = "-"
+        self._mission_time = "-"
+        self._epoch_time = "-"
+        self._zulu_time = "-"
         self._is_running = False
         self._status_text = "Simulator ready"
         self._subscriber = None
@@ -31,6 +37,18 @@ class Backend(QObject):
     @Property(str, notify=simulationTimeChanged)
     def simulationTime(self):
         return self._simulation_time
+    
+    @Property(str, notify=missionTimeChanged)
+    def missionTime(self):
+        return self._mission_time
+    
+    @Property(str, notify=epochTimeChanged)
+    def epochTime(self):
+        return self._epoch_time
+    
+    @Property(str, notify=zuluTimeChanged)
+    def zuluTime(self):
+        return self._zulu_time
     
     @Property(bool, notify=simulationStatusChanged)
     def isRunning(self):
@@ -45,6 +63,24 @@ class Backend(QObject):
         if self._simulation_time != value:
             self._simulation_time = value
             self.simulationTimeChanged.emit(value)
+    
+    def set_mission_time(self, value):
+        """Internal method to set mission time"""
+        if self._mission_time != value:
+            self._mission_time = value
+            self.missionTimeChanged.emit(value)
+    
+    def set_epoch_time(self, value):
+        """Internal method to set epoch time"""
+        if self._epoch_time != value:
+            self._epoch_time = value
+            self.epochTimeChanged.emit(value)
+    
+    def set_zulu_time(self, value):
+        """Internal method to set zulu time"""
+        if self._zulu_time != value:
+            self._zulu_time = value
+            self.zuluTimeChanged.emit(value)
     
     def set_simulation_status(self, value):
         """Internal method to set simulation running status"""
@@ -65,8 +101,16 @@ class Backend(QObject):
             self._commanding = Commanding()
         return self._commanding
     
+    def update_all_times(self, sim_time, mission_time, epoch_time, zulu_time):
+        """Called by subscriber to update all time fields from TIME topic"""
+        # Update all time properties
+        self.set_simulation_time(sim_time)
+        self.set_mission_time(mission_time)
+        self.set_epoch_time(epoch_time)
+        self.set_zulu_time(zulu_time)
+    
     def update_simulation_time(self, time_value):
-        """Called by subscriber to update simulation time"""
+        """Called by subscriber to update simulation time (legacy method)"""
         # Format the time to 3 decimal places
         formatted_time = f"{float(time_value):.3f}"
         self.set_simulation_time(formatted_time)
