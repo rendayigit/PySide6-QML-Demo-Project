@@ -1,7 +1,7 @@
 {
     "pylint.args": [
         "--extension-pkg-whitelist=PySide6",
-        "--disable=method-hidden"
+        "--disable=method-hidden,E0402,W0718,C0301"
     ],
     "python.analysis.diagnosticSeverityOverrides": {
         "reportCallIssue": "none",

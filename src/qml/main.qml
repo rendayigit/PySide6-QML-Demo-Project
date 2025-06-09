@@ -21,16 +21,16 @@ ApplicationWindow {
     title: "Galactron GUI - Simulator Control"
 
     // Simulation state properties - bound to backend
-    property bool isRunning: backend ? backend.isRunning : false
-    property string currentSimTime: backend ? backend.simulationTime : "0.000"
-    property string statusText: backend ? backend.statusText : "Simulator ready"
+    property bool isRunning: backend ? backend.is_running : false
+    property string currentSimTime: backend ? backend.simulation_time : "0.000"
+    property string statusText: backend ? backend.status_text : "Simulator ready"
     property bool commandInProgress: false
 
     // Connect to backend signals for real-time updates
     Connections {
         target: backend
         function onSimulationTimeChanged() {
-            window.currentSimTime = backend.simulationTime;
+            window.currentSimTime = backend.simulation_time;
         }
         function onMissionTimeChanged() {
             // Mission time is automatically updated via binding
@@ -42,10 +42,10 @@ ApplicationWindow {
             // Zulu time is automatically updated via binding
         }
         function onSimulationStatusChanged() {
-            window.isRunning = backend.isRunning;
+            window.isRunning = backend.is_running;
         }
         function onStatusTextChanged() {
-            window.statusText = backend.statusText;
+            window.statusText = backend.status_text;
         }
         function onEventLogReceived(level, message) {
             eventLog.model.append({
@@ -144,10 +144,10 @@ ApplicationWindow {
                 // Time Displays
                 TimeDisplay {
                     id: timeDisplay
-                    simulationTime: backend ? backend.simulationTime : "-"
-                    missionTime: backend ? backend.missionTime : "-"
-                    epochTime: backend ? backend.epochTime : "-"
-                    zuluTime: backend ? backend.zuluTime : "-"
+                    simulationTime: backend ? backend.simulation_time : "-"
+                    missionTime: backend ? backend.mission_time : "-"
+                    epochTime: backend ? backend.epoch_time : "-"
+                    zuluTime: backend ? backend.zulu_time : "-"
                 }
             }
         }
@@ -170,7 +170,7 @@ ApplicationWindow {
                     SplitView.preferredWidth: 300
                     onVariableWatchRequested: function(variablePath, variableName) {
                         if (backend) {
-                            var success = backend.addVariableToWatch(variablePath, variableName);
+                            var success = backend.add_variable_to_watch(variablePath, variableName);
                             if (success) {
                                 console.log("Successfully added:", variablePath);
                             } else {
@@ -189,7 +189,7 @@ ApplicationWindow {
                     onRemoveVariablesRequested: function(variablePaths) {
                         if (backend) {
                             for (var i = 0; i < variablePaths.length; i++) {
-                                backend.removeVariableFromWatch(variablePaths[i]);
+                                backend.remove_variable_from_watch(variablePaths[i]);
                             }
                         }
                     }
@@ -236,7 +236,7 @@ ApplicationWindow {
     function handleToggleSimulation() {
         console.log("Toggle simulation requested");
         if (backend) {
-            var success = backend.toggleSimulation();
+            var success = backend.toggle_simulation();
             if (success) {
                 console.log("Toggle command sent successfully");
             } else {
@@ -255,7 +255,7 @@ ApplicationWindow {
     function handleStepSimulation() {
         console.log("Step simulation requested");
         if (backend) {
-            var success = backend.stepSimulation();
+            var success = backend.step_simulation();
             if (success) {
                 console.log("Step command sent successfully");
             } else {
@@ -267,7 +267,7 @@ ApplicationWindow {
     function handleClearVariableTable() {
         console.log("Clear variable table requested");
         if (backend) {
-            backend.clearVariableTable();
+            backend.clear_variable_table();
         }
     }
 }

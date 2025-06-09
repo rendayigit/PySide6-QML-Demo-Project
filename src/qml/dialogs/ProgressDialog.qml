@@ -350,7 +350,7 @@ Dialog {
                     console.log("Total milliseconds:", totalMilliseconds);
                     
                     if (backend) {
-                        var success = backend.progressSimulation(totalMilliseconds);
+                        var success = backend.progress_simulation(totalMilliseconds);
                         if (success) {
                             console.log("PROGRESS command sent successfully");
                             progressDialog.close();

@@ -148,7 +148,7 @@ Dialog {
                     console.log("Setting simulation rate scale to:", scaleValue);
                     
                     if (backend) {
-                        var success = backend.setSimulationRate(scaleValue);
+                        var success = backend.set_simulation_rate(scaleValue);
                         if (success) {
                             console.log("RATE command sent successfully");
                             scaleDialog.close();
