@@ -22,13 +22,13 @@ ApplicationWindow {
             window.currentSimTime = backend.simulationTime;
         }
         function onMissionTimeChanged() {
-            // Mission time is automatically updated via binding
+        // Mission time is automatically updated via binding
         }
         function onEpochTimeChanged() {
-            // Epoch time is automatically updated via binding
+        // Epoch time is automatically updated via binding
         }
         function onZuluTimeChanged() {
-            // Zulu time is automatically updated via binding
+        // Zulu time is automatically updated via binding
         }
         function onSimulationStatusChanged() {
             window.isRunning = backend.isRunning;
@@ -207,30 +207,15 @@ ApplicationWindow {
                 spacing: 10
 
                 Button {
-                    id: simulatorButton
-                    text: "Simulator Controls"
-                    background: Rectangle {
-                        color: parent.pressed ? "#e6b800" : "#ffcc00"
-                        radius: 4
-                        border.color: "#d4af37"
-                        border.width: 1
-                    }
-                    contentItem: Text {
-                        text: parent.text
-                        color: "black"
-                        font.pixelSize: 12
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
-                    }
-                    onClicked: console.log("Simulator Controls")
-                }
-
-                Button {
                     id: runButton
                     text: window.isRunning ? "Hold" : "Run"
+                    Layout.alignment: Qt.AlignVCenter
+                    Layout.preferredWidth: 80
+                    Layout.preferredHeight: 25
                     background: Rectangle {
                         color: {
-                            if (parent.pressed) return window.isRunning ? "#cc6600" : "#e6b800";
+                            if (parent.pressed)
+                                return window.isRunning ? "#cc6600" : "#e6b800";
                             return window.isRunning ? "#ff8800" : "#ffcc00";
                         }
                         radius: 4
@@ -261,6 +246,9 @@ ApplicationWindow {
                 Button {
                     id: resetButton
                     text: "Reset"
+                    Layout.alignment: Qt.AlignVCenter
+                    Layout.preferredWidth: 80
+                    Layout.preferredHeight: 25
                     background: Rectangle {
                         color: parent.pressed ? "#cc3636" : "#ff4545"
                         radius: 4
@@ -284,6 +272,9 @@ ApplicationWindow {
                 Button {
                     id: stepButton
                     text: "Step"
+                    Layout.alignment: Qt.AlignVCenter
+                    Layout.preferredWidth: 80
+                    Layout.preferredHeight: 25
                     background: Rectangle {
                         color: parent.pressed ? "#5599cc" : "#66b3ff"
                         radius: 4
@@ -308,24 +299,6 @@ ApplicationWindow {
                             }
                         }
                     }
-                }
-
-                Button {
-                    id: storeButton
-                    text: "Store"
-                    onClicked: console.log("Store")
-                }
-
-                Button {
-                    id: restoreButton
-                    text: "Restore"
-                    onClicked: console.log("Restore")
-                }
-
-                Button {
-                    id: plotButton
-                    text: "Plot"
-                    onClicked: console.log("Plot")
                 }
 
                 Item {
@@ -496,7 +469,7 @@ ApplicationWindow {
 
                         ScrollView {
                             Layout.fillWidth: true
-                            Layout.fillHeight: true           
+                            Layout.fillHeight: true
                             ListView {
                                 id: modelsTreeListView
                                 model: ListModel {
@@ -744,7 +717,7 @@ ApplicationWindow {
                                 // Auto-scroll when new items are added (if enabled OR if at bottom)
                                 onCountChanged: {
                                     if (autoScrollEnabled || userAtBottom) {
-                                        Qt.callLater(function() {
+                                        Qt.callLater(function () {
                                             positionViewAtIndex(count - 1, ListView.End);
                                         });
                                         userAtBottom = true;
@@ -753,7 +726,7 @@ ApplicationWindow {
 
                                 // Initialize as being at bottom with auto-scroll enabled
                                 Component.onCompleted: {
-                                    Qt.callLater(function() {
+                                    Qt.callLater(function () {
                                         if (count > 0) {
                                             positionViewAtIndex(count - 1, ListView.End);
                                         }
