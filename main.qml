@@ -63,6 +63,10 @@ ApplicationWindow {
                 }
             }
         }
+        function onVariablesCleared() {
+            // Clear all variables from the model
+            variablesModel.clear();
+        }
         function onCommandExecuted(commandName, success) {
             if (success) {
                 console.log(commandName + " command executed successfully");
@@ -170,7 +174,7 @@ ApplicationWindow {
             MenuSeparator {}
             MenuItem {
                 text: "&Clear Table"
-                onTriggered: console.log("Clear Table")
+                onTriggered: backend.clearVariableTable()
             }
         }
 
