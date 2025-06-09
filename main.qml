@@ -110,7 +110,10 @@ ApplicationWindow {
             }
             MenuItem {
                 text: "Progress Simulation"
-                onTriggered: console.log("Progress Simulation")
+                onTriggered: {
+                    console.log("Progress Simulation menu triggered");
+                    progressDialog.open();
+                }
             }
             MenuItem {
                 text: "Store"
@@ -795,5 +798,10 @@ ApplicationWindow {
                 color: "#333"
             }
         }
+    }
+
+    // Progress Dialog for time-based simulation progression
+    ProgressDialog {
+        id: progressDialog
     }
 }

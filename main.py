@@ -449,6 +449,55 @@ class Backend(QObject):
         else:
             return self.runSimulation()
 
+    def progress_simulation(self, total_milliseconds):
+        """Send PROGRESS command to the Galactron Engine with specified time"""
+        try:
+            commanding = self.get_commanding_instance()
+            response = commanding.request({"command": "PROGRESS", "millis": total_milliseconds})
+            
+            print(f"PROGRESS command successful: {response}")
+            self.send_event_log("INFO", f"PROGRESS command sent to engine with {total_milliseconds}ms")
+            
+            # Request status update after progress - actual status will come via STATUS topic
+            self.verify_simulation_status()
+            
+            # Emit command executed signal for UI feedback
+            self.commandExecuted.emit("PROGRESS", True)
+            
+            return response
+            
+        except TimeoutError as e:
+            error_msg = f"PROGRESS command timeout: {e}"
+            print(error_msg)
+            self.send_event_log("WARNING", "PROGRESS command timed out")
+            self.commandExecuted.emit("PROGRESS", False)
+            
+        except (ConnectionError, OSError) as e:
+            error_msg = f"PROGRESS command connection failed: {e}"
+            print(error_msg)
+            self.send_event_log("ERROR", f"PROGRESS command connection failed: {str(e)}")
+            self.commandExecuted.emit("PROGRESS", False)
+            
+        except ValueError as e:
+            error_msg = f"PROGRESS command data error: {e}"
+            print(error_msg)
+            self.send_event_log("ERROR", f"PROGRESS command data error: {str(e)}")
+            self.commandExecuted.emit("PROGRESS", False)
+            
+        except Exception as e:
+            error_msg = f"PROGRESS command failed: {e}"
+            print(error_msg)
+            self.send_event_log("ERROR", f"PROGRESS command failed: {str(e)}")
+            self.commandExecuted.emit("PROGRESS", False)
+            
+        return None
+
+    @Slot(int, result=bool)
+    def progressSimulation(self, total_milliseconds):
+        """QML-callable method to progress the simulation by specified time"""
+        response = self.progress_simulation(total_milliseconds)
+        return response is not None
+
 def main():
     app = QGuiApplication(sys.argv)
     
