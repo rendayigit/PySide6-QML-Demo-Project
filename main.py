@@ -498,6 +498,55 @@ class Backend(QObject):
         response = self.progress_simulation(total_milliseconds)
         return response is not None
 
+    def set_simulation_rate(self, scale_value):
+        """Send RATE command to the Galactron Engine with specified scale"""
+        try:
+            commanding = self.get_commanding_instance()
+            response = commanding.request({"command": "RATE", "rate": scale_value})
+            
+            print(f"RATE command successful: {response}")
+            self.send_event_log("INFO", f"RATE command sent to engine with scale {scale_value}")
+            
+            # Request status update after rate change - actual status will come via STATUS topic
+            self.verify_simulation_status()
+            
+            # Emit command executed signal for UI feedback
+            self.commandExecuted.emit("RATE", True)
+            
+            return response
+            
+        except TimeoutError as e:
+            error_msg = f"RATE command timeout: {e}"
+            print(error_msg)
+            self.send_event_log("WARNING", "RATE command timed out")
+            self.commandExecuted.emit("RATE", False)
+            
+        except (ConnectionError, OSError) as e:
+            error_msg = f"RATE command connection failed: {e}"
+            print(error_msg)
+            self.send_event_log("ERROR", f"RATE command connection failed: {str(e)}")
+            self.commandExecuted.emit("RATE", False)
+            
+        except ValueError as e:
+            error_msg = f"RATE command data error: {e}"
+            print(error_msg)
+            self.send_event_log("ERROR", f"RATE command data error: {str(e)}")
+            self.commandExecuted.emit("RATE", False)
+            
+        except Exception as e:
+            error_msg = f"RATE command failed: {e}"
+            print(error_msg)
+            self.send_event_log("ERROR", f"RATE command failed: {str(e)}")
+            self.commandExecuted.emit("RATE", False)
+            
+        return None
+
+    @Slot(float, result=bool)
+    def setSimulationRate(self, scale_value):
+        """QML-callable method to set the simulation rate scale"""
+        response = self.set_simulation_rate(scale_value)
+        return response is not None
+
 def main():
     app = QGuiApplication(sys.argv)
     

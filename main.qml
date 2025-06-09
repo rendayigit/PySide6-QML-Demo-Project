@@ -124,8 +124,11 @@ ApplicationWindow {
                 onTriggered: console.log("Restore")
             }
             MenuItem {
-                text: "Speed"
-                onTriggered: console.log("Speed")
+                text: "Rate"
+                onTriggered: {
+                    console.log("Rate menu triggered");
+                    scaleDialog.open();
+                }
             }
             MenuSeparator {}
             MenuItem {
@@ -803,5 +806,10 @@ ApplicationWindow {
     // Progress Dialog for time-based simulation progression
     ProgressDialog {
         id: progressDialog
+    }
+
+    // Scale Dialog for simulation rate control
+    ScaleDialog {
+        id: scaleDialog
     }
 }
