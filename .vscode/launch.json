@@ -5,7 +5,7 @@
       "name": "Debug Python GUI",
       "type": "debugpy",
       "request": "launch",
-      "program": "main.py",
+      "program": "src/main.py",
       "cwd": "${workspaceFolder}"
     }
   ]
