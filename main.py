@@ -256,14 +256,23 @@ class Backend(QObject):
                 for key, children in node_data.items():
                     # Add the current node
                     full_path = f"{parent_name}.{key}" if parent_name else key
+                    
+                    # Determine if this node has children
+                    # Empty list [] means it's a leaf node (no children)
+                    # Non-empty list means it has children
+                    has_children = isinstance(children, list) and len(children) > 0
+                    
                     tree_items.append({
-                        "name": "  " * level + key,
+                        "name": key,  # Don't include indentation in the name
                         "level": level,
-                        "fullPath": full_path
+                        "fullPath": full_path,
+                        "hasChildren": has_children,
+                        "expanded": False,  # Start collapsed by default
+                        "visible": level == 0  # Only show top-level items initially
                     })
                     
-                    # Process children
-                    if isinstance(children, list) and children:
+                    # Process children only if they exist
+                    if has_children:
                         for child in children:
                             process_node(child, full_path, level + 1)
             elif isinstance(node_data, list):

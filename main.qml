@@ -490,10 +490,85 @@ ApplicationWindow {
                                 model: ListModel {
                                     id: modelsTreeModel
                                 }
+                                
+                                // Helper function to toggle expand/collapse
+                                function toggleExpanded(index) {
+                                    var item = modelsTreeModel.get(index);
+                                    if (!item) return;
+                                    
+                                    var isExpanded = item.expanded || false;
+                                    modelsTreeModel.setProperty(index, "expanded", !isExpanded);
+                                    
+                                    // Update visibility of children
+                                    updateChildrenVisibility(index, !isExpanded);
+                                }
+                                
+                                // Helper function to update children visibility
+                                function updateChildrenVisibility(parentIndex, parentExpanded) {
+                                    var parentItem = modelsTreeModel.get(parentIndex);
+                                    if (!parentItem) return;
+                                    
+                                    var parentLevel = parentItem.level;
+                                    var parentPath = parentItem.fullPath;
+                                    
+                                    // Find and update all children of this parent
+                                    for (var i = parentIndex + 1; i < modelsTreeModel.count; i++) {
+                                        var childItem = modelsTreeModel.get(i);
+                                        
+                                        // Stop when we reach a sibling or parent (same or lower level)
+                                        if (childItem.level <= parentLevel) {
+                                            break;
+                                        }
+                                        
+                                        // Check if this is a direct child
+                                        if (childItem.level === parentLevel + 1 && 
+                                            childItem.fullPath.startsWith(parentPath + ".")) {
+                                            modelsTreeModel.setProperty(i, "visible", parentExpanded);
+                                            
+                                            // If we're collapsing or child is collapsed, hide all its descendants
+                                            if (!parentExpanded || !childItem.expanded) {
+                                                updateChildrenVisibility(i, false);
+                                            }
+                                        }
+                                    }
+                                }
+                                
+                                // Helper function to add all variables under a parent recursively
+                                function addAllVariablesUnder(parentPath, parentIndex) {
+                                    var parentItem = modelsTreeModel.get(parentIndex);
+                                    if (!parentItem) return;
+                                    
+                                    var parentLevel = parentItem.level;
+                                    
+                                    // Find and add all leaf nodes under this parent
+                                    for (var i = parentIndex + 1; i < modelsTreeModel.count; i++) {
+                                        var childItem = modelsTreeModel.get(i);
+                                        
+                                        // Stop when we reach a sibling or parent (same or lower level)
+                                        if (childItem.level <= parentLevel) {
+                                            break;
+                                        }
+                                        
+                                        // If this is a leaf node (no children) under our parent path, add it
+                                        if (!childItem.hasChildren && 
+                                            childItem.fullPath.startsWith(parentPath + ".")) {
+                                            console.log("Adding to watch:", childItem.fullPath);
+                                            if (backend) {
+                                                var success = backend.addVariableToWatch(childItem.fullPath, childItem.name.trim());
+                                                if (success) {
+                                                    console.log("Successfully added:", childItem.fullPath);
+                                                } else {
+                                                    console.log("Variable already being watched:", childItem.fullPath);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
 
                                 delegate: Rectangle {
                                     width: modelsTreeListView.width
-                                    height: 25
+                                    height: model.visible !== false ? 25 : 0
+                                    visible: model.visible !== false
                                     color: mouseArea.containsMouse ? "#e9ecef" : "transparent"
 
                                     MouseArea {
@@ -502,31 +577,64 @@ ApplicationWindow {
                                         hoverEnabled: true
                                         onClicked: {
                                             console.log("Selected:", model.name);
+                                            // Toggle expand/collapse if this item has children
+                                            if (model.hasChildren) {
+                                                modelsTreeListView.toggleExpanded(index);
+                                            }
                                         }
                                         onDoubleClicked: {
-                                            // Only add leaf nodes (items with fullPath) to variables
-                                            if (model.fullPath && model.fullPath !== "") {
-                                                console.log("Adding to watch:", model.fullPath);
+                                            if (model.hasChildren) {
+                                                // Double-click on parent: add all child variables recursively
+                                                console.log("Adding all variables under:", model.fullPath);
                                                 if (backend) {
-                                                    var success = backend.addVariableToWatch(model.fullPath, model.name.trim().replace(/^[-\s]*/, ''));
-                                                    if (success) {
-                                                        console.log("Successfully added:", model.fullPath);
-                                                    } else {
-                                                        console.log("Variable already being watched:", model.fullPath);
+                                                    modelsTreeListView.addAllVariablesUnder(model.fullPath, index);
+                                                }
+                                            } else {
+                                                // Double-click on leaf: add single variable
+                                                if (model.fullPath && model.fullPath !== "") {
+                                                    console.log("Adding to watch:", model.fullPath);
+                                                    if (backend) {
+                                                        var success = backend.addVariableToWatch(model.fullPath, model.name.trim());
+                                                        if (success) {
+                                                            console.log("Successfully added:", model.fullPath);
+                                                        } else {
+                                                            console.log("Variable already being watched:", model.fullPath);
+                                                        }
                                                     }
                                                 }
                                             }
                                         }
                                     }
-
-                                    Text {
-                                        anchors.left: parent.left
-                                        anchors.leftMargin: 10
-                                        anchors.verticalCenter: parent.verticalCenter
-                                        text: model.name
-                                        font.pixelSize: 12
-                                        color: "#333"
-                                        font.bold: model.level === 0
+                                    
+                                    RowLayout {
+                                        anchors.fill: parent
+                                        anchors.leftMargin: 10 + (model.level * 20)
+                                        anchors.rightMargin: 10
+                                        spacing: 5
+                                        
+                                        // Expand/collapse icon
+                                        Text {
+                                            text: {
+                                                if (model.hasChildren) {
+                                                    return model.expanded ? "▼" : "▶";
+                                                }
+                                                return "  ";
+                                            }
+                                            font.pixelSize: 10
+                                            color: "#666"
+                                            Layout.preferredWidth: 15
+                                            Layout.alignment: Qt.AlignVCenter
+                                        }
+                                        
+                                        // Node name
+                                        Text {
+                                            text: model.name
+                                            font.pixelSize: 12
+                                            color: "#333"
+                                            font.bold: model.level === 0
+                                            Layout.fillWidth: true
+                                            Layout.alignment: Qt.AlignVCenter
+                                        }
                                     }
                                 }
                             }
