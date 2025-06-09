@@ -662,42 +662,191 @@ ApplicationWindow {
                             color: "#333"
                         }
 
-                        // Variable table header
+                        // Variable table header with resizable columns
                         Rectangle {
+                            id: variableTableHeader
                             Layout.fillWidth: true
                             height: 30
                             color: "#f8f9fa"
                             border.color: "#dee2e6"
                             border.width: 1
 
-                            RowLayout {
+                            // Column width properties
+                            property real variableColumnWidth: 200
+                            property real descriptionColumnWidth: 150
+                            property real valueColumnWidth: 100
+                            property real typeColumnWidth: Math.max(100, width - variableColumnWidth - descriptionColumnWidth - valueColumnWidth - 20) // Remaining space
+
+                            Row {
                                 anchors.fill: parent
                                 anchors.margins: 5
                                 spacing: 0
 
-                                Text {
-                                    text: "Variable"
-                                    Layout.preferredWidth: 200
-                                    font.bold: true
-                                    font.pixelSize: 12
+                                // Variable column
+                                Rectangle {
+                                    width: variableTableHeader.variableColumnWidth
+                                    height: parent.height
+                                    color: "transparent"
+                                    
+                                    Text {
+                                        anchors.left: parent.left
+                                        anchors.verticalCenter: parent.verticalCenter
+                                        anchors.leftMargin: 5
+                                        text: "Variable"
+                                        font.bold: true
+                                        font.pixelSize: 12
+                                        color: "#333"
+                                    }
+                                    
+                                    // Resize handle
+                                    Rectangle {
+                                        id: variableResizeHandle
+                                        width: 3
+                                        height: parent.height
+                                        anchors.right: parent.right
+                                        color: variableResizeArea.containsMouse ? "#007bff" : "#dee2e6"
+                                        
+                                        MouseArea {
+                                            id: variableResizeArea
+                                            anchors.fill: parent
+                                            anchors.margins: -2
+                                            hoverEnabled: true
+                                            cursorShape: Qt.SizeHorCursor
+                                            
+                                            property real startX: 0
+                                            property real startWidth: 0
+                                            
+                                            onPressed: {
+                                                startX = mouse.x
+                                                startWidth = variableTableHeader.variableColumnWidth
+                                            }
+                                            
+                                            onPositionChanged: {
+                                                if (pressed) {
+                                                    var delta = mouse.x - startX
+                                                    var newWidth = Math.max(50, startWidth + delta)
+                                                    variableTableHeader.variableColumnWidth = Math.min(400, newWidth)
+                                                }
+                                            }
+                                        }
+                                    }
                                 }
-                                Text {
-                                    text: "Description"
-                                    Layout.fillWidth: true
-                                    font.bold: true
-                                    font.pixelSize: 12
+
+                                // Description column
+                                Rectangle {
+                                    width: variableTableHeader.descriptionColumnWidth
+                                    height: parent.height
+                                    color: "transparent"
+                                    
+                                    Text {
+                                        anchors.left: parent.left
+                                        anchors.verticalCenter: parent.verticalCenter
+                                        anchors.leftMargin: 5
+                                        text: "Description"
+                                        font.bold: true
+                                        font.pixelSize: 12
+                                        color: "#333"
+                                    }
+                                    
+                                    // Resize handle
+                                    Rectangle {
+                                        width: 3
+                                        height: parent.height
+                                        anchors.right: parent.right
+                                        color: descriptionResizeArea.containsMouse ? "#007bff" : "#dee2e6"
+                                        
+                                        MouseArea {
+                                            id: descriptionResizeArea
+                                            anchors.fill: parent
+                                            anchors.margins: -2
+                                            hoverEnabled: true
+                                            cursorShape: Qt.SizeHorCursor
+                                            
+                                            property real startX: 0
+                                            property real startWidth: 0
+                                            
+                                            onPressed: {
+                                                startX = mouse.x
+                                                startWidth = variableTableHeader.descriptionColumnWidth
+                                            }
+                                            
+                                            onPositionChanged: {
+                                                if (pressed) {
+                                                    var delta = mouse.x - startX
+                                                    var newWidth = Math.max(50, startWidth + delta)
+                                                    variableTableHeader.descriptionColumnWidth = Math.min(400, newWidth)
+                                                }
+                                            }
+                                        }
+                                    }
                                 }
-                                Text {
-                                    text: "Value"
-                                    Layout.preferredWidth: 150
-                                    font.bold: true
-                                    font.pixelSize: 12
+
+                                // Value column
+                                Rectangle {
+                                    width: variableTableHeader.valueColumnWidth
+                                    height: parent.height
+                                    color: "transparent"
+                                    
+                                    Text {
+                                        anchors.left: parent.left
+                                        anchors.verticalCenter: parent.verticalCenter
+                                        anchors.leftMargin: 5
+                                        text: "Value"
+                                        font.bold: true
+                                        font.pixelSize: 12
+                                        color: "#333"
+                                    }
+                                    
+                                    // Resize handle
+                                    Rectangle {
+                                        width: 3
+                                        height: parent.height
+                                        anchors.right: parent.right
+                                        color: valueResizeArea.containsMouse ? "#007bff" : "#dee2e6"
+                                        
+                                        MouseArea {
+                                            id: valueResizeArea
+                                            anchors.fill: parent
+                                            anchors.margins: -2
+                                            hoverEnabled: true
+                                            cursorShape: Qt.SizeHorCursor
+                                            
+                                            property real startX: 0
+                                            property real startWidth: 0
+                                            
+                                            onPressed: {
+                                                startX = mouse.x
+                                                startWidth = variableTableHeader.valueColumnWidth
+                                            }
+                                            
+                                            onPositionChanged: {
+                                                if (pressed) {
+                                                    var delta = mouse.x - startX
+                                                    var newWidth = Math.max(50, startWidth + delta)
+                                                    variableTableHeader.valueColumnWidth = Math.min(300, newWidth)
+                                                }
+                                            }
+                                        }
+                                    }
                                 }
-                                Text {
-                                    text: "Type"
-                                    Layout.preferredWidth: 100
-                                    font.bold: true
-                                    font.pixelSize: 12
+
+                                // Type column
+                                Rectangle {
+                                    width: variableTableHeader.typeColumnWidth
+                                    height: parent.height
+                                    color: "transparent"
+                                    
+                                    Text {
+                                        anchors.left: parent.left
+                                        anchors.verticalCenter: parent.verticalCenter
+                                        anchors.leftMargin: 5
+                                        text: "Type"
+                                        font.bold: true
+                                        font.pixelSize: 12
+                                        color: "#333"
+                                    }
+                                    
+                                    // No resize handle for the last column
                                 }
                             }
                         }
@@ -829,34 +978,101 @@ ApplicationWindow {
                                         }
                                     }
 
-                                    RowLayout {
+                                    Row {
                                         anchors.fill: parent
                                         anchors.margins: 5
                                         spacing: 0
 
-                                        Text {
-                                            text: model.variablePath || model.variable || ""
-                                            Layout.preferredWidth: 200
-                                            font.pixelSize: 11
-                                            color: model.selected ? "white" : "#333"
+                                        // Variable column
+                                        Rectangle {
+                                            width: variableTableHeader.variableColumnWidth
+                                            height: parent.height
+                                            color: "transparent"
+                                            clip: true
+                                            
+                                            Text {
+                                                anchors.left: parent.left
+                                                anchors.verticalCenter: parent.verticalCenter
+                                                anchors.leftMargin: 5
+                                                anchors.right: parent.right
+                                                anchors.rightMargin: 5
+                                                text: model.variablePath || model.variable || ""
+                                                font.pixelSize: 11
+                                                color: model.selected ? "white" : "#333"
+                                                elide: Text.ElideRight
+                                                
+                                                ToolTip.text: model.variablePath || model.variable || ""
+                                                ToolTip.visible: truncated && parent.parent.parent.parent.hoverEnabled
+                                            }
                                         }
-                                        Text {
-                                            text: model.description || ""
-                                            Layout.fillWidth: true
-                                            font.pixelSize: 11
-                                            color: model.selected ? "white" : "#333"
+
+                                        // Description column
+                                        Rectangle {
+                                            width: variableTableHeader.descriptionColumnWidth
+                                            height: parent.height
+                                            color: "transparent"
+                                            clip: true
+                                            
+                                            Text {
+                                                anchors.left: parent.left
+                                                anchors.verticalCenter: parent.verticalCenter
+                                                anchors.leftMargin: 5
+                                                anchors.right: parent.right
+                                                anchors.rightMargin: 5
+                                                text: model.description || ""
+                                                font.pixelSize: 11
+                                                color: model.selected ? "white" : "#333"
+                                                elide: Text.ElideRight
+                                                
+                                                ToolTip.text: model.description || ""
+                                                ToolTip.visible: truncated && parent.parent.parent.parent.hoverEnabled
+                                            }
                                         }
-                                        Text {
-                                            text: model.value || ""
-                                            Layout.preferredWidth: 150
-                                            font.pixelSize: 11
-                                            color: model.selected ? "white" : "#333"
+
+                                        // Value column
+                                        Rectangle {
+                                            width: variableTableHeader.valueColumnWidth
+                                            height: parent.height
+                                            color: "transparent"
+                                            clip: true
+                                            
+                                            Text {
+                                                anchors.left: parent.left
+                                                anchors.verticalCenter: parent.verticalCenter
+                                                anchors.leftMargin: 5
+                                                anchors.right: parent.right
+                                                anchors.rightMargin: 5
+                                                text: model.value || ""
+                                                font.pixelSize: 11
+                                                color: model.selected ? "white" : "#333"
+                                                elide: Text.ElideRight
+                                                
+                                                ToolTip.text: model.value || ""
+                                                ToolTip.visible: truncated && parent.parent.parent.parent.hoverEnabled
+                                            }
                                         }
-                                        Text {
-                                            text: model.type
-                                            Layout.preferredWidth: 100
-                                            font.pixelSize: 11
-                                            color: model.selected ? "white" : "#666"
+
+                                        // Type column
+                                        Rectangle {
+                                            width: variableTableHeader.typeColumnWidth
+                                            height: parent.height
+                                            color: "transparent"
+                                            clip: true
+                                            
+                                            Text {
+                                                anchors.left: parent.left
+                                                anchors.verticalCenter: parent.verticalCenter
+                                                anchors.leftMargin: 5
+                                                anchors.right: parent.right
+                                                anchors.rightMargin: 5
+                                                text: model.type || ""
+                                                font.pixelSize: 11
+                                                color: model.selected ? "white" : "#666"
+                                                elide: Text.ElideRight
+                                                
+                                                ToolTip.text: model.type || ""
+                                                ToolTip.visible: truncated && parent.parent.parent.parent.hoverEnabled
+                                            }
                                         }
                                     }
                                 }
