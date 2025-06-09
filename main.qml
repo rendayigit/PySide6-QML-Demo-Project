@@ -594,6 +594,30 @@ ApplicationWindow {
                                     // Dynamic model - variables added via backend signals
                                 }
 
+                                // Context menu for right-click actions
+                                MouseArea {
+                                    anchors.fill: parent
+                                    acceptedButtons: Qt.RightButton
+                                    onClicked: {
+                                        if (mouse.button === Qt.RightButton) {
+                                            variableContextMenu.popup()
+                                        }
+                                    }
+                                }
+
+                                Menu {
+                                    id: variableContextMenu
+                                    MenuItem {
+                                        text: "Clear Table"
+                                        onTriggered: {
+                                            console.log("Clear Table from context menu");
+                                            if (backend) {
+                                                backend.clearVariableTable();
+                                            }
+                                        }
+                                    }
+                                }
+
                                 delegate: Rectangle {
                                     width: parent ? parent.width : 0
                                     height: 25
