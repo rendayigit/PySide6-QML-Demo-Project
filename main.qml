@@ -352,6 +352,8 @@ ApplicationWindow {
                             implicitWidth: 130
                             color: "#333"
                             font.pixelSize: 11
+                            font.family: "Consolas, Monaco, 'Liberation Mono', 'Courier New', monospace"
+                            font.letterSpacing: 0  // Ensure consistent character spacing
                             horizontalAlignment: TextInput.AlignHCenter
                             background: Rectangle {
                                 color: "#f8f9fa"
@@ -381,6 +383,8 @@ ApplicationWindow {
                             implicitWidth: 130
                             color: "#333"
                             font.pixelSize: 11
+                            font.family: "Consolas, Monaco, 'Liberation Mono', 'Courier New', monospace"
+                            font.letterSpacing: 0  // Ensure consistent character spacing
                             horizontalAlignment: TextInput.AlignHCenter
                             background: Rectangle {
                                 color: "#f8f9fa"
@@ -410,6 +414,8 @@ ApplicationWindow {
                             implicitWidth: 130
                             color: "#333"
                             font.pixelSize: 11
+                            font.family: "Consolas, Monaco, 'Liberation Mono', 'Courier New', monospace"
+                            font.letterSpacing: 0  // Ensure consistent character spacing
                             horizontalAlignment: TextInput.AlignHCenter
                             background: Rectangle {
                                 color: "#f8f9fa"
@@ -439,6 +445,8 @@ ApplicationWindow {
                             implicitWidth: 130
                             color: "#333"
                             font.pixelSize: 11
+                            font.family: "Consolas, Monaco, 'Liberation Mono', 'Courier New', monospace"
+                            font.letterSpacing: 0  // Ensure consistent character spacing
                             horizontalAlignment: TextInput.AlignHCenter
                             background: Rectangle {
                                 color: "#f8f9fa"
