@@ -1003,9 +1003,6 @@ ApplicationWindow {
                                                 color: model.selected ? "white" : "#333"
                                                 wrapMode: Text.Wrap
                                                 width: parent.width - 10
-                                                
-                                                ToolTip.text: model.variablePath || model.variable || ""
-                                                ToolTip.visible: (model.variablePath || model.variable || "").length > 50
                                             }
                                         }
 
@@ -1028,9 +1025,6 @@ ApplicationWindow {
                                                 color: model.selected ? "white" : "#333"
                                                 wrapMode: Text.Wrap
                                                 width: parent.width - 10
-                                                
-                                                ToolTip.text: model.description || ""
-                                                ToolTip.visible: (model.description || "").length > 50
                                             }
                                         }
 
@@ -1053,9 +1047,6 @@ ApplicationWindow {
                                                 color: model.selected ? "white" : "#333"
                                                 wrapMode: Text.Wrap
                                                 width: parent.width - 10
-                                                
-                                                ToolTip.text: model.value || ""
-                                                ToolTip.visible: (model.value || "").length > 50
                                             }
                                         }
 
@@ -1076,9 +1067,6 @@ ApplicationWindow {
                                                 font.pixelSize: 11
                                                 color: model.selected ? "white" : "#666"
                                                 elide: Text.ElideRight
-                                                
-                                                ToolTip.text: model.type || ""
-                                                ToolTip.visible: truncated
                                             }
                                         }
                                     }
