@@ -577,6 +577,14 @@ def main():
     # Start the ZMQ subscriber
     backend.start_subscriber()
     
+    # Give subscriber a moment to establish connection
+    import time
+    time.sleep(0.1)  # Brief delay to ensure subscriber is ready
+    
+    # Request initial status to set correct UI state at startup
+    print("Requesting initial status from Galactron Engine...")
+    backend.verify_simulation_status()
+    
     # Request model tree from engine after subscriber is ready
     print("Requesting model tree from Galactron Engine...")
     backend.request_model_tree()
