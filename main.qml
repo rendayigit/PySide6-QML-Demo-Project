@@ -719,42 +719,6 @@ ApplicationWindow {
                                 id: eventLogsListView
                                 model: ListModel {
                                     id: eventLogsModel
-                                    ListElement {
-                                        level: "INFO"
-                                        log: "Simulator initialized successfully"
-                                    }
-                                    ListElement {
-                                        level: "INFO"
-                                        log: "Loading spacecraft configuration..."
-                                    }
-                                    ListElement {
-                                        level: "WARNING"
-                                        log: "Battery level below optimal range"
-                                    }
-                                    ListElement {
-                                        level: "INFO"
-                                        log: "Orbit propagation started"
-                                    }
-                                    ListElement {
-                                        level: "DEBUG"
-                                        log: "Attitude control system active"
-                                    }
-                                    ListElement {
-                                        level: "INFO"
-                                        log: "Telemetry data received"
-                                    }
-                                    ListElement {
-                                        level: "ERROR"
-                                        log: "Communication timeout"
-                                    }
-                                    ListElement {
-                                        level: "INFO"
-                                        log: "System recovery completed"
-                                    }
-                                    ListElement {
-                                        level: "CRITICAL"
-                                        log: "Critical failure in power system"
-                                    }
                                 }
 
                                 // Track if user is at bottom and if auto-scroll is enabled
