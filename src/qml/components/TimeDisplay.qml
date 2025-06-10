@@ -31,7 +31,7 @@ RowLayout {
             id: simTimeDisplay
             text: root.simulationTime
             readOnly: true
-            implicitWidth: 130
+            implicitWidth: 150
             color: "#333"
             font.pixelSize: 11
             font.family: "Consolas, Monaco, 'Liberation Mono', 'Courier New', monospace"
@@ -62,7 +62,7 @@ RowLayout {
             id: missionTimeDisplay
             text: root.missionTime
             readOnly: true
-            implicitWidth: 130
+            implicitWidth: 150
             color: "#333"
             font.pixelSize: 11
             font.family: "Consolas, Monaco, 'Liberation Mono', 'Courier New', monospace"
@@ -93,7 +93,7 @@ RowLayout {
             id: epochTimeDisplay
             text: root.epochTime
             readOnly: true
-            implicitWidth: 130
+            implicitWidth: 150
             color: "#333"
             font.pixelSize: 11
             font.family: "Consolas, Monaco, 'Liberation Mono', 'Courier New', monospace"
@@ -124,7 +124,7 @@ RowLayout {
             id: zuluTimeDisplay
             text: root.zuluTime
             readOnly: true
-            implicitWidth: 130
+            implicitWidth: 150
             color: "#333"
             font.pixelSize: 11
             font.family: "Consolas, Monaco, 'Liberation Mono', 'Courier New', monospace"
