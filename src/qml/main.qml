@@ -28,6 +28,12 @@ ApplicationWindow {
     property string statusText: backend ? backend.status_text : "Simulator ready"
     property bool commandInProgress: false
 
+    // Simulation Controller - Centralized backend interaction
+    SimulationController {
+        id: simulationController
+        backendInstance: backend
+    }
+
     // Connect to backend signals for real-time updates
     Connections {
         target: backend
@@ -103,13 +109,13 @@ ApplicationWindow {
     // Menu Bar Component
     menuBar: AppMenuBar {
         id: menuBar
-        onToggleSimulationRequested: handleToggleSimulation()
-        onResetSimulationRequested: handleResetSimulation()
-        onStepSimulationRequested: handleStepSimulation()
-        onProgressDialogRequested: progressDialog.open()
-        onScaleDialogRequested: scaleDialog.open()
-        onClearVariableTableRequested: handleClearVariableTable()
-        onQuitRequested: Qt.quit()
+        onToggleSimulationRequested: simulationController.handleToggleSimulation()
+        onResetSimulationRequested: simulationController.handleResetSimulation()
+        onStepSimulationRequested: simulationController.handleStepSimulation()
+        onProgressDialogRequested: simulationController.handleOpenProgressDialog(progressDialog)
+        onScaleDialogRequested: simulationController.handleOpenScaleDialog(scaleDialog)
+        onClearVariableTableRequested: simulationController.handleClearVariableTable()
+        onQuitRequested: simulationController.handleQuitApplication()
     }
 
     // Main content layout
@@ -134,9 +140,9 @@ ApplicationWindow {
                 Controls {
                     id: controlButtons
                     isRunning: window.isRunning
-                    onToggleSimulationRequested: handleToggleSimulation()
-                    onResetSimulationRequested: handleResetSimulation()
-                    onStepSimulationRequested: handleStepSimulation()
+                    onToggleSimulationRequested: simulationController.handleToggleSimulation()
+                    onResetSimulationRequested: simulationController.handleResetSimulation()
+                    onStepSimulationRequested: simulationController.handleStepSimulation()
                 }
 
                 Item {
@@ -171,14 +177,7 @@ ApplicationWindow {
                     SplitView.minimumWidth: 200
                     SplitView.preferredWidth: 300
                     onVariableWatchRequested: function (variablePath, variableName) {
-                        if (backend) {
-                            var success = backend.add_variable_to_watch(variablePath, variableName);
-                            if (success) {
-                                console.log("Successfully added:", variablePath);
-                            } else {
-                                console.log("Variable already being watched:", variablePath);
-                            }
-                        }
+                        simulationController.handleAddVariableToWatch(variablePath, variableName);
                     }
                 }
 
@@ -187,13 +186,9 @@ ApplicationWindow {
                     id: variableTable
                     SplitView.fillWidth: true
                     SplitView.minimumWidth: 400
-                    onClearTableRequested: handleClearVariableTable()
+                    onClearTableRequested: simulationController.handleClearVariableTable()
                     onRemoveVariablesRequested: function (variablePaths) {
-                        if (backend) {
-                            for (var i = 0; i < variablePaths.length; i++) {
-                                backend.remove_variable_from_watch(variablePaths[i]);
-                            }
-                        }
+                        simulationController.handleRemoveMultipleVariables(variablePaths);
                     }
                 }
             }
@@ -228,48 +223,18 @@ ApplicationWindow {
     // Dialog Components
     ProgressDialog {
         id: progressDialog
+        onProgressSimulationRequested: function(totalMilliseconds) {
+            var success = simulationController.handleProgressSimulation(totalMilliseconds);
+            if (success) {
+                simulationController.handleCloseDialog(progressDialog);
+            }
+        }
+        onDialogCloseRequested: {
+            simulationController.handleCloseDialog(progressDialog);
+        }
     }
 
     ScaleDialog {
         id: scaleDialog
-    }
-
-    // Event Handlers - Centralized simulation control logic
-    function handleToggleSimulation() {
-        console.log("Toggle simulation requested");
-        if (backend) {
-            var success = backend.toggle_simulation();
-            if (success) {
-                console.log("Toggle command sent successfully");
-            } else {
-                console.log("Toggle command failed");
-            }
-        }
-    }
-
-    function handleResetSimulation() {
-        console.log("Reset simulation requested");
-        window.isRunning = false;
-        window.currentSimTime = "0.000";
-    // Additional reset logic can be added here
-    }
-
-    function handleStepSimulation() {
-        console.log("Step simulation requested");
-        if (backend) {
-            var success = backend.step_simulation();
-            if (success) {
-                console.log("Step command sent successfully");
-            } else {
-                console.log("Step command failed");
-            }
-        }
-    }
-
-    function handleClearVariableTable() {
-        console.log("Clear variable table requested");
-        if (backend) {
-            backend.clear_variable_table();
-        }
     }
 }

@@ -12,6 +12,10 @@ Dialog {
     modal: true
     anchors.centerIn: parent
 
+    // Signals for dialog actions
+    signal progressSimulationRequested(int totalMilliseconds)
+    signal dialogCloseRequested
+
     background: Rectangle {
         color: "#ffffff"
         border.color: "#dee2e6"
@@ -101,12 +105,7 @@ Dialog {
                     // Convert all time components to total milliseconds
                     var totalMilliseconds = days * 86400000 + hours * 3600000 + minutes * 60000 + seconds * 1000 + milliseconds;
 
-                    if (backend) {
-                        var success = backend.progress_simulation(totalMilliseconds.toString());
-                        if (success) {
-                            progressDialog.close();
-                        }
-                    }
+                    progressDialog.progressSimulationRequested(totalMilliseconds);
                 }
             }
 
@@ -117,7 +116,7 @@ Dialog {
                 posY: 0
 
                 onClicked: {
-                    progressDialog.close();
+                    progressDialog.dialogCloseRequested();
                 }
             }
         }
