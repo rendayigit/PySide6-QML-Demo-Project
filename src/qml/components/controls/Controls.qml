@@ -1,9 +1,10 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import "../" // Import CustomButton from parent directory
 
 /**
- * ControlButtons - Simulation control buttons component
+ * Controls - Simulation control buttons component
  *
  * This component provides Run/Hold, Reset, and Step buttons for simulation control.
  * It handles the visual state changes and communicates actions via signals.
@@ -21,7 +22,7 @@ RowLayout {
     signal stepSimulationRequested
 
     // Run/Hold Button
-    ControlButton {
+    CustomButton {
         id: runButton
         buttonText: root.isRunning ? "Hold" : "Run"
         normalColor: root.isRunning ? "#3b82f6" : "#10b981"
@@ -29,6 +30,7 @@ RowLayout {
         borderColor: root.isRunning ? "#1d4ed8" : "#047857"
         textColor: "black"
         boldText: root.isRunning
+        useLayoutAlignment: true
 
         onClicked: {
             root.toggleSimulationRequested();
@@ -36,13 +38,14 @@ RowLayout {
     }
 
     // Reset Button
-    ControlButton {
+    CustomButton {
         id: resetButton
         buttonText: "Reset"
         normalColor: "#ef4444"
         pressedColor: "#dc2626"
         borderColor: "#b91c1c"
         textColor: "white"
+        useLayoutAlignment: true
 
         onClicked: {
             root.resetSimulationRequested();
@@ -50,13 +53,14 @@ RowLayout {
     }
 
     // Step Button
-    ControlButton {
+    CustomButton {
         id: stepButton
         buttonText: "Step"
         normalColor: "#06b6d4"
         pressedColor: "#0891b2"
         borderColor: "#0e7490"
         textColor: "white"
+        useLayoutAlignment: true
 
         onClicked: {
             root.stepSimulationRequested();
