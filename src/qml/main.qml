@@ -101,7 +101,7 @@ ApplicationWindow {
     }
 
     // Menu Bar Component
-    menuBar: GalactronMenuBar {
+    menuBar: AppMenuBar {
         id: menuBar
         onToggleSimulationRequested: handleToggleSimulation()
         onResetSimulationRequested: handleResetSimulation()
