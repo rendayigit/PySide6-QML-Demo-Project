@@ -3,11 +3,12 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import "components"
 import "components/time"
+import "components/controls"
 import "dialogs"
 
 /**
  * Galactron GUI - Main Application Window
- * 
+ *
  * This is the main application window that orchestrates all components:
  * - Menu bar with simulation controls
  * - Control buttons panel with time displays
@@ -34,13 +35,13 @@ ApplicationWindow {
             window.currentSimTime = backend.simulation_time;
         }
         function onMissionTimeChanged() {
-            // Mission time is automatically updated via binding
+        // Mission time is automatically updated via binding
         }
         function onEpochTimeChanged() {
-            // Epoch time is automatically updated via binding
+        // Epoch time is automatically updated via binding
         }
         function onZuluTimeChanged() {
-            // Zulu time is automatically updated via binding
+        // Zulu time is automatically updated via binding
         }
         function onSimulationStatusChanged() {
             window.isRunning = backend.is_running;
@@ -130,7 +131,7 @@ ApplicationWindow {
                 spacing: 10
 
                 // Control Buttons
-                ControlButtons {
+                Controls {
                     id: controlButtons
                     isRunning: window.isRunning
                     onToggleSimulationRequested: handleToggleSimulation()
@@ -169,7 +170,7 @@ ApplicationWindow {
                     id: modelTree
                     SplitView.minimumWidth: 200
                     SplitView.preferredWidth: 300
-                    onVariableWatchRequested: function(variablePath, variableName) {
+                    onVariableWatchRequested: function (variablePath, variableName) {
                         if (backend) {
                             var success = backend.add_variable_to_watch(variablePath, variableName);
                             if (success) {
@@ -187,7 +188,7 @@ ApplicationWindow {
                     SplitView.fillWidth: true
                     SplitView.minimumWidth: 400
                     onClearTableRequested: handleClearVariableTable()
-                    onRemoveVariablesRequested: function(variablePaths) {
+                    onRemoveVariablesRequested: function (variablePaths) {
                         if (backend) {
                             for (var i = 0; i < variablePaths.length; i++) {
                                 backend.remove_variable_from_watch(variablePaths[i]);
@@ -250,7 +251,7 @@ ApplicationWindow {
         console.log("Reset simulation requested");
         window.isRunning = false;
         window.currentSimTime = "0.000";
-        // Additional reset logic can be added here
+    // Additional reset logic can be added here
     }
 
     function handleStepSimulation() {
