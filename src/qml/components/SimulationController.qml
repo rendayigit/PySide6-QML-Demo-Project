@@ -33,6 +33,10 @@ QtObject {
         backendInstance.progress_simulation(totalMilliseconds.toString());
     }
 
+    function handleScaleSimulation(scaleValue) {
+        backendInstance.set_simulation_rate(scaleValue);
+    }
+
     function handleAddVariableToWatch(variablePath, variableName) {
         backendInstance.add_variable_to_watch(variablePath, variableName);
     }

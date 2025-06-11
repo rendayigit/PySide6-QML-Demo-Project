@@ -109,13 +109,34 @@ ApplicationWindow {
     // Menu Bar Component
     menuBar: AppMenuBar {
         id: menuBar
-        onToggleSimulationRequested: simulationController.handleToggleSimulation()
-        onResetSimulationRequested: simulationController.handleResetSimulation()
-        onStepSimulationRequested: simulationController.handleStepSimulation()
-        onProgressDialogRequested: simulationController.handleOpenProgressDialog(progressDialog)
-        onScaleDialogRequested: simulationController.handleOpenScaleDialog(scaleDialog)
-        onClearVariableTableRequested: simulationController.handleClearVariableTable()
-        onQuitRequested: simulationController.handleQuitApplication()
+
+        onToggleSimulationRequested: {
+            simulationController.handleToggleSimulation();
+        }
+
+        onResetSimulationRequested: {
+            simulationController.handleResetSimulation();
+        }
+
+        onStepSimulationRequested: {
+            simulationController.handleStepSimulation();
+        }
+
+        onProgressDialogRequested: {
+            simulationController.handleOpenProgressDialog(progressDialog);
+        }
+
+        onScaleDialogRequested: {
+            simulationController.handleOpenScaleDialog(scaleDialog);
+        }
+
+        onClearVariableTableRequested: {
+            simulationController.handleClearVariableTable();
+        }
+
+        onQuitRequested: {
+            simulationController.handleQuitApplication();
+        }
     }
 
     // Main content layout
@@ -140,9 +161,18 @@ ApplicationWindow {
                 Controls {
                     id: controlButtons
                     isRunning: window.isRunning
-                    onToggleSimulationRequested: simulationController.handleToggleSimulation()
-                    onResetSimulationRequested: simulationController.handleResetSimulation()
-                    onStepSimulationRequested: simulationController.handleStepSimulation()
+
+                    onToggleSimulationRequested: {
+                        simulationController.handleToggleSimulation();
+                    }
+
+                    onResetSimulationRequested: {
+                        simulationController.handleResetSimulation();
+                    }
+
+                    onStepSimulationRequested: {
+                        simulationController.handleStepSimulation();
+                    }
                 }
 
                 Item {
@@ -176,6 +206,7 @@ ApplicationWindow {
                     id: modelTree
                     SplitView.minimumWidth: 200
                     SplitView.preferredWidth: 300
+
                     onVariableWatchRequested: function (variablePath, variableName) {
                         simulationController.handleAddVariableToWatch(variablePath, variableName);
                     }
@@ -186,7 +217,11 @@ ApplicationWindow {
                     id: variableTable
                     SplitView.fillWidth: true
                     SplitView.minimumWidth: 400
-                    onClearTableRequested: simulationController.handleClearVariableTable()
+
+                    onClearTableRequested: {
+                        simulationController.handleClearVariableTable();
+                    }
+
                     onRemoveVariablesRequested: function (variablePaths) {
                         simulationController.handleRemoveMultipleVariables(variablePaths);
                     }
@@ -223,12 +258,11 @@ ApplicationWindow {
     // Dialog Components
     ProgressDialog {
         id: progressDialog
-        onProgressSimulationRequested: function(totalMilliseconds) {
-            var success = simulationController.handleProgressSimulation(totalMilliseconds);
-            if (success) {
-                simulationController.handleCloseDialog(progressDialog);
-            }
+
+        onProgressSimulationRequested: function (totalMilliseconds) {
+            simulationController.handleProgressSimulation(totalMilliseconds);
         }
+
         onDialogCloseRequested: {
             simulationController.handleCloseDialog(progressDialog);
         }
@@ -236,5 +270,13 @@ ApplicationWindow {
 
     ScaleDialog {
         id: scaleDialog
+
+        onScaleSimulationRequested: function (scaleValue) {
+            simulationController.handleScaleSimulation(scaleValue);
+        }
+
+        onDialogCloseRequested: {
+            simulationController.handleCloseDialog(scaleDialog);
+        }
     }
 }

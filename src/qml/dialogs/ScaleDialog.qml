@@ -1,7 +1,14 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import "../components" // Import CustomButton
 
+/**
+ * ScaleDialog - Simulation rate scale dialog component
+ *
+ * This dialog allows users to set the simulation rate scale.
+ * Uses signals for clean separation of concerns.
+ */
 Dialog {
     id: scaleDialog
     title: "Simulation Rate"
@@ -10,7 +17,9 @@ Dialog {
     modal: true
     anchors.centerIn: parent
 
-    property string commandString: "RATE"  // Default command, can be overridden
+    // Signals for dialog actions
+    signal scaleSimulationRequested(real scaleValue)
+    signal dialogCloseRequested
 
     background: Rectangle {
         color: "#ffffff"
@@ -114,26 +123,17 @@ Dialog {
             Layout.alignment: Qt.AlignRight
             spacing: 10
 
-            Button {
+            CustomButton {
                 id: okayButton
-                text: "Okay"
-                implicitWidth: 80
-
-                background: Rectangle {
-                    color: parent.pressed ? "#e6b800" : "#ffcc00"
-                    radius: 4
-                    border.color: "#d4af37"
-                    border.width: 1
-                }
-
-                contentItem: Text {
-                    text: parent.text
-                    color: "black"
-                    font.pixelSize: 12
-                    font.bold: true
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                }
+                buttonText: "Okay"
+                normalColor: "#ffcc00"
+                pressedColor: "#e6b800"
+                borderColor: "#d4af37"
+                textColor: "black"
+                boldText: true
+                useLayoutAlignment: false
+                posX: 0
+                posY: 0
 
                 onClicked: {
                     var scaleValue = parseFloat(scaleTextField.text);
@@ -146,42 +146,18 @@ Dialog {
                     }
 
                     console.log("Setting simulation rate scale to:", scaleValue);
-                    
-                    if (backend) {
-                        var success = backend.set_simulation_rate(scaleValue);
-                        if (success) {
-                            console.log("RATE command sent successfully");
-                            scaleDialog.close();
-                        } else {
-                            console.log("RATE command failed");
-                        }
-                    }
+                    scaleDialog.scaleSimulationRequested(scaleValue);
                 }
             }
 
-            Button {
-                id: closeButton
-                text: "Close"
-                implicitWidth: 80
-
-                background: Rectangle {
-                    color: parent.pressed ? "#e6e6e6" : "#f8f9fa"
-                    radius: 4
-                    border.color: "#ced4da"
-                    border.width: 1
-                }
-
-                contentItem: Text {
-                    text: parent.text
-                    color: "#333"
-                    font.pixelSize: 12
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                }
+            CustomButton {
+                buttonText: "Close"
+                useLayoutAlignment: false
+                posX: 0
+                posY: 0
 
                 onClicked: {
-                    console.log("Scale dialog closed");
-                    scaleDialog.close();
+                    scaleDialog.dialogCloseRequested();
                 }
             }
         }
