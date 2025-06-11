@@ -11,22 +11,67 @@ MenuBar {
     id: root
 
     // Signal properties for communication with main window
+    signal simulatorControlsRequested  // TODO: Implement
     signal toggleSimulationRequested
-    signal resetSimulationRequested
+    signal resetSimulationRequested  // TODO: Implement
     signal stepSimulationRequested
     signal progressDialogRequested
+    signal storeSimulationRequested  // TODO: Implement
+    signal restoreSimulationRequested  // TODO: Implement
     signal scaleDialogRequested
-    signal clearVariableTableRequested
+    signal settingsRequested  // TODO: Implement
     signal quitRequested
+    signal plotSelectedVariablesRequested  // TODO: Implement
+    signal saveVariablesRequested  // TODO: Implement
+    signal loadVariablesRequested  // TODO: Implement
+    signal clearVariableTableRequested
+    signal helpManualRequested  // TODO: Implement
+    signal aboutRequested // TODO: Implement
+
+    // Keyboard shortcuts
+    Shortcut {
+        sequence: "Ctrl+R"
+        onActivated: {
+            root.toggleSimulationRequested();
+        }
+    }
+
+    Shortcut {
+        sequence: "Ctrl+X"
+        onActivated: {
+            root.resetSimulationRequested();
+        }
+    }
+
+    Shortcut {
+        sequence: "Ctrl+P"
+        onActivated: {
+            root.plotSelectedVariablesRequested();
+        }
+    }
+
+    Shortcut {
+        sequence: "Ctrl+Q"
+        onActivated: {
+            root.quitRequested();
+        }
+    }
+
+    Shortcut {
+        sequence: "F1"
+        onActivated: {
+            root.helpManualRequested();
+        }
+    }
 
     Menu {
         title: "&File"
 
         MenuItem {
             text: "Simulator Controls"
-            onTriggered:
-            //TODO: Implement
-            {}
+            onTriggered: {
+                root.simulatorControlsRequested();
+            }
         }
         MenuItem {
             text: "&Run/Hold\tCtrl+R"
@@ -54,15 +99,15 @@ MenuBar {
         }
         MenuItem {
             text: "Store"
-            onTriggered:
-            //TODO: Implement
-            {}
+            onTriggered: {
+                root.storeSimulationRequested();
+            }
         }
         MenuItem {
             text: "Restore"
-            onTriggered:
-            //TODO: Implement
-            {}
+            onTriggered: {
+                root.restoreSimulationRequested();
+            }
         }
         MenuItem {
             text: "Rate"
@@ -73,9 +118,9 @@ MenuBar {
         MenuSeparator {}
         MenuItem {
             text: "Settings"
-            onTriggered:
-            //TODO: Implement
-            {}
+            onTriggered: {
+                root.settingsRequested();
+            }
         }
         MenuSeparator {}
         MenuItem {
@@ -90,23 +135,23 @@ MenuBar {
         title: "&Variable Display"
 
         MenuItem {
-            text: "&Plot Selected Variables\tCtrl+P"
-            onTriggered:
-            //TODO: Implement
-            {}
+            text: "&Plot Selected\tCtrl+P" //TODO: Name too long
+            onTriggered: {
+                root.plotSelectedVariablesRequested();
+            }
         }
         MenuSeparator {}
         MenuItem {
             text: "&Save Variables"
-            onTriggered:
-            //TODO: Implement
-            {}
+            onTriggered: {
+                root.saveVariablesRequested();
+            }
         }
         MenuItem {
             text: "&Load Variables"
-            onTriggered:
-            //TODO: Implement
-            {}
+            onTriggered: {
+                root.loadVariablesRequested();
+            }
         }
         MenuSeparator {}
         MenuItem {
@@ -122,15 +167,15 @@ MenuBar {
 
         MenuItem {
             text: "&Manual\tF1"
-            onTriggered:
-            //TODO: Implement
-            {}
+            onTriggered: {
+                root.helpManualRequested();
+            }
         }
         MenuItem {
             text: "&About"
-            onTriggered:
-            //TODO: Implement
-            {}
+            onTriggered: {
+                root.aboutRequested();
+            }
         }
     }
 }
