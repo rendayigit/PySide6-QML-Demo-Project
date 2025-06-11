@@ -22,8 +22,80 @@ Dialog {
 
         // Time selection row
         RowLayout {
-            spacing: 20
+            spacing: 15
             Layout.fillWidth: true
+
+            // Days
+            ColumnLayout {
+                spacing: 5
+                Text {
+                    text: "Days:"
+                    font.pixelSize: 12
+                    font.bold: true
+                    color: "#333"
+                }
+                SpinBox {
+                    id: daysSpinBox
+                    from: 0
+                    to: 999999
+                    value: 0
+                    implicitWidth: 80
+                    editable: true
+                    
+                    background: Rectangle {
+                        color: "#ffffff"
+                        border.color: "#ced4da"
+                        border.width: 1
+                        radius: 3
+                    }
+                    
+                    contentItem: TextInput {
+                        text: daysSpinBox.textFromValue(daysSpinBox.value, daysSpinBox.locale)
+                        font.pixelSize: 12
+                        color: "#333"
+                        horizontalAlignment: Qt.AlignHCenter
+                        verticalAlignment: Qt.AlignVCenter
+                        readOnly: !daysSpinBox.editable
+                        validator: daysSpinBox.validator
+                        inputMethodHints: Qt.ImhFormattedNumbersOnly
+                    }
+                    
+                    up.indicator: Rectangle {
+                        x: daysSpinBox.mirrored ? 0 : parent.width - width
+                        height: parent.height / 2
+                        implicitWidth: 20
+                        implicitHeight: 10
+                        color: daysSpinBox.up.pressed ? "#e6e6e6" : "#f8f9fa"
+                        border.color: "#ced4da"
+                        border.width: 1
+                        
+                        Text {
+                            text: "▲"
+                            font.pixelSize: 8
+                            color: "#333"
+                            anchors.centerIn: parent
+                        }
+                    }
+                    
+                    down.indicator: Rectangle {
+                        x: daysSpinBox.mirrored ? 0 : parent.width - width
+                        y: parent.height / 2
+                        height: parent.height / 2
+                        implicitWidth: 20
+                        implicitHeight: 10
+                        color: daysSpinBox.down.pressed ? "#e6e6e6" : "#f8f9fa"
+                        border.color: "#ced4da"
+                        border.width: 1
+                        
+                        Text {
+                            text: "▼"
+                            font.pixelSize: 8
+                            color: "#333"
+                            anchors.centerIn: parent
+                        }
+                    }
+                }
+            }
 
             // Hours
             ColumnLayout {
@@ -40,6 +112,7 @@ Dialog {
                     to: 23
                     value: 0
                     implicitWidth: 80
+                    editable: true
                     
                     background: Rectangle {
                         color: "#ffffff"
@@ -111,6 +184,7 @@ Dialog {
                     to: 59
                     value: 0
                     implicitWidth: 80
+                    editable: true
                     
                     background: Rectangle {
                         color: "#ffffff"
@@ -182,6 +256,7 @@ Dialog {
                     to: 59
                     value: 0
                     implicitWidth: 80
+                    editable: true
                     
                     background: Rectangle {
                         color: "#ffffff"
@@ -253,6 +328,7 @@ Dialog {
                     to: 999
                     value: 0
                     implicitWidth: 100
+                    editable: true
                     
                     background: Rectangle {
                         color: "#ffffff"
@@ -338,19 +414,20 @@ Dialog {
                 }
 
                 onClicked: {
+                    var days = daysSpinBox.value;
                     var hours = hoursSpinBox.value;
                     var minutes = minutesSpinBox.value;
                     var seconds = secondsSpinBox.value;
                     var milliseconds = millisecondsSpinBox.value;
 
                     // Convert all time components to total milliseconds
-                    var totalMilliseconds = (hours * 3600000) + (minutes * 60000) + (seconds * 1000) + milliseconds;
+                    var totalMilliseconds = days * 86400000 + hours * 3600000 + minutes * 60000 + seconds * 1000 + milliseconds;
 
-                    console.log("Progress simulation:", hours + "h", minutes + "m", seconds + "s", milliseconds + "ms");
+                    console.log("Progress simulation:", days + "d", hours + "h", minutes + "m", seconds + "s", milliseconds + "ms");
                     console.log("Total milliseconds:", totalMilliseconds);
                     
                     if (backend) {
-                        var success = backend.progress_simulation(totalMilliseconds);
+                        var success = backend.progress_simulation(totalMilliseconds.toString());
                         if (success) {
                             console.log("PROGRESS command sent successfully");
                             progressDialog.close();

@@ -335,12 +335,15 @@ class Backend(QObject):
         else:
             return self.run_simulation()
 
-    @Slot(int, result=bool)
-    def progress_simulation(self, total_milliseconds: int) -> bool:
+    @Slot(str, result=bool)
+    def progress_simulation(self, total_milliseconds: str) -> bool:
         """QML-callable method to progress the simulation by specified time"""
         try:
+            # Convert string to int for commander
+            milliseconds_int = int(total_milliseconds)
+            
             commander = self.get_commanding_instance()
-            response = commander.progress_simulation(total_milliseconds)
+            response = commander.progress_simulation(milliseconds_int)
 
             print(f"PROGRESS command successful: {response}")
             self.send_event_log("INFO", f"PROGRESS command sent to engine with {total_milliseconds}ms")
@@ -350,6 +353,12 @@ class Backend(QObject):
             self.verify_simulation_status()
             return True
 
+        except ValueError:
+            error_msg = f"Invalid milliseconds value: {total_milliseconds}"
+            print(error_msg)
+            self.send_event_log("ERROR", error_msg)
+            self.commandExecuted.emit("PROGRESS", False)
+            return False
         except Exception as e:
             error_msg = f"PROGRESS command failed: {e}"
             print(error_msg)

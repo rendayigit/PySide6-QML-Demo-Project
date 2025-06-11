@@ -133,7 +133,7 @@ class SimulationCommander(QObject):
         Returns:
             Engine response or None if error occurred
         """
-        return self.send_command({"command": "PROGRESS", "millis": milliseconds})
+        return self.send_command({"command": "PROGRESS", "millis": milliseconds}, timeout_ms=600000)  # 10 minutes timeout
 
     def set_simulation_rate(self, rate: float) -> Union[str, Dict, None]:
         """
