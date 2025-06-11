@@ -33,7 +33,6 @@ class Backend(QObject):
     simulationStatusChanged = Signal(bool)
     statusTextChanged = Signal(str)
     eventLogReceived = Signal(str, str)  # level, message
-    commandExecuted = Signal(str, bool)  # command name, success status
 
     # Data management signals
     modelTreeUpdated = Signal(list)
@@ -270,7 +269,6 @@ class Backend(QObject):
 
             print(f"RUN command successful: {response}")
             self.send_event_log("INFO", "RUN command sent to engine")
-            self.commandExecuted.emit("RUN", True)
 
             # Request status update after command
             self.verify_simulation_status()
@@ -280,7 +278,6 @@ class Backend(QObject):
             error_msg = f"RUN command failed: {e}"
             print(error_msg)
             self.send_event_log("ERROR", error_msg)
-            self.commandExecuted.emit("RUN", False)
             return False
 
     @Slot(result=bool)
@@ -292,7 +289,6 @@ class Backend(QObject):
 
             print(f"HOLD command successful: {response}")
             self.send_event_log("INFO", "HOLD command sent to engine")
-            self.commandExecuted.emit("HOLD", True)
 
             # Request status update after command
             self.verify_simulation_status()
@@ -302,7 +298,6 @@ class Backend(QObject):
             error_msg = f"HOLD command failed: {e}"
             print(error_msg)
             self.send_event_log("ERROR", error_msg)
-            self.commandExecuted.emit("HOLD", False)
             return False
 
     @Slot(result=bool)
@@ -314,7 +309,6 @@ class Backend(QObject):
 
             print(f"STEP command successful: {response}")
             self.send_event_log("INFO", "STEP command sent to engine")
-            self.commandExecuted.emit("STEP", True)
 
             # Request status update after command
             self.verify_simulation_status()
@@ -324,7 +318,6 @@ class Backend(QObject):
             error_msg = f"STEP command failed: {e}"
             print(error_msg)
             self.send_event_log("ERROR", error_msg)
-            self.commandExecuted.emit("STEP", False)
             return False
 
     @Slot(result=bool)
@@ -347,7 +340,6 @@ class Backend(QObject):
 
             print(f"PROGRESS command successful: {response}")
             self.send_event_log("INFO", f"PROGRESS command sent to engine with {total_milliseconds}ms")
-            self.commandExecuted.emit("PROGRESS", True)
 
             # Request status update after command
             self.verify_simulation_status()
@@ -357,13 +349,11 @@ class Backend(QObject):
             error_msg = f"Invalid milliseconds value: {total_milliseconds}"
             print(error_msg)
             self.send_event_log("ERROR", error_msg)
-            self.commandExecuted.emit("PROGRESS", False)
             return False
         except Exception as e:
             error_msg = f"PROGRESS command failed: {e}"
             print(error_msg)
             self.send_event_log("ERROR", error_msg)
-            self.commandExecuted.emit("PROGRESS", False)
             return False
 
     @Slot(float, result=bool)
@@ -375,7 +365,6 @@ class Backend(QObject):
 
             print(f"RATE command successful: {response}")
             self.send_event_log("INFO", f"RATE command sent to engine with scale {scale_value}")
-            self.commandExecuted.emit("RATE", True)
 
             # Request status update after command
             self.verify_simulation_status()
@@ -385,7 +374,6 @@ class Backend(QObject):
             error_msg = f"RATE command failed: {e}"
             print(error_msg)
             self.send_event_log("ERROR", error_msg)
-            self.commandExecuted.emit("RATE", False)
             return False
 
     @Slot(result=bool)

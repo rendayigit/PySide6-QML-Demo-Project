@@ -22,10 +22,10 @@ ApplicationWindow {
     height: 700
     title: "Galactron GUI - Simulator Control"
 
-    // Simulation state properties - bound to backend
-    property bool isRunning: backend ? backend.is_running : false
-    property string currentSimTime: backend ? backend.simulation_time : "0.000"
-    property string statusText: backend ? backend.status_text : "Simulator ready"
+    // Simulation state properties
+    property bool isRunning: false
+    property string currentSimTime: "0.00"
+    property string statusText: "Simulator ready"
     property bool commandInProgress: false
 
     // Simulation Controller - Centralized backend interaction
@@ -37,41 +37,43 @@ ApplicationWindow {
     // Connect to backend signals for real-time updates
     Connections {
         target: backend
-        function onSimulationTimeChanged() {
-            window.currentSimTime = backend.simulation_time;
+        
+        // Time and status updates
+        function onSimulationTimeChanged(simTime) {
+            window.currentSimTime = simTime;
         }
-        function onMissionTimeChanged() {
-        // Mission time is automatically updated via binding
+        
+        function onSimulationStatusChanged(isRunning) {
+            window.isRunning = isRunning;
         }
-        function onEpochTimeChanged() {
-        // Epoch time is automatically updated via binding
+        
+        function onStatusTextChanged(statusText) {
+            window.statusText = statusText;
         }
-        function onZuluTimeChanged() {
-        // Zulu time is automatically updated via binding
-        }
-        function onSimulationStatusChanged() {
-            window.isRunning = backend.is_running;
-        }
-        function onStatusTextChanged() {
-            window.statusText = backend.status_text;
-        }
+        
+        // Event log updates
         function onEventLogReceived(level, message) {
             eventLog.model.append({
                 "level": level,
                 "log": message
             });
         }
+        
+        // Model tree updates
         function onModelTreeUpdated(treeData) {
             modelTree.model.clear();
             for (var i = 0; i < treeData.length; i++) {
                 modelTree.model.append(treeData[i]);
             }
         }
+        
+        // Variable model updates
         function onVariableAdded(variableData) {
             // Ensure the selected property is initialized
             variableData.selected = false;
             variableTable.model.append(variableData);
         }
+        
         function onVariableUpdated(variablePath, variableData) {
             // Find and update the variable in the model
             for (var i = 0; i < variableTable.model.count; i++) {
@@ -84,10 +86,12 @@ ApplicationWindow {
                 }
             }
         }
+        
         function onVariablesCleared() {
             // Clear all variables from the model
             variableTable.model.clear();
         }
+        
         function onVariableRemoved(variablePath) {
             // Remove the specific variable from the model
             for (var i = 0; i < variableTable.model.count; i++) {
@@ -95,13 +99,6 @@ ApplicationWindow {
                     variableTable.model.remove(i);
                     break;
                 }
-            }
-        }
-        function onCommandExecuted(commandName, success) {
-            if (success) {
-                console.log(commandName + " command executed successfully");
-            } else {
-                console.log(commandName + " command failed");
             }
         }
     }
