@@ -7,7 +7,7 @@ import "../components" // Import CustomButton
 Dialog {
     id: progressDialog
     title: "Progress Simulation"
-    width: 600
+    width: 520
     height: 200
     modal: true
     anchors.centerIn: parent
@@ -29,7 +29,7 @@ Dialog {
         // Time selection row
         RowLayout {
             spacing: 15
-            Layout.fillWidth: true
+            Layout.alignment: Qt.AlignHCenter
 
             TimeSpinBox {
                 id: daysSpinBox

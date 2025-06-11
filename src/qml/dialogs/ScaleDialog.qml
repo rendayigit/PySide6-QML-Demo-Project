@@ -11,6 +11,7 @@ import "../components" // Import CustomButton
  */
 Dialog {
     id: scaleDialog
+
     title: "Simulation Rate"
     width: 450
     height: 150
@@ -46,8 +47,10 @@ Dialog {
 
             TextField {
                 id: scaleTextField
+
                 text: "1.0"
                 implicitWidth: 80
+
                 validator: DoubleValidator {
                     bottom: 0.1
                     top: 10.0
@@ -75,6 +78,7 @@ Dialog {
 
             Slider {
                 id: scaleSlider
+
                 from: 1
                 to: 100
                 value: 10
@@ -125,6 +129,7 @@ Dialog {
 
             CustomButton {
                 id: okayButton
+                
                 buttonText: "Okay"
                 normalColor: "#ffcc00"
                 pressedColor: "#e6b800"
