@@ -7,7 +7,6 @@ import QtQuick.Layouts
  *
  * A standardized button.
  * Supports customizable colors, text, sizing, layout behavior, and positioning.
- * Can be used for dialogs, controls, and any other button needs.
  */
 Button {
     id: root
@@ -28,7 +27,7 @@ Button {
     property bool useLayoutAlignment: false
     property int layoutAlignment: Qt.AlignVCenter
 
-    // Position properties (for dialog buttons when not using layout)
+    // Position properties (for buttons when not using layout)
     property int posX: 0
     property int posY: 0
 

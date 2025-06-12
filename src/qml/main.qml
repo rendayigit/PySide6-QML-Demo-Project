@@ -4,7 +4,7 @@ import QtQuick.Layouts
 import "components"
 import "components/time"
 import "components/controls"
-import "dialogs"
+import "windows"
 
 /**
  * Galactron GUI - Main Application Window
@@ -13,7 +13,6 @@ import "dialogs"
  * - Menu bar with simulation controls
  * - Control buttons panel with time displays
  * - Model tree, variable table, and event log panels
- * - Dialog components for advanced operations
  */
 ApplicationWindow {
     id: window
@@ -119,12 +118,12 @@ ApplicationWindow {
             simulationController.handleStepSimulation();
         }
 
-        onProgressDialogRequested: {
-            simulationController.handleOpenProgressDialog(progressDialog);
+        onProgressWindowRequested: {
+            simulationController.handleOpenProgressWindow(progressWindow);
         }
 
-        onScaleDialogRequested: {
-            simulationController.handleOpenScaleDialog(scaleDialog);
+        onScaleWindowRequested: {
+            simulationController.handleOpenScaleWindow(scaleWindow);
         }
 
         onClearVariableTableRequested: {
@@ -252,28 +251,28 @@ ApplicationWindow {
         }
     }
 
-    // Dialog Components
-    ProgressDialog {
-        id: progressDialog
+    // Window Components
+    ProgressWindow {
+        id: progressWindow
 
         onProgressSimulationRequested: function (totalMilliseconds) {
             simulationController.handleProgressSimulation(totalMilliseconds);
         }
 
-        onDialogCloseRequested: {
-            simulationController.handleCloseDialog(progressDialog);
+        onWindowCloseRequested: {
+            simulationController.handleCloseWindow(progressWindow);
         }
     }
 
-    ScaleDialog {
-        id: scaleDialog
+    ScaleWindow {
+        id: scaleWindow
 
         onScaleSimulationRequested: function (scaleValue) {
             simulationController.handleScaleSimulation(scaleValue);
         }
 
-        onDialogCloseRequested: {
-            simulationController.handleCloseDialog(scaleDialog);
+        onWindowCloseRequested: {
+            simulationController.handleCloseWindow(scaleWindow);
         }
     }
 }

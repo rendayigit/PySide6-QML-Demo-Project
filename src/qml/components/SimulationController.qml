@@ -55,21 +55,21 @@ QtObject {
         backendInstance.clear_variable_table();
     }
 
-    function handleOpenProgressDialog(dialogRef) {
-        if (dialogRef) {
-            dialogRef.open();
+    function handleOpenProgressWindow(windowRef) {
+        if (windowRef) {
+            windowRef.show();
         }
     }
 
-    function handleOpenScaleDialog(dialogRef) {
-        if (dialogRef) {
-            dialogRef.open();
+    function handleOpenScaleWindow(windowRef) {
+        if (windowRef) {
+            windowRef.show();
         }
     }
 
-    function handleCloseDialog(dialogRef) {
-        if (dialogRef) {
-            dialogRef.close();
+    function handleCloseWindow(windowRef) {
+        if (windowRef) {
+            windowRef.visible = false;
         }
     }
 

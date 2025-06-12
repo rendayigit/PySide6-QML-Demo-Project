@@ -1,29 +1,27 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import "../components/dialogs"
-import "../components" // Import CustomButton
+import QtQuick.Window
+import "../components"
 
-Dialog {
-    id: progressDialog
+Window {
+    id: progressWindow
     title: "Progress Simulation"
     width: 520
     height: 200
-    modal: true
-    anchors.centerIn: parent
+    visible: false
+    modality: Qt.NonModal  // Allow interaction with main window
+    flags: Qt.Window | Qt.WindowTitleHint | Qt.WindowCloseButtonHint | Qt.WindowMinimizeButtonHint
 
-    // Signals for dialog actions
+    // Signals for window actions
     signal progressSimulationRequested(int totalMilliseconds)
-    signal dialogCloseRequested
+    signal windowCloseRequested
 
-    background: Rectangle {
-        color: "#ffffff"
-        border.color: "#dee2e6"
-        border.width: 1
-        radius: 4
-    }
+    color: "#ffffff"
 
-    contentItem: ColumnLayout {
+    ColumnLayout {
+        anchors.fill: parent
+        anchors.margins: 20
         spacing: 20
 
         // Time selection row
@@ -105,7 +103,7 @@ Dialog {
                     // Convert all time components to total milliseconds
                     var totalMilliseconds = days * 86400000 + hours * 3600000 + minutes * 60000 + seconds * 1000 + milliseconds;
 
-                    progressDialog.progressSimulationRequested(totalMilliseconds);
+                    progressWindow.progressSimulationRequested(totalMilliseconds);
                 }
             }
 
@@ -116,7 +114,7 @@ Dialog {
                 posY: 0
 
                 onClicked: {
-                    progressDialog.dialogCloseRequested();
+                    progressWindow.windowCloseRequested();
                 }
             }
         }

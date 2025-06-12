@@ -15,10 +15,10 @@ MenuBar {
     signal toggleSimulationRequested
     signal resetSimulationRequested  // TODO: Implement
     signal stepSimulationRequested
-    signal progressDialogRequested
+    signal progressWindowRequested
     signal storeSimulationRequested  // TODO: Implement
     signal restoreSimulationRequested  // TODO: Implement
-    signal scaleDialogRequested
+    signal scaleWindowRequested
     signal settingsRequested  // TODO: Implement
     signal quitRequested
     signal plotSelectedVariablesRequested  // TODO: Implement
@@ -94,7 +94,7 @@ MenuBar {
         MenuItem {
             text: "Progress Simulation"
             onTriggered: {
-                root.progressDialogRequested();
+                root.progressWindowRequested();
             }
         }
         MenuItem {
@@ -112,7 +112,7 @@ MenuBar {
         MenuItem {
             text: "Rate"
             onTriggered: {
-                root.scaleDialogRequested();
+                root.scaleWindowRequested();
             }
         }
         MenuSeparator {}

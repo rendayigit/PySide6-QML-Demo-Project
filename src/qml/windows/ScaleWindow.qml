@@ -1,35 +1,34 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import QtQuick.Window
 import "../components" // Import CustomButton
 
 /**
- * ScaleDialog - Simulation rate scale dialog component
+ * ScaleWindow - Simulation rate scale window component
  *
- * This dialog allows users to set the simulation rate scale.
+ * This window allows users to set the simulation rate scale.
  * Uses signals for clean separation of concerns.
  */
-Dialog {
-    id: scaleDialog
+Window {
+    id: scaleWindow
 
     title: "Simulation Rate"
     width: 450
     height: 150
-    modal: true
-    anchors.centerIn: parent
+    visible: false
+    modality: Qt.NonModal  // Allow interaction with main window
+    flags: Qt.Window | Qt.WindowTitleHint | Qt.WindowCloseButtonHint | Qt.WindowMinimizeButtonHint
 
-    // Signals for dialog actions
+    // Signals for window actions
     signal scaleSimulationRequested(real scaleValue)
-    signal dialogCloseRequested
+    signal windowCloseRequested
 
-    background: Rectangle {
-        color: "#ffffff"
-        border.color: "#dee2e6"
-        border.width: 1
-        radius: 4
-    }
+    color: "#ffffff"
 
-    contentItem: ColumnLayout {
+    ColumnLayout {
+        anchors.fill: parent
+        anchors.margins: 20
         spacing: 20
 
         // Scale selection row
@@ -129,7 +128,7 @@ Dialog {
 
             CustomButton {
                 id: okayButton
-                
+
                 buttonText: "Okay"
                 normalColor: "#ffcc00"
                 pressedColor: "#e6b800"
@@ -151,7 +150,7 @@ Dialog {
                     }
 
                     console.log("Setting simulation rate scale to:", scaleValue);
-                    scaleDialog.scaleSimulationRequested(scaleValue);
+                    scaleWindow.scaleSimulationRequested(scaleValue);
                 }
             }
 
@@ -162,7 +161,7 @@ Dialog {
                 posY: 0
 
                 onClicked: {
-                    scaleDialog.dialogCloseRequested();
+                    scaleWindow.windowCloseRequested();
                 }
             }
         }
