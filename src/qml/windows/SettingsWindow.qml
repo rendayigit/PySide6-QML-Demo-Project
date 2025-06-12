@@ -1,7 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import "../components" // Import CustomButton from components directory
+import "../components"
 
 /**
  * SettingsWindow - Application settings configuration window
@@ -34,49 +34,26 @@ Window {
         anchors.margins: 20
         spacing: 15
 
-        // Header
-        Text {
-            text: "Application Settings"
-            font.pixelSize: 16
-            font.bold: true
-            color: "#333"
-            Layout.alignment: Qt.AlignHCenter
-        }
+        RowLayout {
+            anchors.fill: parent
+            anchors.margins: 10
+            spacing: 10
 
-        // Settings sections
-        GroupBox {
-            title: "Appearance"
-            Layout.fillWidth: true
-            Layout.preferredHeight: 120
+            Text {
+                text: "Theme:"
+                font.pixelSize: 12
+                color: "#333"
+            }
 
-            ColumnLayout {
-                anchors.fill: parent
-                anchors.margins: 10
-                spacing: 10
+            Switcher {
+                id: themeSwitcher
+                leftText: "Light"
+                rightText: "Dark"
+                isRightSelected: root.selectedTheme === "dark"
+                Layout.alignment: Qt.AlignLeft
 
-                Text {
-                    text: "Theme:"
-                    font.pixelSize: 12
-                    color: "#333"
-                }
-
-                Switcher {
-                    id: themeSwitcher
-                    leftText: "Light"
-                    rightText: "Dark"
-                    isRightSelected: root.selectedTheme === "dark"
-                    Layout.alignment: Qt.AlignLeft
-
-                    onOptionToggled: {
-                        root.selectedTheme = isRightSelected ? "dark" : "light";
-                    }
-                }
-
-                Text {
-                    text: "Selected: " + root.selectedTheme.charAt(0).toUpperCase() + root.selectedTheme.slice(1) + " Theme"
-                    font.pixelSize: 10
-                    color: "#666"
-                    font.italic: true
+                onOptionToggled: {
+                    root.selectedTheme = isRightSelected ? "dark" : "light";
                 }
             }
         }
