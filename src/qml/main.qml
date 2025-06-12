@@ -1,10 +1,9 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import "components"
-import "components/time"
-import "components/controls"
-import "windows"
+import "components"      // Reusable components
+import "panels"          // Main window panels
+import "windows"         // Separate windows/dialogs
 
 /**
  * Galactron GUI - Main Application Window

@@ -1,7 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import "../" // Import CustomButton from parent directory
+import "../../components" // Import CustomButton from components directory
 
 /**
  * Controls - Simulation control buttons component
