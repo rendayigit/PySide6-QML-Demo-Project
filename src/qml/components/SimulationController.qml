@@ -67,6 +67,12 @@ QtObject {
         }
     }
 
+    function handleOpenSettingsWindow(windowRef) {
+        if (windowRef) {
+            windowRef.show();
+        }
+    }
+
     function handleCloseWindow(windowRef) {
         if (windowRef) {
             windowRef.visible = false;

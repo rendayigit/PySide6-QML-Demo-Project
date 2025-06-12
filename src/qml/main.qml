@@ -125,6 +125,10 @@ ApplicationWindow {
             simulationController.handleOpenScaleWindow(scaleWindow);
         }
 
+        onSettingsRequested: {
+            simulationController.handleOpenSettingsWindow(settingsWindow);
+        }
+
         onClearVariableTableRequested: {
             simulationController.handleClearVariableTable();
         }
@@ -272,6 +276,23 @@ ApplicationWindow {
 
         onWindowCloseRequested: {
             simulationController.handleCloseWindow(scaleWindow);
+        }
+    }
+
+    SettingsWindow {
+        id: settingsWindow
+
+        onThemeChanged: function (theme) {
+            console.log("Theme changed to:", theme);
+            // TODO: Implement theme handling
+        }
+
+        onSettingsApplied: {
+            console.log("Settings applied");
+        }
+
+        onSettingsCanceled: {
+            console.log("Settings canceled");
         }
     }
 }
