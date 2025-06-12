@@ -24,7 +24,7 @@ Window {
     property string selectedTheme: "light" // Default to light theme
 
     // Signals for settings changes
-    signal settingsApplied()
+    signal settingsApplied
     signal settingsCanceled
 
     // Main content
@@ -51,7 +51,7 @@ Window {
                 isRightSelected: root.selectedTheme === "dark"
                 Layout.alignment: Qt.AlignLeft
 
-                onOptionToggled: function(isRightSelected) {
+                onOptionToggled: function (isRightSelected) {
                     root.selectedTheme = isRightSelected ? "dark" : "light";
                 }
             }
@@ -73,21 +73,6 @@ Window {
             }
 
             CustomButton {
-                buttonText: "Cancel"
-                buttonWidth: 80
-                buttonHeight: 30
-                normalColor: "#6b7280"
-                pressedColor: "#4b5563"
-                borderColor: "#374151"
-                textColor: "white"
-
-                onClicked: {
-                    root.settingsCanceled();
-                    root.visible = false;
-                }
-            }
-
-            CustomButton {
                 buttonText: "OK"
                 buttonWidth: 80
                 buttonHeight: 30
@@ -99,6 +84,21 @@ Window {
 
                 onClicked: {
                     root.settingsApplied();
+                    root.visible = false;
+                }
+            }
+
+            CustomButton {
+                buttonText: "Cancel"
+                buttonWidth: 80
+                buttonHeight: 30
+                normalColor: "#6b7280"
+                pressedColor: "#4b5563"
+                borderColor: "#374151"
+                textColor: "white"
+
+                onClicked: {
+                    root.settingsCanceled();
                     root.visible = false;
                 }
             }
