@@ -3,3 +3,5 @@
 - Add IP and Port options
 - Add logger to gui backend
 - Use simulator states for status bar
+- Sim should send certain data as it initializes
+- GUI should not give up after initializing and not finding sim
