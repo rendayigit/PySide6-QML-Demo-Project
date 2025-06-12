@@ -24,8 +24,7 @@ Window {
     property string selectedTheme: "light" // Default to light theme
 
     // Signals for settings changes
-    signal themeChanged(string theme)
-    signal settingsApplied
+    signal settingsApplied()
     signal settingsCanceled
 
     // Main content
@@ -52,7 +51,7 @@ Window {
                 isRightSelected: root.selectedTheme === "dark"
                 Layout.alignment: Qt.AlignLeft
 
-                onOptionToggled: {
+                onOptionToggled: function(isRightSelected) {
                     root.selectedTheme = isRightSelected ? "dark" : "light";
                 }
             }
@@ -71,22 +70,6 @@ Window {
             // Spacer to push buttons to the right
             Item {
                 Layout.fillWidth: true
-            }
-
-            CustomButton {
-                buttonText: "Apply"
-                buttonWidth: 80
-                buttonHeight: 30
-                normalColor: "#10b981"
-                pressedColor: "#059669"
-                borderColor: "#047857"
-                textColor: "white"
-                boldText: true
-
-                onClicked: {
-                    root.themeChanged(root.selectedTheme);
-                    root.settingsApplied();
-                }
             }
 
             CustomButton {
@@ -115,7 +98,6 @@ Window {
                 boldText: true
 
                 onClicked: {
-                    root.themeChanged(root.selectedTheme);
                     root.settingsApplied();
                     root.visible = false;
                 }

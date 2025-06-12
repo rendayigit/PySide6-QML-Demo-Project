@@ -282,13 +282,9 @@ ApplicationWindow {
     SettingsWindow {
         id: settingsWindow
 
-        onThemeChanged: function (theme) {
-            console.log("Theme changed to:", theme);
-            // TODO: Implement theme handling
-        }
-
         onSettingsApplied: {
-            console.log("Settings applied");
+            console.log("Settings applied - Theme:", settingsWindow.selectedTheme);
+            // TODO: Implement theme handling and other settings
         }
 
         onSettingsCanceled: {
