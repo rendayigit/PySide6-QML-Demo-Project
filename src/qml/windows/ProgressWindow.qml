@@ -3,6 +3,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import QtQuick.Window
 import "../components"
+import "../services"
 
 Window {
     id: progressWindow

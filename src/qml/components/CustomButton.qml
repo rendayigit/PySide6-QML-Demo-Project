@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import "../services"
 
 /**
  * CustomButton - Universal reusable button component
@@ -13,10 +14,10 @@ Button {
 
     // Text and styling properties
     property string buttonText: ""
-    property string normalColor: ThemeManager.primaryButtonBg
-    property string pressedColor: ThemeManager.primaryButtonBgPressed
-    property string borderColor: ThemeManager.focusBorderColor
-    property string textColor: ThemeManager.primaryButtonText
+    property color normalColor: ThemeManager.primaryButtonBg
+    property color pressedColor: ThemeManager.primaryButtonBgPressed
+    property color borderColor: ThemeManager.focusBorderColor
+    property color textColor: ThemeManager.primaryButtonText
     property bool boldText: false
 
     // Size properties

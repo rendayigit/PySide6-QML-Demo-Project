@@ -1,23 +1,12 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import "../components"
+import "../services"
 
 /**
  * VariableTable - Variable display table component
  * 
- * This component displays variables with resizable columns inclu                            onPressed: function(mouse) {
-                                startX = mouse.x
-                                startWidth = variableTableHeader.valueColumnWidth
-                            }
-                            
-                            onPositionChanged: function(mouse) {
-                                if (pressed) {
-                                    var delta = mouse.x - startX
-                                    var newWidth = Math.max(50, startWidth + delta)
-                                    variableTableHeader.valueColumnWidth = Math.min(300, newWidth)
-                                }
-                            }e, Description,
+ * This component displays variables with resizable columns include Variable, Description,
  * Value, and Type. It supports selection, context menu operations, and dynamic row heights.
  */
 Rectangle {

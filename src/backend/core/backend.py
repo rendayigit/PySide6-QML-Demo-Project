@@ -395,7 +395,8 @@ class Backend(QObject):
             commander = self.get_commanding_instance()
             response = commander.request_model_tree()
 
-            print(f"Model tree request successful: {response}")
+            //TODO: remove after debugging
+            # print(f"Model tree request successful: {response}")
             self.send_event_log("INFO", "Model tree requested from engine")
             return True
 

@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import "../services"
 
 /**
  * TimeSpinBox - Reusable time input spinbox component

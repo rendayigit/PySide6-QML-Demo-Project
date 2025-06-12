@@ -2,9 +2,10 @@ import QtQuick
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import "components"      // Reusable components
-import "panels"          // Main window panels  
-import "windows"         // Separate windows/dialogs
+import "components"
+import "services"
+import "panels"
+import "windows"
 
 /**
  * Galactron GUI - Main Application Window
@@ -43,20 +44,20 @@ ApplicationWindow {
     // Connect to backend signals for real-time updates
     Connections {
         target: backend
-        
+
         // Time and status updates
         function onSimulationTimeChanged(simTime) {
             window.currentSimTime = simTime;
         }
-        
+
         function onSimulationStatusChanged(isRunning) {
             window.isRunning = isRunning;
         }
-        
+
         function onStatusTextChanged(statusText) {
             window.statusText = statusText;
         }
-        
+
         // Theme updates
         function onThemeChanged(theme) {
             console.log("Theme changed to:", theme);
@@ -69,7 +70,7 @@ ApplicationWindow {
                 settingsWindow.selectedTheme = backend?.current_theme || theme;
             }
         }
-        
+
         // Event log updates
         function onEventLogReceived(level, message) {
             eventLog.model.append({
@@ -77,7 +78,7 @@ ApplicationWindow {
                 "log": message
             });
         }
-        
+
         // Model tree updates
         function onModelTreeUpdated(treeData) {
             modelTree.model.clear();
@@ -85,14 +86,14 @@ ApplicationWindow {
                 modelTree.model.append(treeData[i]);
             }
         }
-        
+
         // Variable model updates
         function onVariableAdded(variableData) {
             // Ensure the selected property is initialized
             variableData.selected = false;
             variableTable.model.append(variableData);
         }
-        
+
         function onVariableUpdated(variablePath, variableData) {
             // Find and update the variable in the model
             for (var i = 0; i < variableTable.model.count; i++) {
@@ -105,12 +106,12 @@ ApplicationWindow {
                 }
             }
         }
-        
+
         function onVariablesCleared() {
             // Clear all variables from the model
             variableTable.model.clear();
         }
-        
+
         function onVariableRemoved(variablePath) {
             // Remove the specific variable from the model
             for (var i = 0; i < variableTable.model.count; i++) {

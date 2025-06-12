@@ -3,6 +3,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import QtQuick.Window
 import "../components" // Import CustomButton
+import "../services"   // Import ThemeManager
 
 /**
  * ScaleWindow - Simulation rate scale window component
