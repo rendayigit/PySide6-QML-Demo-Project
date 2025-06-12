@@ -20,7 +20,7 @@ ColumnLayout {
     Text {
         text: root.label
         font.pixelSize: 10
-        color: "#333"
+        color: ThemeManager.primaryText
         horizontalAlignment: Text.AlignHCenter
     }
 
@@ -28,14 +28,14 @@ ColumnLayout {
         text: root.value
         readOnly: true
         implicitWidth: root.fieldWidth
-        color: "#333"
+        color: ThemeManager.inputText
         font.pixelSize: 11
         font.family: "Consolas, Monaco, 'Liberation Mono', 'Courier New', monospace"
         font.letterSpacing: 0
         horizontalAlignment: TextInput.AlignHCenter
         background: Rectangle {
-            color: "#f8f9fa"
-            border.color: "#ced4da"
+            color: ThemeManager.inputBackgroundDisabled
+            border.color: ThemeManager.inputBorderColor
             border.width: 1
             radius: 3
         }

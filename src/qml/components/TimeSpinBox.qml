@@ -24,7 +24,7 @@ ColumnLayout {
         text: root.label
         font.pixelSize: 12
         font.bold: true
-        color: "#333"
+        color: ThemeManager.primaryText
     }
 
     // SpinBox
@@ -37,8 +37,8 @@ ColumnLayout {
         editable: true
         
         background: Rectangle {
-            color: "#ffffff"
-            border.color: "#ced4da"
+            color: ThemeManager.inputBackground
+            border.color: ThemeManager.inputBorderColor
             border.width: 1
             radius: 3
         }
@@ -46,7 +46,7 @@ ColumnLayout {
         contentItem: TextInput {
             text: spinBox.textFromValue(spinBox.value, spinBox.locale)
             font.pixelSize: 12
-            color: "#333"
+            color: ThemeManager.inputText
             horizontalAlignment: Qt.AlignHCenter
             verticalAlignment: Qt.AlignVCenter
             readOnly: !spinBox.editable
@@ -59,14 +59,14 @@ ColumnLayout {
             height: parent.height / 2
             implicitWidth: 20
             implicitHeight: 10
-            color: spinBox.up.pressed ? "#e6e6e6" : "#f8f9fa"
-            border.color: "#ced4da"
+            color: spinBox.up.pressed ? ThemeManager.controlBackgroundPressed : ThemeManager.controlBackground
+            border.color: ThemeManager.inputBorderColor
             border.width: 1
             
             Text {
                 text: "▲"
                 font.pixelSize: 8
-                color: "#333"
+                color: ThemeManager.primaryText
                 anchors.centerIn: parent
             }
         }
@@ -77,14 +77,14 @@ ColumnLayout {
             height: parent.height / 2
             implicitWidth: 20
             implicitHeight: 10
-            color: spinBox.down.pressed ? "#e6e6e6" : "#f8f9fa"
-            border.color: "#ced4da"
+            color: spinBox.down.pressed ? ThemeManager.controlBackgroundPressed : ThemeManager.controlBackground
+            border.color: ThemeManager.inputBorderColor
             border.width: 1
             
             Text {
                 text: "▼"
                 font.pixelSize: 8
-                color: "#333"
+                color: ThemeManager.primaryText
                 anchors.centerIn: parent
             }
         }

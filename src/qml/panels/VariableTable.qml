@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import "../components"
 
 /**
  * VariableTable - Variable display table component
@@ -21,8 +22,8 @@ import QtQuick.Layouts
  */
 Rectangle {
     id: root
-    color: "white"
-    border.color: "#dee2e6"
+    color: ThemeManager.windowBackground
+    border.color: ThemeManager.borderColor
     border.width: 1
     
     // Properties
@@ -41,7 +42,7 @@ Rectangle {
             text: "Variables"
             font.pixelSize: 14
             font.bold: true
-            color: "#333"
+            color: ThemeManager.primaryText
         }
 
         // Variable table header with resizable columns
@@ -49,8 +50,8 @@ Rectangle {
             id: variableTableHeader
             Layout.fillWidth: true
             height: 30
-            color: "#f8f9fa"
-            border.color: "#dee2e6"
+            color: ThemeManager.alternateBackground
+            border.color: ThemeManager.borderColor
             border.width: 1
 
             // Column width properties
@@ -77,7 +78,7 @@ Rectangle {
                         text: "Variable"
                         font.bold: true
                         font.pixelSize: 12
-                        color: "#333"
+                        color: ThemeManager.primaryText
                     }
                     
                     // Resize handle
@@ -86,7 +87,7 @@ Rectangle {
                         width: 3
                         height: parent.height
                         anchors.right: parent.right
-                        color: variableResizeArea.containsMouse ? "#007bff" : "#dee2e6"
+                        color: variableResizeArea.containsMouse ? ThemeManager.focusBorderColor : ThemeManager.borderColor
                         
                         MouseArea {
                             id: variableResizeArea
@@ -127,7 +128,7 @@ Rectangle {
                         text: "Description"
                         font.bold: true
                         font.pixelSize: 12
-                        color: "#333"
+                        color: ThemeManager.primaryText
                     }
                     
                     // Resize handle
@@ -135,7 +136,7 @@ Rectangle {
                         width: 3
                         height: parent.height
                         anchors.right: parent.right
-                        color: descriptionResizeArea.containsMouse ? "#007bff" : "#dee2e6"
+                        color: descriptionResizeArea.containsMouse ? ThemeManager.focusBorderColor : ThemeManager.borderColor
                         
                         MouseArea {
                             id: descriptionResizeArea
@@ -176,7 +177,7 @@ Rectangle {
                         text: "Value"
                         font.bold: true
                         font.pixelSize: 12
-                        color: "#333"
+                        color: ThemeManager.primaryText
                     }
                     
                     // Resize handle
@@ -184,7 +185,7 @@ Rectangle {
                         width: 3
                         height: parent.height
                         anchors.right: parent.right
-                        color: valueResizeArea.containsMouse ? "#007bff" : "#dee2e6"
+                        color: valueResizeArea.containsMouse ? ThemeManager.focusBorderColor : ThemeManager.borderColor
                         
                         MouseArea {
                             id: valueResizeArea
@@ -225,7 +226,7 @@ Rectangle {
                         text: "Type"
                         font.bold: true
                         font.pixelSize: 12
-                        color: "#333"
+                        color: ThemeManager.primaryText
                     }
                 }
             }
@@ -326,9 +327,9 @@ Rectangle {
                     height: Math.max(25, Math.max(variableText.contentHeight, Math.max(descriptionText.contentHeight, valueText.contentHeight)) + 20)
                     color: {
                         if (model.selected) {
-                            return "#007bff";  // Blue for selected
+                            return ThemeManager.highlightColor;
                         }
-                        return index % 2 ? "#f8f9fa" : "white";
+                        return index % 2 ? ThemeManager.alternateBackground : ThemeManager.surfaceBackground;
                     }
 
                     MouseArea {
@@ -379,7 +380,7 @@ Rectangle {
                                 anchors.rightMargin: 5
                                 text: model.variablePath || model.variable || ""
                                 font.pixelSize: 11
-                                color: model.selected ? "white" : "#333"
+                                color: model.selected ? ThemeManager.highlightTextColor : ThemeManager.primaryText
                                 wrapMode: Text.Wrap
                                 width: parent.width - 10
                             }
@@ -401,7 +402,7 @@ Rectangle {
                                 anchors.rightMargin: 5
                                 text: model.description || ""
                                 font.pixelSize: 11
-                                color: model.selected ? "white" : "#333"
+                                color: model.selected ? ThemeManager.highlightTextColor : ThemeManager.primaryText
                                 wrapMode: Text.Wrap
                                 width: parent.width - 10
                             }
@@ -423,7 +424,7 @@ Rectangle {
                                 anchors.rightMargin: 5
                                 text: model.value || ""
                                 font.pixelSize: 11
-                                color: model.selected ? "white" : "#333"
+                                color: model.selected ? ThemeManager.highlightTextColor : ThemeManager.primaryText
                                 wrapMode: Text.Wrap
                                 width: parent.width - 10
                             }
@@ -444,7 +445,7 @@ Rectangle {
                                 anchors.rightMargin: 5
                                 text: model.type || ""
                                 font.pixelSize: 11
-                                color: model.selected ? "white" : "#666"
+                                color: model.selected ? ThemeManager.highlightTextColor : ThemeManager.secondaryText
                                 elide: Text.ElideRight
                             }
                         }

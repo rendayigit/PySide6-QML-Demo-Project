@@ -13,10 +13,10 @@ Button {
 
     // Text and styling properties
     property string buttonText: ""
-    property string normalColor: "#06b6d4"
-    property string pressedColor: "#0891b2"
-    property string borderColor: "#0e7490"
-    property string textColor: "white"
+    property string normalColor: ThemeManager.primaryButtonBg
+    property string pressedColor: ThemeManager.primaryButtonBgPressed
+    property string borderColor: ThemeManager.focusBorderColor
+    property string textColor: ThemeManager.primaryButtonText
     property bool boldText: false
 
     // Size properties

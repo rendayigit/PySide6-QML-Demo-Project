@@ -24,7 +24,7 @@ Window {
     signal scaleSimulationRequested(real scaleValue)
     signal windowCloseRequested
 
-    color: "#ffffff"
+    color: ThemeManager.windowBackground
 
     ColumnLayout {
         anchors.fill: parent
@@ -40,7 +40,7 @@ Window {
                 text: "Scale:"
                 font.pixelSize: 12
                 font.bold: true
-                color: "#333"
+                color: ThemeManager.primaryText
                 Layout.alignment: Qt.AlignVCenter
             }
 
@@ -57,13 +57,13 @@ Window {
                 }
 
                 background: Rectangle {
-                    color: "#ffffff"
-                    border.color: "#ced4da"
+                    color: ThemeManager.inputBackground
+                    border.color: ThemeManager.inputBorderColor
                     border.width: 1
                     radius: 3
                 }
 
-                color: "#333"
+                color: ThemeManager.inputText
                 font.pixelSize: 12
                 horizontalAlignment: TextInput.AlignHCenter
 
@@ -92,12 +92,12 @@ Window {
                     width: scaleSlider.availableWidth
                     height: implicitHeight
                     radius: 2
-                    color: "#e9ecef"
+                    color: ThemeManager.alternateBackground
 
                     Rectangle {
                         width: scaleSlider.visualPosition * parent.width
                         height: parent.height
-                        color: "#ffcc00"
+                        color: ThemeManager.specialColor
                         radius: 2
                     }
                 }
@@ -108,8 +108,8 @@ Window {
                     implicitWidth: 18
                     implicitHeight: 18
                     radius: 9
-                    color: scaleSlider.pressed ? "#e6b800" : "#ffcc00"
-                    border.color: "#d4af37"
+                    color: scaleSlider.pressed ? ThemeManager.specialColorPressed : ThemeManager.specialColor
+                    border.color: ThemeManager.specialColorBorder
                     border.width: 1
                 }
 
@@ -130,10 +130,10 @@ Window {
                 id: okayButton
 
                 buttonText: "Okay"
-                normalColor: "#ffcc00"
-                pressedColor: "#e6b800"
-                borderColor: "#d4af37"
-                textColor: "black"
+                normalColor: ThemeManager.specialColor
+                pressedColor: ThemeManager.specialColorPressed
+                borderColor: ThemeManager.specialColorBorder
+                textColor: ThemeManager.primaryText
                 boldText: true
                 useLayoutAlignment: false
                 posX: 0

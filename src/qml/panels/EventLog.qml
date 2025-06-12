@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import "../components"
 
 /**
  * EventLog - Event logs display component
@@ -10,8 +11,8 @@ import QtQuick.Layouts
  */
 Rectangle {
     id: root
-    color: "white"
-    border.color: "#dee2e6"
+    color: ThemeManager.surfaceBackground
+    border.color: ThemeManager.borderColor
     border.width: 1
     
     // Properties
@@ -26,15 +27,15 @@ Rectangle {
             text: "Event Logs"
             font.pixelSize: 14
             font.bold: true
-            color: "#333"
+            color: ThemeManager.primaryText
         }
 
         // Log table header
         Rectangle {
             Layout.fillWidth: true
             height: 30
-            color: "#f8f9fa"
-            border.color: "#dee2e6"
+            color: ThemeManager.panelBackground
+            border.color: ThemeManager.borderColor
             border.width: 1
 
             RowLayout {
@@ -47,12 +48,14 @@ Rectangle {
                     Layout.preferredWidth: 70
                     font.bold: true
                     font.pixelSize: 12
+                    color: ThemeManager.primaryText
                 }
                 Text {
                     text: "Log"
                     Layout.fillWidth: true
                     font.bold: true
                     font.pixelSize: 12
+                    color: ThemeManager.primaryText
                 }
             }
         }
@@ -118,12 +121,12 @@ Rectangle {
                         height: Math.max(40, logText.contentHeight + 20)
                         color: {
                             if (model.level === "ERROR")
-                                return "#ffe6e6";
+                                return ThemeManager.isDarkTheme ? "#4a1f1f" : "#ffe6e6";
                             if (model.level === "WARNING")
-                                return "#fff3cd";
+                                return ThemeManager.isDarkTheme ? "#4a3c1f" : "#fff3cd";
                             if (model.level === "CRITICAL")
-                                return "#ff0000";
-                            return index % 2 ? "#f8f9fa" : "white";
+                                return ThemeManager.isDarkTheme ? "#660000" : "#ffdddd";
+                            return index % 2 ? ThemeManager.alternateBackground : ThemeManager.surfaceBackground;
                         }
 
                         RowLayout {
@@ -164,7 +167,7 @@ Rectangle {
                                 Layout.fillWidth: true
                                 text: model.log
                                 font.pixelSize: 11
-                                color: "#333"
+                                color: ThemeManager.primaryText
                                 wrapMode: Text.Wrap
                                 width: parent.width - 75 // Account for level badge width and margins
                             }
@@ -184,9 +187,9 @@ Rectangle {
                 visible: !eventLogsListView.userAtBottom && !eventLogsListView.autoScrollEnabled
 
                 background: Rectangle {
-                    color: parent.pressed ? "#0056b3" : "#007bff"
+                    color: parent.pressed ? ThemeManager.primaryButtonBgPressed : ThemeManager.primaryButtonBg
                     radius: 20
-                    border.color: "#0056b3"
+                    border.color: ThemeManager.focusBorderColor
                     border.width: 1
 
                     // Drop shadow effect
@@ -194,7 +197,7 @@ Rectangle {
                         anchors.fill: parent
                         anchors.topMargin: 2
                         anchors.leftMargin: 2
-                        color: "#00000040"
+                        color: ThemeManager.isDarkTheme ? "#00000060" : "#00000040"
                         radius: 20
                         z: -1
                     }

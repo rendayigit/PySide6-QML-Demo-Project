@@ -17,7 +17,7 @@ Window {
     signal progressSimulationRequested(int totalMilliseconds)
     signal windowCloseRequested
 
-    color: "#ffffff"
+    color: ThemeManager.windowBackground
 
     ColumnLayout {
         anchors.fill: parent

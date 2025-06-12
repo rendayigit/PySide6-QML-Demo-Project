@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import "../components"
 
 /**
  * ModelTree - Simulation model tree display component
@@ -10,8 +11,8 @@ import QtQuick.Layouts
  */
 Rectangle {
     id: root
-    color: "white"
-    border.color: "#dee2e6"
+    color: ThemeManager.windowBackground
+    border.color: ThemeManager.borderColor
     border.width: 1
     
     // Properties
@@ -30,7 +31,7 @@ Rectangle {
             text: "Simulation Models"
             font.pixelSize: 14
             font.bold: true
-            color: "#333"
+            color: ThemeManager.primaryText
         }
 
         ScrollView {
@@ -115,7 +116,7 @@ Rectangle {
                     width: modelsTreeListView.width
                     height: model.visible !== false ? 25 : 0
                     visible: model.visible !== false
-                    color: mouseArea.containsMouse ? "#e9ecef" : "transparent"
+                    color: mouseArea.containsMouse ? ThemeManager.controlBackgroundHover : "transparent"
 
                     MouseArea {
                         id: mouseArea
@@ -158,7 +159,7 @@ Rectangle {
                                 return "  ";
                             }
                             font.pixelSize: 10
-                            color: "#666"
+                            color: ThemeManager.secondaryText
                             Layout.preferredWidth: 15
                             Layout.alignment: Qt.AlignVCenter
                         }
@@ -167,7 +168,7 @@ Rectangle {
                         Text {
                             text: model.name
                             font.pixelSize: 12
-                            color: "#333"
+                            color: ThemeManager.primaryText
                             font.bold: model.level === 0
                             Layout.fillWidth: true
                             Layout.alignment: Qt.AlignVCenter

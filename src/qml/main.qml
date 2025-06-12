@@ -1,8 +1,9 @@
 import QtQuick
+import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import "components"      // Reusable components
-import "panels"          // Main window panels
+import "panels"          // Main window panels  
 import "windows"         // Separate windows/dialogs
 
 /**
@@ -19,6 +20,13 @@ ApplicationWindow {
     width: 1200
     height: 700
     title: "Galactron GUI - Simulator Control"
+
+    // Theme initialization
+    Component.onCompleted: {
+        if (backend) {
+            ThemeManager.updateThemeState(backend.current_theme, backend.is_system_dark);
+        }
+    }
 
     // Simulation state properties
     property bool isRunning: false
@@ -52,9 +60,13 @@ ApplicationWindow {
         // Theme updates
         function onThemeChanged(theme) {
             console.log("Theme changed to:", theme);
+            // Update ThemeManager with new theme state
+            if (backend) {
+                ThemeManager.updateThemeState(backend.current_theme, backend.is_system_dark);
+            }
             // Update settings window if it's open
             if (settingsWindow.visible) {
-                settingsWindow.selectedTheme = settingsWindow.backend?.current_theme || theme;
+                settingsWindow.selectedTheme = backend?.current_theme || theme;
             }
         }
         
@@ -156,8 +168,8 @@ ApplicationWindow {
         Rectangle {
             Layout.fillWidth: true
             height: 70
-            color: "#f8f9fa"
-            border.color: "#dee2e6"
+            color: ThemeManager.windowBackground
+            border.color: ThemeManager.borderColor
             border.width: 1
 
             RowLayout {
@@ -248,8 +260,8 @@ ApplicationWindow {
         Rectangle {
             Layout.fillWidth: true
             height: 30
-            color: "#f0f0f0"
-            border.color: "#dee2e6"
+            color: ThemeManager.statusBarBackground
+            border.color: ThemeManager.statusBarBorder
             border.width: 1
 
             Text {
@@ -258,7 +270,7 @@ ApplicationWindow {
                 anchors.verticalCenter: parent.verticalCenter
                 text: window.statusText
                 font.pixelSize: 12
-                color: "#333"
+                color: ThemeManager.primaryText
             }
         }
     }
