@@ -11,7 +11,7 @@ import "../components"
  */
 Rectangle {
     id: root
-    color: ThemeManager.surfaceBackground
+    color: ThemeManager.windowBackground
     border.color: ThemeManager.borderColor
     border.width: 1
     

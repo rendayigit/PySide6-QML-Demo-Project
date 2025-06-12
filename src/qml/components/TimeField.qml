@@ -34,7 +34,7 @@ ColumnLayout {
         font.letterSpacing: 0
         horizontalAlignment: TextInput.AlignHCenter
         background: Rectangle {
-            color: ThemeManager.inputBackgroundDisabled
+            color: ThemeManager.surfaceBackground
             border.color: ThemeManager.inputBorderColor
             border.width: 1
             radius: 3

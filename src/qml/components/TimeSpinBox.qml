@@ -35,58 +35,5 @@ ColumnLayout {
         value: root.currentValue
         implicitWidth: root.spinBoxWidth
         editable: true
-        
-        background: Rectangle {
-            color: ThemeManager.inputBackground
-            border.color: ThemeManager.inputBorderColor
-            border.width: 1
-            radius: 3
-        }
-        
-        contentItem: TextInput {
-            text: spinBox.textFromValue(spinBox.value, spinBox.locale)
-            font.pixelSize: 12
-            color: ThemeManager.inputText
-            horizontalAlignment: Qt.AlignHCenter
-            verticalAlignment: Qt.AlignVCenter
-            readOnly: !spinBox.editable
-            validator: spinBox.validator
-            inputMethodHints: Qt.ImhFormattedNumbersOnly
-        }
-        
-        up.indicator: Rectangle {
-            x: spinBox.mirrored ? 0 : parent.width - width
-            height: parent.height / 2
-            implicitWidth: 20
-            implicitHeight: 10
-            color: spinBox.up.pressed ? ThemeManager.controlBackgroundPressed : ThemeManager.controlBackground
-            border.color: ThemeManager.inputBorderColor
-            border.width: 1
-            
-            Text {
-                text: "▲"
-                font.pixelSize: 8
-                color: ThemeManager.primaryText
-                anchors.centerIn: parent
-            }
-        }
-        
-        down.indicator: Rectangle {
-            x: spinBox.mirrored ? 0 : parent.width - width
-            y: parent.height / 2
-            height: parent.height / 2
-            implicitWidth: 20
-            implicitHeight: 10
-            color: spinBox.down.pressed ? ThemeManager.controlBackgroundPressed : ThemeManager.controlBackground
-            border.color: ThemeManager.inputBorderColor
-            border.width: 1
-            
-            Text {
-                text: "▼"
-                font.pixelSize: 8
-                color: ThemeManager.primaryText
-                anchors.centerIn: parent
-            }
-        }
     }
 }
