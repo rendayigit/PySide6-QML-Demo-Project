@@ -7,6 +7,13 @@
       "request": "launch",
       "program": "src/main.py",
       "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "Preview Current QML file",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "pyside6-qml ${file}",
+      "cwd": "${workspaceFolder}"
     }
   ]
 }
