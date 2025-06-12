@@ -1,0 +1,5 @@
+- Use spaceloader themes and components for better visuals
+- Remove variable add and var variable remove
+- Add IP and Port options
+- Add logger to gui backend
+- Use simulator states for status bar

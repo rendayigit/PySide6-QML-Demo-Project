@@ -1,11 +1,15 @@
 {
-    "pylint.args": [
-        "--extension-pkg-whitelist=PySide6",
-        "--disable=method-hidden,E0402,W0718,C0301"
-    ],
-    "python.analysis.diagnosticSeverityOverrides": {
-        "reportCallIssue": "none",
-        "reportRedeclaration": "none",
-        "reportArgumentType": "none"
-    }
+  "pylint.args": [
+    "--extension-pkg-whitelist=PySide6",
+    "--disable=method-hidden,E0402,W0718,C0301"
+  ],
+  "python.analysis.diagnosticSeverityOverrides": {
+    "reportCallIssue": "none",
+    "reportRedeclaration": "none",
+    "reportArgumentType": "none"
+  },
+  "qt-qml.qmlls.customExePath": "/home/pc/.local/lib/python3.10/site-packages/PySide6/qmlls",
+  "qt-qml.qmlls.additionalImportPaths": [
+    "/home/pc/.local/lib/python3.10/site-packages/PySide6/Qt/qml"
+  ],
 }
