@@ -21,11 +21,19 @@ Window {
     modality: Qt.NonModal
 
     // Properties for settings
-    property string selectedTheme: "light" // Default to light theme
+    property string selectedTheme: "auto" // Default to auto theme
 
     // Signals for settings changes
     signal settingsApplied
     signal settingsCanceled
+
+    // Load theme setting from backend on open
+    onVisibilityChanged: {
+        if (visible && backend) {
+            selectedTheme = backend.current_theme;
+            themeComboBox.currentIndex = themeComboBox.indexOfValue(selectedTheme);
+        }
+    }
 
     // Main content
     ColumnLayout {
@@ -33,26 +41,54 @@ Window {
         anchors.margins: 20
         spacing: 15
 
-        RowLayout {
-            anchors.fill: parent
-            anchors.margins: 10
-            spacing: 10
+        // Header
+        Text {
+            text: "Application Settings"
+            font.pixelSize: 16
+            font.bold: true
+            color: "#333"
+            Layout.alignment: Qt.AlignHCenter
+        }
 
-            Text {
-                text: "Theme:"
-                font.pixelSize: 12
-                color: "#333"
-            }
+        // Settings sections
+        GroupBox {
+            title: "Appearance"
+            Layout.fillWidth: true
+            Layout.preferredHeight: 120
 
-            Switcher {
-                id: themeSwitcher
-                leftText: "Light"
-                rightText: "Dark"
-                isRightSelected: root.selectedTheme === "dark"
-                Layout.alignment: Qt.AlignLeft
+            ColumnLayout {
+                anchors.fill: parent
+                anchors.margins: 10
+                spacing: 10
 
-                onOptionToggled: function (isRightSelected) {
-                    root.selectedTheme = isRightSelected ? "dark" : "light";
+                Text {
+                    text: "Theme:"
+                    font.pixelSize: 12
+                    color: "#333"
+                }
+
+                ComboBox {
+                    id: themeComboBox
+                    Layout.fillWidth: true
+                    Layout.preferredHeight: 30
+                    
+                    model: [
+                        { text: "Light Theme", value: "light" },
+                        { text: "Dark Theme", value: "dark" },
+                        { text: "Auto (System)", value: "auto" }
+                    ]
+                    
+                    textRole: "text"
+                    valueRole: "value"
+                    
+                    // Set initial selection
+                    Component.onCompleted: {
+                        currentIndex = indexOfValue(root.selectedTheme);
+                    }
+
+                    onActivated: function(index) {
+                        root.selectedTheme = model[index].value;
+                    }
                 }
             }
         }
@@ -105,3 +141,4 @@ Window {
         }
     }
 }
+

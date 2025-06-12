@@ -6,7 +6,8 @@ between the QML frontend and the Python backend systems.
 """
 
 from typing import Optional
-from PySide6.QtCore import QObject, Signal, Property, Slot
+from PySide6.QtCore import QObject, Signal, Property, Slot, QSettings
+from PySide6.QtGui import QGuiApplication, QPalette, QColor
 
 from .data_manager import DataManager
 from .json_formatter import JSONFormatter
@@ -41,6 +42,9 @@ class Backend(QObject):
     variableRemoved = Signal(str)  # variable path
     variablesCleared = Signal()
 
+    # Theme management signals
+    themeChanged = Signal(str)  # theme name
+
     def __init__(self):
         """Initialize the backend with all subsystems"""
         super().__init__()
@@ -53,6 +57,10 @@ class Backend(QObject):
         self._is_running = False
         self._status_text = "Simulator ready"
 
+        # Theme properties
+        self._current_theme = "auto"
+        self._is_system_dark = False
+
         # Initialize subsystems
         self._data_manager = DataManager()
         self._json_formatter = JSONFormatter()
@@ -61,6 +69,10 @@ class Backend(QObject):
 
         # Connect data manager signals to backend signals
         self._connect_data_manager_signals()
+
+        # Initialize theme settings
+        self._settings = QSettings("Galactron", "GalactronApp")
+        self._load_and_apply_theme()
 
     def _connect_data_manager_signals(self) -> None:
         """Connect data manager signals to backend signals for QML"""
@@ -416,3 +428,132 @@ class Backend(QObject):
             self._commander = None
 
         print("Backend cleanup completed")
+
+    # Theme management properties
+    @Property(str, notify=themeChanged)
+    def current_theme(self) -> str:
+        """Current theme setting (light, dark, auto)"""
+        return self._current_theme
+
+    @Property(bool)
+    def is_system_dark(self) -> bool:
+        """Whether the system is using dark mode"""
+        return self._is_system_dark
+
+    def _detect_system_theme(self) -> bool:
+        """Detect if the system is using dark theme"""
+        try:
+            app = QGuiApplication.instance()
+            if app:
+                palette = app.palette()
+                # Check if window background is dark
+                bg_color = palette.color(QPalette.ColorRole.Window)
+                return bg_color.lightness() < 128
+        except Exception as e:
+            print(f"Failed to detect system theme: {e}")
+        return False
+
+    def _load_and_apply_theme(self) -> None:
+        """Load theme setting and apply it"""
+        try:
+            # Load saved theme preference with proper type handling
+            theme_value = self._settings.value("theme", "auto")
+            self._current_theme = str(theme_value) if theme_value else "auto"
+            
+            # Detect system theme
+            self._is_system_dark = self._detect_system_theme()
+            
+            # Apply the theme
+            self._apply_theme()
+            
+            print(f"Theme loaded: {self._current_theme}")
+        except Exception as e:
+            print(f"Failed to load theme: {e}")
+            # Fallback to light theme
+            self._current_theme = "light"
+            self._apply_theme()
+
+    def _apply_theme(self) -> None:
+        """Apply the current theme"""
+        try:
+            app = QGuiApplication.instance()
+            if not app:
+                return
+
+            # Determine which theme to actually use
+            if self._current_theme == "auto":
+                use_dark = self._is_system_dark
+            elif self._current_theme == "dark":
+                use_dark = True
+            else:  # light
+                use_dark = False
+
+            palette = QPalette()
+
+            if use_dark:
+                # Dark theme colors
+                palette.setColor(QPalette.ColorRole.Window, QColor(53, 53, 53))
+                palette.setColor(QPalette.ColorRole.WindowText, QColor(255, 255, 255))
+                palette.setColor(QPalette.ColorRole.Base, QColor(25, 25, 25))
+                palette.setColor(QPalette.ColorRole.AlternateBase, QColor(53, 53, 53))
+                palette.setColor(QPalette.ColorRole.ToolTipBase, QColor(255, 255, 255))
+                palette.setColor(QPalette.ColorRole.ToolTipText, QColor(0, 0, 0))
+                palette.setColor(QPalette.ColorRole.Text, QColor(255, 255, 255))
+                palette.setColor(QPalette.ColorRole.Button, QColor(53, 53, 53))
+                palette.setColor(QPalette.ColorRole.ButtonText, QColor(255, 255, 255))
+                palette.setColor(QPalette.ColorRole.BrightText, QColor(255, 0, 0))
+                palette.setColor(QPalette.ColorRole.Link, QColor(42, 130, 218))
+                palette.setColor(QPalette.ColorRole.Highlight, QColor(42, 130, 218))
+                palette.setColor(QPalette.ColorRole.HighlightedText, QColor(255, 255, 255))
+            else:
+                # Light theme colors
+                palette.setColor(QPalette.ColorRole.Window, QColor(240, 240, 240))
+                palette.setColor(QPalette.ColorRole.WindowText, QColor(0, 0, 0))
+                palette.setColor(QPalette.ColorRole.Base, QColor(255, 255, 255))
+                palette.setColor(QPalette.ColorRole.AlternateBase, QColor(233, 231, 227))
+                palette.setColor(QPalette.ColorRole.ToolTipBase, QColor(255, 255, 220))
+                palette.setColor(QPalette.ColorRole.ToolTipText, QColor(0, 0, 0))
+                palette.setColor(QPalette.ColorRole.Text, QColor(0, 0, 0))
+                palette.setColor(QPalette.ColorRole.Button, QColor(240, 240, 240))
+                palette.setColor(QPalette.ColorRole.ButtonText, QColor(0, 0, 0))
+                palette.setColor(QPalette.ColorRole.BrightText, QColor(255, 0, 0))
+                palette.setColor(QPalette.ColorRole.Link, QColor(0, 0, 255))
+                palette.setColor(QPalette.ColorRole.Highlight, QColor(48, 140, 198))
+                palette.setColor(QPalette.ColorRole.HighlightedText, QColor(255, 255, 255))
+
+            app.setPalette(palette)
+            
+            # Emit theme changed signal
+            actual_theme = "dark" if use_dark else "light"
+            self.themeChanged.emit(actual_theme)
+            
+        except Exception as e:
+            print(f"Failed to apply theme: {e}")
+
+    @Slot(str)
+    def set_theme(self, theme: str) -> None:
+        """Set application theme (light, dark, auto)"""
+        try:
+            if theme in ["light", "dark", "auto"] and theme != self._current_theme:
+                self._current_theme = theme
+                
+                # Save to settings
+                self._settings.setValue("theme", theme)
+                
+                # Re-detect system theme if auto mode
+                if theme == "auto":
+                    self._is_system_dark = self._detect_system_theme()
+                
+                # Apply the theme
+                self._apply_theme()
+                
+                print(f"Theme changed to: {theme}")
+                
+        except Exception as e:
+            print(f"Failed to set theme: {e}")
+
+    # Theme management
+    def _load_theme(self) -> None:
+        """Load the application theme from settings (deprecated - use _load_and_apply_theme)"""
+        # This method is deprecated but kept for compatibility
+        pass

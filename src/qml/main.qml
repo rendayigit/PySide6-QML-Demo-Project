@@ -49,6 +49,15 @@ ApplicationWindow {
             window.statusText = statusText;
         }
         
+        // Theme updates
+        function onThemeChanged(theme) {
+            console.log("Theme changed to:", theme);
+            // Update settings window if it's open
+            if (settingsWindow.visible) {
+                settingsWindow.selectedTheme = settingsWindow.backend?.current_theme || theme;
+            }
+        }
+        
         // Event log updates
         function onEventLogReceived(level, message) {
             eventLog.model.append({
@@ -284,11 +293,18 @@ ApplicationWindow {
 
         onSettingsApplied: {
             console.log("Settings applied - Theme:", settingsWindow.selectedTheme);
-            // TODO: Implement theme handling and other settings
+            // Apply theme through backend
+            if (backend) {
+                backend.set_theme(settingsWindow.selectedTheme);
+            }
         }
 
         onSettingsCanceled: {
             console.log("Settings canceled");
+            // Reset to current backend theme
+            if (backend) {
+                settingsWindow.selectedTheme = backend.current_theme;
+            }
         }
     }
 }
