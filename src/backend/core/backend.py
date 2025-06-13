@@ -13,6 +13,7 @@ from .data_manager import DataManager
 from .json_formatter import JSONFormatter
 from ..communication.subscriber import ZMQSubscriber
 from ..communication.commanding import SimulationCommander
+from ..models.tree_model import TreeModel, register_tree_model
 
 
 class Backend(QObject):
@@ -66,6 +67,9 @@ class Backend(QObject):
         self._json_formatter = JSONFormatter()
         self._subscriber: Optional[ZMQSubscriber] = None
         self._commander: Optional[SimulationCommander] = None
+        
+        # Initialize TreeModel for QML TreeView
+        self._tree_model = TreeModel()
 
         # Connect data manager signals to backend signals
         self._connect_data_manager_signals()
@@ -112,6 +116,11 @@ class Backend(QObject):
     def status_text(self) -> str:
         """Current status text"""
         return self._status_text
+
+    @Property(TreeModel, constant=True)
+    def tree_model(self) -> TreeModel:
+        """Tree model for QML TreeView component"""
+        return self._tree_model
 
     # Property setters
     def set_simulation_time(self, value: str) -> None:
@@ -251,7 +260,10 @@ class Backend(QObject):
         self.variablesCleared.emit()
 
     def _on_model_tree_updated(self, tree_items) -> None:
-        """Forward model tree updated signal to QML"""
+        """Forward model tree updated signal to QML and update TreeModel"""
+        # Update the TreeModel with the new data
+        self._tree_model.populate_from_flat_data(tree_items)
+        # Also emit the signal for backward compatibility
         self.modelTreeUpdated.emit(tree_items)
 
     # QML-callable variable management methods

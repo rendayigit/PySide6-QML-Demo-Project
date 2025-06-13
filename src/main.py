@@ -20,6 +20,7 @@ from PySide6.QtCore import QUrl
 
 # Import the main backend class
 from backend.core.backend import Backend
+from backend.models.tree_model import register_tree_model
 
 # Constants
 QML_DIR = "src/qml"
@@ -59,6 +60,9 @@ def main() -> int:
 
         # Create QML engine
         engine = QQmlApplicationEngine()
+
+        # Register custom QML types
+        register_tree_model()
 
         # Setup QML engine
         setup_qml_engine(engine)

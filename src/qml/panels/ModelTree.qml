@@ -1,23 +1,22 @@
+pragma ComponentBehavior: Bound
+
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import "../components"
+import TreeModels 1.0
 import "../services"
 
 /**
- * ModelTree - Simulation model tree display component
+ * ModelTree - Official Qt 6.2+ TreeView implementation
  *
- * This component displays the hierarchical simulation model tree with expand/collapse
- * functionality and support for adding variables to watch list.
+ * This component uses the official Qt 6.2+ TreeView component with a proper
+ * QAbstractItemModel (TreeModel) from the Python backend for hierarchical data display.
  */
 Rectangle {
     id: root
     color: ThemeManager.windowBackground
     border.color: ThemeManager.borderColor
     border.width: 1
-
-    // Properties
-    property alias model: modelsTreeModel
 
     // Signals for communication with backend
     signal variableWatchRequested(string variablePath, string variableName)
@@ -40,145 +39,72 @@ Rectangle {
             Layout.fillHeight: true
             clip: true
 
-            ListView {
-                id: modelsTreeListView
-                model: ListModel {
-                    id: modelsTreeModel
-                }
+            // Official Qt 6.2+ TreeView component
+            TreeView {
+                id: treeView
+                anchors.fill: parent
+                model: backend ? backend.tree_model : null
 
-                // Helper function to toggle expand/collapse
-                function toggleExpanded(index) {
-                    var item = modelsTreeModel.get(index);
-                    if (!item)
-                        return;
+                delegate: TreeViewDelegate {
+                    id: treeDelegate
 
-                    var isExpanded = item.expanded || false;
-                    modelsTreeModel.setProperty(index, "expanded", !isExpanded);
+                    implicitWidth: treeView.width
+                    implicitHeight: 25
 
-                    // Update visibility of children
-                    updateChildrenVisibility(index, !isExpanded);
-                }
+                    // contentItem: Rectangle {
+                    //     color: treeDelegate.hovered ? ThemeManager.controlBackgroundHover : "transparent"
 
-                // Helper function to update children visibility
-                function updateChildrenVisibility(parentIndex, parentExpanded) {
-                    var parentItem = modelsTreeModel.get(parentIndex);
-                    if (!parentItem) {
-                        return;
-                    }
+                    //     Text {
+                    //         anchors.left: parent.left
+                    //         anchors.leftMargin: 25 + (treeDelegate.depth * 20)
+                    //         anchors.verticalCenter: parent.verticalCenter
+                    //         anchors.right: parent.right
+                    //         anchors.rightMargin: 10
 
-                    var parentLevel = parentItem.level;
-                    var parentPath = parentItem.fullPath;
+                    //         text: treeDelegate.model.display || ""
+                    //         font.pixelSize: 12
+                    //         color: ThemeManager.primaryText
+                    //         font.bold: treeDelegate.depth === 0
+                    //         elide: Text.ElideRight
+                    //     }
 
-                    // Find and update all children of this parent
-                    for (var i = parentIndex + 1; i < modelsTreeModel.count; i++) {
-                        var childItem = modelsTreeModel.get(i);
+                    //     MouseArea {
+                    //         anchors.fill: parent
+                    //         acceptedButtons: Qt.LeftButton
 
-                        // Stop when we reach a sibling or parent (same or lower level)
-                        if (childItem.level <= parentLevel) {
-                            break;
-                        }
+                    //         onDoubleClicked: function (mouse) {
+                    //             // Get the model index for this item
+                    //             var modelIndex = treeView.index(treeDelegate.row, 0, treeDelegate.parent);
 
-                        // Check if this is a direct child
-                        if (childItem.level === parentLevel + 1 && childItem.fullPath.startsWith(parentPath + ".")) {
-                            modelsTreeModel.setProperty(i, "visible", parentExpanded);
+                    //             // Access data using Qt.UserRole for fullPath and name
+                    //             var fullPath = treeView.model.data(modelIndex, Qt.UserRole) || "";
+                    //             var name = treeView.model.data(modelIndex, Qt.DisplayRole) || "";
+                    //             var hasChildren = treeView.model.data(modelIndex, Qt.UserRole + 1) || false;
 
-                            // If we're collapsing or child is collapsed, hide all its descendants
-                            if (!parentExpanded || !childItem.expanded) {
-                                updateChildrenVisibility(i, false);
-                            }
-                        }
-                    }
-                }
-
-                // Helper function to add all variables under a parent recursively
-                function addAllVariablesUnder(parentPath, parentIndex) {
-                    var parentItem = modelsTreeModel.get(parentIndex);
-                    if (!parentItem)
-                        return;
-
-                    var parentLevel = parentItem.level;
-
-                    // Find and add all leaf nodes under this parent
-                    for (var i = parentIndex + 1; i < modelsTreeModel.count; i++) {
-                        var childItem = modelsTreeModel.get(i);
-
-                        // Stop when we reach a sibling or parent (same or lower level)
-                        if (childItem.level <= parentLevel) {
-                            break;
-                        }
-
-                        // If this is a leaf node (no children) under our parent path, add it
-                        if (!childItem.hasChildren && childItem.fullPath.startsWith(parentPath + ".")) {
-                            console.log("Adding to watch:", childItem.fullPath);
-                            root.variableWatchRequested(childItem.fullPath, childItem.name.trim());
-                        }
-                    }
-                }
-
-                delegate: Rectangle {
-                    width: modelsTreeListView.width
-                    height: model.visible !== false ? 25 : 0
-                    visible: model.visible !== false
-                    color: mouseArea.containsMouse ? ThemeManager.controlBackgroundHover : "transparent"
-
-                    MouseArea {
-                        id: mouseArea
-                        anchors.fill: parent
-                        hoverEnabled: true
-                        onClicked: {
-                            console.log("Selected:", model.name);
-                            // Toggle expand/collapse if this item has children
-                            if (model.hasChildren) {
-                                modelsTreeListView.toggleExpanded(index);
-                            }
-                        }
-                        onDoubleClicked: {
-                            if (model.hasChildren) {
-                                // Double-click on parent: add all child variables recursively
-                                console.log("Adding all variables under:", model.fullPath);
-                                modelsTreeListView.addAllVariablesUnder(model.fullPath, index);
-                            } else {
-                                // Double-click on leaf: add single variable
-                                if (model.fullPath && model.fullPath !== "") {
-                                    console.log("Adding to watch:", model.fullPath);
-                                    root.variableWatchRequested(model.fullPath, model.name.trim());
-                                }
-                            }
-                        }
-                    }
-
-                    RowLayout {
-                        anchors.fill: parent
-                        anchors.leftMargin: 10 + (model.level * 20)
-                        anchors.rightMargin: 10
-                        spacing: 5
-
-                        // Expand/collapse icon
-                        Text {
-                            text: {
-                                if (model.hasChildren) {
-                                    return model.expanded ? "▼" : "▶";
-                                }
-                                return "  ";
-                            }
-                            font.pixelSize: 10
-                            color: ThemeManager.secondaryText
-                            Layout.preferredWidth: 15
-                            Layout.alignment: Qt.AlignVCenter
-                        }
-
-                        // Node name
-                        Text {
-                            text: model.name
-                            font.pixelSize: 12
-                            color: ThemeManager.primaryText
-                            font.bold: model.level === 0
-                            Layout.fillWidth: true
-                            Layout.alignment: Qt.AlignVCenter
-                        }
-                    }
+                    //             if (hasChildren) {
+                    //                 // Double-click on parent: add all child variables recursively
+                    //                 console.log("Adding all variables under:", fullPath);
+                    //                 root.addAllVariablesUnder(fullPath);
+                    //             } else {
+                    //                 // Double-click on leaf: add single variable
+                    //                 if (fullPath && fullPath !== "") {
+                    //                     console.log("Adding to watch:", fullPath);
+                    //                     root.variableWatchRequested(fullPath, name.trim());
+                    //                 }
+                    //             }
+                    //         }
+                    //     }
+                    // }
                 }
             }
         }
+    }
+
+    // Helper function to add all variables under a parent path
+    function addAllVariablesUnder(parentPath) {
+        // This would need to be implemented by traversing the model
+        // For now, we'll emit the signal and let the backend handle it
+        console.log("Adding all variables under:", parentPath);
+        root.allVariablesWatchRequested(parentPath, -1);
     }
 }

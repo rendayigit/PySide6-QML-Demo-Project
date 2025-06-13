@@ -81,10 +81,8 @@ ApplicationWindow {
 
         // Model tree updates
         function onModelTreeUpdated(treeData) {
-            modelTree.model.clear();
-            for (var i = 0; i < treeData.length; i++) {
-                modelTree.model.append(treeData[i]);
-            }
+            // TreeModel is updated automatically in the backend
+            console.log("Model tree updated with", treeData.length, "items");
         }
 
         // Variable model updates
