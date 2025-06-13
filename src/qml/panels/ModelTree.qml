@@ -45,11 +45,11 @@ Rectangle {
                 anchors.fill: parent
                 model: backend ? backend.tree_model : null
 
-                delegate: TreeViewDelegate {
-                    id: treeDelegate
+                // delegate: TreeViewDelegate {
+                //     id: treeDelegate
 
-                    implicitWidth: treeView.width
-                    implicitHeight: 25
+                //     implicitWidth: treeView.width
+                //     implicitHeight: 25
 
                     // contentItem: Rectangle {
                     //     color: treeDelegate.hovered ? ThemeManager.controlBackgroundHover : "transparent"
@@ -95,7 +95,7 @@ Rectangle {
                     //         }
                     //     }
                     // }
-                }
+                // }
             }
         }
     }
