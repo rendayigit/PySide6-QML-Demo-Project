@@ -121,12 +121,12 @@ Rectangle {
                         height: Math.max(40, logText.contentHeight + 20)
                         color: {
                             if (model.level === "ERROR")
-                                return ThemeManager.isDarkTheme ? "#4a1f1f" : "#ffe6e6";
+                                return ThemeManager.currentTheme === "dark" ? "#4a1f1f" : "#ffe6e6";
                             if (model.level === "WARNING")
-                                return ThemeManager.isDarkTheme ? "#4a3c1f" : "#fff3cd";
+                                return ThemeManager.currentTheme === "dark" ? "#4a3c1f" : "#fff3cd";
                             if (model.level === "CRITICAL")
-                                return ThemeManager.isDarkTheme ? "#660000" : "#ffdddd";
-                            return index % 2 ? ThemeManager.alternateBackground : ThemeManager.surfaceBackground;
+                                return ThemeManager.currentTheme === "dark" ? "#660000" : "#ffdddd";
+                            return index % 2 ? ThemeManager.hoverBackground : ThemeManager.panelBackground;
                         }
 
                         RowLayout {
@@ -187,9 +187,9 @@ Rectangle {
                 visible: !eventLogsListView.userAtBottom && !eventLogsListView.autoScrollEnabled
 
                 background: Rectangle {
-                    color: parent.pressed ? ThemeManager.primaryButtonBgPressed : ThemeManager.primaryButtonBg
+                    color: parent.pressed ? ThemeManager.buttonPressed : ThemeManager.buttonBackground
                     radius: 20
-                    border.color: ThemeManager.focusBorderColor
+                    border.color: ThemeManager.borderColor
                     border.width: 1
 
                     // Drop shadow effect
@@ -197,7 +197,7 @@ Rectangle {
                         anchors.fill: parent
                         anchors.topMargin: 2
                         anchors.leftMargin: 2
-                        color: ThemeManager.isDarkTheme ? "#00000060" : "#00000040"
+                        color: ThemeManager.currentTheme === "dark" ? "#00000060" : "#00000040"
                         radius: 20
                         z: -1
                     }

@@ -59,7 +59,7 @@ Window {
 
                 background: Rectangle {
                     color: ThemeManager.inputBackground
-                    border.color: ThemeManager.inputBorderColor
+                    border.color: ThemeManager.inputBorder
                     border.width: 1
                     radius: 3
                 }
@@ -93,12 +93,12 @@ Window {
                     width: scaleSlider.availableWidth
                     height: implicitHeight
                     radius: 2
-                    color: ThemeManager.alternateBackground
+                    color: ThemeManager.hoverBackground
 
                     Rectangle {
                         width: scaleSlider.visualPosition * parent.width
                         height: parent.height
-                        color: ThemeManager.specialColor
+                        color: ThemeManager.accentColor
                         radius: 2
                     }
                 }
@@ -109,8 +109,8 @@ Window {
                     implicitWidth: 18
                     implicitHeight: 18
                     radius: 9
-                    color: scaleSlider.pressed ? ThemeManager.specialColorPressed : ThemeManager.specialColor
-                    border.color: ThemeManager.specialColorBorder
+                    color: scaleSlider.pressed ? ThemeManager.accentHover : ThemeManager.accentColor
+                    border.color: ThemeManager.accentColor
                     border.width: 1
                 }
 
@@ -131,9 +131,9 @@ Window {
                 id: okayButton
 
                 buttonText: "Okay"
-                normalColor: ThemeManager.specialColor
-                pressedColor: ThemeManager.specialColorPressed
-                borderColor: ThemeManager.specialColorBorder
+                normalColor: ThemeManager.accentColor
+                pressedColor: ThemeManager.accentHover
+                borderColor: ThemeManager.accentColor
                 textColor: ThemeManager.primaryText
                 boldText: true
                 useLayoutAlignment: false

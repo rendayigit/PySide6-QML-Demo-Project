@@ -25,10 +25,10 @@ RowLayout {
     CustomButton {
         id: runButton
         buttonText: root.isRunning ? "Hold" : "Run"
-        normalColor: root.isRunning ? ThemeManager.primaryButtonBg : ThemeManager.successColor
-        pressedColor: root.isRunning ? ThemeManager.primaryButtonBgPressed : ThemeManager.successColorPressed
-        borderColor: root.isRunning ? ThemeManager.focusBorderColor : ThemeManager.successColorBorder
-        textColor: ThemeManager.primaryButtonText
+        normalColor: root.isRunning ? ThemeManager.buttonBackground : ThemeManager.successColor
+        pressedColor: root.isRunning ? ThemeManager.buttonPressed : ThemeManager.successColor
+        borderColor: root.isRunning ? ThemeManager.borderColor : ThemeManager.successColor
+        textColor: ThemeManager.buttonText
         boldText: root.isRunning
         useLayoutAlignment: true
 
@@ -42,9 +42,9 @@ RowLayout {
         id: resetButton
         buttonText: "Reset"
         normalColor: ThemeManager.errorColor
-        pressedColor: ThemeManager.errorColorPressed
-        borderColor: ThemeManager.errorColorBorder
-        textColor: ThemeManager.primaryButtonText
+        pressedColor: ThemeManager.errorColor
+        borderColor: ThemeManager.errorColor
+        textColor: ThemeManager.buttonText
         useLayoutAlignment: true
 
         onClicked: {
@@ -56,10 +56,10 @@ RowLayout {
     CustomButton {
         id: stepButton
         buttonText: "Step"
-        normalColor: ThemeManager.primaryButtonBg
-        pressedColor: ThemeManager.primaryButtonBgPressed
-        borderColor: ThemeManager.focusBorderColor
-        textColor: ThemeManager.primaryButtonText
+        normalColor: ThemeManager.buttonBackground
+        pressedColor: ThemeManager.buttonPressed
+        borderColor: ThemeManager.borderColor
+        textColor: ThemeManager.buttonText
         useLayoutAlignment: true
 
         onClicked: {

@@ -119,7 +119,7 @@ Rectangle {
                     width: modelsTreeListView.width
                     height: model.visible !== false ? 25 : 0
                     visible: model.visible !== false
-                    color: mouseArea.containsMouse ? ThemeManager.controlBackgroundHover : "transparent"
+                    color: mouseArea.containsMouse ? ThemeManager.hoverBackground : "transparent"
 
                     MouseArea {
                         id: mouseArea

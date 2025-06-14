@@ -22,7 +22,7 @@ Window {
     modality: Qt.NonModal
 
     // Properties for settings
-    property string selectedTheme: "auto" // Default to auto theme
+    property string selectedTheme: "light" // Default to light theme
 
     // Signals for settings changes
     signal settingsApplied
@@ -30,10 +30,10 @@ Window {
 
     color: ThemeManager.windowBackground
 
-    // Load theme setting from backend on open
+    // Load theme setting from ThemeManager on open
     onVisibilityChanged: {
-        if (visible && backend) {
-            selectedTheme = backend.current_theme;
+        if (visible) {
+            selectedTheme = ThemeManager.getCurrentTheme();
             themeComboBox.currentIndex = themeComboBox.indexOfValue(selectedTheme);
         }
     }
@@ -68,10 +68,6 @@ Window {
                     {
                         text: "Dark Theme",
                         value: "dark"
-                    },
-                    {
-                        text: "Auto (System)",
-                        value: "auto"
                     }
                 ]
 
@@ -81,9 +77,7 @@ Window {
                 // Set initial selection
                 Component.onCompleted: {
                     currentIndex = indexOfValue(root.selectedTheme);
-                }
-
-                onActivated: function (index) {
+                }                onActivated: function (index) {
                     root.selectedTheme = model[index].value;
                 }
             }

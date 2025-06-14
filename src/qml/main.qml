@@ -22,13 +22,6 @@ ApplicationWindow {
     height: 700
     title: "Galactron GUI - Simulator Control"
 
-    // Theme initialization
-    Component.onCompleted: {
-        if (backend) {
-            ThemeManager.updateThemeState(backend.current_theme, backend.is_system_dark);
-        }
-    }
-
     // Simulation state properties
     property bool isRunning: false
     property string currentSimTime: "0.00"
@@ -56,19 +49,6 @@ ApplicationWindow {
 
         function onStatusTextChanged(statusText) {
             window.statusText = statusText;
-        }
-
-        // Theme updates
-        function onThemeChanged(theme) {
-            console.log("Theme changed to:", theme);
-            // Update ThemeManager with new theme state
-            if (backend) {
-                ThemeManager.updateThemeState(backend.current_theme, backend.is_system_dark);
-            }
-            // Update settings window if it's open
-            if (settingsWindow.visible) {
-                settingsWindow.selectedTheme = backend?.current_theme || theme;
-            }
         }
 
         // Event log updates
@@ -306,18 +286,14 @@ ApplicationWindow {
 
         onSettingsApplied: {
             console.log("Settings applied - Theme:", settingsWindow.selectedTheme);
-            // Apply theme through backend
-            if (backend) {
-                backend.set_theme(settingsWindow.selectedTheme);
-            }
+            // Apply theme through ThemeManager
+            ThemeManager.setTheme(settingsWindow.selectedTheme);
         }
 
         onSettingsCanceled: {
             console.log("Settings canceled");
-            // Reset to current backend theme
-            if (backend) {
-                settingsWindow.selectedTheme = backend.current_theme;
-            }
+            // Reset to current theme
+            settingsWindow.selectedTheme = ThemeManager.getCurrentTheme();
         }
     }
 }

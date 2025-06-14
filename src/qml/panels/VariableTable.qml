@@ -39,7 +39,7 @@ Rectangle {
             id: variableTableHeader
             Layout.fillWidth: true
             height: 30
-            color: ThemeManager.alternateBackground
+            color: ThemeManager.hoverBackground
             border.color: ThemeManager.borderColor
             border.width: 1
 
@@ -76,7 +76,7 @@ Rectangle {
                         width: 3
                         height: parent.height
                         anchors.right: parent.right
-                        color: variableResizeArea.containsMouse ? ThemeManager.focusBorderColor : ThemeManager.borderColor
+                        color: variableResizeArea.containsMouse ? ThemeManager.accentColor : ThemeManager.borderColor
                         
                         MouseArea {
                             id: variableResizeArea
@@ -125,7 +125,7 @@ Rectangle {
                         width: 3
                         height: parent.height
                         anchors.right: parent.right
-                        color: descriptionResizeArea.containsMouse ? ThemeManager.focusBorderColor : ThemeManager.borderColor
+                        color: descriptionResizeArea.containsMouse ? ThemeManager.accentColor : ThemeManager.borderColor
                         
                         MouseArea {
                             id: descriptionResizeArea
@@ -174,7 +174,7 @@ Rectangle {
                         width: 3
                         height: parent.height
                         anchors.right: parent.right
-                        color: valueResizeArea.containsMouse ? ThemeManager.focusBorderColor : ThemeManager.borderColor
+                        color: valueResizeArea.containsMouse ? ThemeManager.accentColor : ThemeManager.borderColor
                         
                         MouseArea {
                             id: valueResizeArea
@@ -316,9 +316,9 @@ Rectangle {
                     height: Math.max(25, Math.max(variableText.contentHeight, Math.max(descriptionText.contentHeight, valueText.contentHeight)) + 20)
                     color: {
                         if (model.selected) {
-                            return ThemeManager.highlightColor;
+                            return ThemeManager.selectionBackground;
                         }
-                        return index % 2 ? ThemeManager.alternateBackground : ThemeManager.surfaceBackground;
+                        return index % 2 ? ThemeManager.hoverBackground : ThemeManager.panelBackground;
                     }
 
                     MouseArea {
@@ -369,7 +369,7 @@ Rectangle {
                                 anchors.rightMargin: 5
                                 text: model.variablePath || model.variable || ""
                                 font.pixelSize: 11
-                                color: model.selected ? ThemeManager.highlightTextColor : ThemeManager.primaryText
+                                color: model.selected ? ThemeManager.primaryText : ThemeManager.primaryText
                                 wrapMode: Text.Wrap
                                 width: parent.width - 10
                             }
@@ -391,7 +391,7 @@ Rectangle {
                                 anchors.rightMargin: 5
                                 text: model.description || ""
                                 font.pixelSize: 11
-                                color: model.selected ? ThemeManager.highlightTextColor : ThemeManager.primaryText
+                                color: model.selected ? ThemeManager.primaryText : ThemeManager.primaryText
                                 wrapMode: Text.Wrap
                                 width: parent.width - 10
                             }
@@ -413,7 +413,7 @@ Rectangle {
                                 anchors.rightMargin: 5
                                 text: model.value || ""
                                 font.pixelSize: 11
-                                color: model.selected ? ThemeManager.highlightTextColor : ThemeManager.primaryText
+                                color: model.selected ? ThemeManager.primaryText : ThemeManager.primaryText
                                 wrapMode: Text.Wrap
                                 width: parent.width - 10
                             }
@@ -434,7 +434,7 @@ Rectangle {
                                 anchors.rightMargin: 5
                                 text: model.type || ""
                                 font.pixelSize: 11
-                                color: model.selected ? ThemeManager.highlightTextColor : ThemeManager.secondaryText
+                                color: model.selected ? ThemeManager.primaryText : ThemeManager.secondaryText
                                 elide: Text.ElideRight
                             }
                         }
