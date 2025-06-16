@@ -2,22 +2,23 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import "../services"
+import "../components"
 
 /**
  * EventLog - Event logs display component
- * 
+ *
  * This component displays event logs with different severity levels, auto-scroll functionality,
  * and dynamic row heights for JSON-formatted log messages.
  */
 Rectangle {
     id: root
-    color: ThemeManager.windowBackground
+    color: ThemeManager.darkBlue_background2 // TODO: do not use darkBlue
     border.color: ThemeManager.borderColor
     border.width: 1
-    
+
     // Properties
     property alias model: eventLogsModel
-    
+
     ColumnLayout {
         anchors.fill: parent
         anchors.margins: 5
@@ -34,8 +35,8 @@ Rectangle {
         Rectangle {
             Layout.fillWidth: true
             height: 30
-            color: ThemeManager.panelBackground
-            border.color: ThemeManager.borderColor
+            color: ThemeManager.darkBlue_background2 // TODO: do not use darkBlue
+            border.color: ThemeManager.border
             border.width: 1
 
             RowLayout {
@@ -177,40 +178,26 @@ Rectangle {
             }
 
             // Auto-scroll button (appears when not at bottom and not auto-scrolling)
-            Button {
+            CustomButton {
                 id: autoScrollButton
+
                 anchors.bottom: parent.bottom
                 anchors.right: parent.right
                 anchors.margins: 10
+
+                buttonText: "↓"
+                font.pixelSize: 20
+                font.bold: true
+                normalColor: ThemeManager.primaryComponentBackground
+                hoveredColor: ThemeManager.primaryComponentHoverBackground
+                pressedColor: normalColor.darker(1.2)
+                borderColor: ThemeManager.border
+                textColor: ThemeManager.warningForeground
+                useLayoutAlignment: true
                 width: 40
                 height: 40
                 visible: !eventLogsListView.userAtBottom && !eventLogsListView.autoScrollEnabled
-
-                background: Rectangle {
-                    color: parent.pressed ? ThemeManager.buttonPressed : ThemeManager.buttonBackground
-                    radius: 20
-                    border.color: ThemeManager.borderColor
-                    border.width: 1
-
-                    // Drop shadow effect
-                    Rectangle {
-                        anchors.fill: parent
-                        anchors.topMargin: 2
-                        anchors.leftMargin: 2
-                        color: ThemeManager.currentTheme === "dark" ? "#00000060" : "#00000040"
-                        radius: 20
-                        z: -1
-                    }
-                }
-
-                contentItem: Text {
-                    text: "↓"
-                    font.pixelSize: 20
-                    font.bold: true
-                    color: "white"
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                }
+                // radius: 20
 
                 onClicked: {
                     eventLogsListView.autoScrollEnabled = true;
