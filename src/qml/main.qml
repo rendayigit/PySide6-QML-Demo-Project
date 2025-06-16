@@ -150,7 +150,7 @@ ApplicationWindow {
             Layout.fillWidth: true
             height: 70
             color: ThemeManager.windowBackground
-            border.color: ThemeManager.borderColor
+            border.color: ThemeManager.border
             border.width: 1
 
             RowLayout {
@@ -241,8 +241,8 @@ ApplicationWindow {
         Rectangle {
             Layout.fillWidth: true
             height: 30
-            color: ThemeManager.statusBarBackground
-            border.color: ThemeManager.statusBarBorder
+            color: ThemeManager.titleBarBackground
+            border.color: ThemeManager.border
             border.width: 1
 
             Text {
@@ -251,7 +251,7 @@ ApplicationWindow {
                 anchors.verticalCenter: parent.verticalCenter
                 text: window.statusText
                 font.pixelSize: 12
-                color: ThemeManager.primaryText
+                color: ThemeManager.componentForeground
             }
         }
     }

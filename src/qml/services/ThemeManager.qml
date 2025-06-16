@@ -13,111 +13,92 @@ QtObject {
     // Only allow 'light' or 'dark' theme - load from settings on startup
     property string currentTheme: "light"
 
-    // --- Light Theme Colors (from light.css) ---
-    readonly property color light_accentBg: "#2777ff"
-    readonly property color light_accentFg: "#ffffff"
-    readonly property color light_destructiveBg: "#e01b24"
-    readonly property color light_destructiveFg: "#ffffff"
-    readonly property color light_successBg: "#2ec27e"
-    readonly property color light_successFg: "#ffffff"
-    readonly property color light_warningBg: "#e5a50a"
-    readonly property color light_warningFg: "#000000cc"
-    readonly property color light_errorBg: "#e01b24"
-    readonly property color light_errorFg: "#ffffff"
-    readonly property color light_windowBg: "#fafafa"
-    readonly property color light_windowFg: "#000000cc"
-    readonly property color light_viewBg: "#ffffff"
-    readonly property color light_viewFg: "#000000cc"
-    readonly property color light_headerbarBg: "#ebebeb"
-    readonly property color light_headerbarFg: "#000000cc"
-    readonly property color light_sidebarBg: "#ebebeb"
-    readonly property color light_sidebarFg: "#000000cc"
-    readonly property color light_cardBg: "#ffffff"
-    readonly property color light_cardFg: "#000000cc"
-    readonly property color light_dialogBg: "#ffffff"
-    readonly property color light_dialogFg: "#000000cc"
-    readonly property color light_popoverBg: "#ffffff"
-    readonly property color light_popoverFg: "#000000cc"
-    readonly property color light_thumbnailBg: "#ffffff"
-    readonly property color light_thumbnailFg: "#000000cc"
-    readonly property color light_border: "#00000012"
+    readonly property color accent: "#2777ff"
 
-    // --- Dark Theme Colors (from dark.css) ---
-    readonly property color dark_accentBg: "#2777ff"
-    readonly property color dark_accentFg: "#ffffff"
-    readonly property color dark_destructiveBg: "#c01c28"
-    readonly property color dark_destructiveFg: "#ffffff"
-    readonly property color dark_successBg: "#26a269"
-    readonly property color dark_successFg: "#ffffff"
-    readonly property color dark_warningBg: "#cd9309"
-    readonly property color dark_warningFg: "#000000cc"
-    readonly property color dark_errorBg: "#c01c28"
-    readonly property color dark_errorFg: "#ffffff"
-    readonly property color dark_windowBg: "#23252e"
-    readonly property color dark_windowFg: "#ffffff"
-    readonly property color dark_viewBg: "#272a34"
-    readonly property color dark_viewFg: "#ffffff"
-    readonly property color dark_headerbarBg: "#1a1c23"
-    readonly property color dark_headerbarFg: "#ffffff"
-    readonly property color dark_sidebarBg: "#1a1c23"
-    readonly property color dark_sidebarFg: "#ffffff"
-    readonly property color dark_cardBg: "#ffffff0d"
-    readonly property color dark_cardFg: "#ffffff"
-    readonly property color dark_dialogBg: "#303340"
-    readonly property color dark_dialogFg: "#ffffff"
-    readonly property color dark_popoverBg: "#303340"
-    readonly property color dark_popoverFg: "#ffffff"
-    readonly property color dark_thumbnailBg: "#303340"
-    readonly property color dark_thumbnailFg: "#ffffff"
-    readonly property color dark_border: "#00000040"
+    // Dark Theme Colors
+    readonly property color dark_windowBackground: "#242424"
+    readonly property color dark_windowForeground: "#ffffff"
+    readonly property color dark_titleBarBackground: "#303030"
+    readonly property color dark_componentBackground: "#353535"
+    readonly property color dark_componentHoverBackground: "#3b3b3b"
+    readonly property color dark_componentForeground: "#ffffff"
+    readonly property color dark_primaryComponentBackground: "#3584e4"
+    readonly property color dark_primaryComponentHoverBackground: "#4990e7"
+    readonly property color dark_secondaryComponentBackground: "#6f6f6f"
+    readonly property color dark_secondaryComponentHoverBackground: "#787878"
+    readonly property color dark_tertiaryComponentBackground: "#444444"
+    readonly property color dark_tertiaryComponentHoverBackground: "#4f4f4f"
+    readonly property color dark_alternativePrimaryComponentBackground: "#494949"
+    readonly property color dark_alternativePrimaryComponentHoverBackground: "#585858"
+    readonly property color dark_alternativeSecondaryComponentBackground: "#a4a4a4"
+    readonly property color dark_alternativeSecondaryComponentHoverBackground: "#a7a7a7"
+    readonly property color dark_destructiveBackground: "#c01c28"
+    readonly property color dark_destructiveHoverBackground: "#c6323d"
+    readonly property color dark_destructiveForeground: "#ffffff"
+    readonly property color dark_border: "#000000"
+    readonly property color dark_successBackground: "#26a269"
+    readonly property color dark_successForeground: "#ffffff"
+    readonly property color dark_warningBackground: "#cd9309"
+    readonly property color dark_warningForeground: "#000000"
+    readonly property color dark_yellowBackground: "#ffffff0d"
+    readonly property color darkBlue_background1: "#303340"
+    readonly property color darkBlue_background2: "#272a34"
+    readonly property color darkBlue_background3: "#23252e"
+    readonly property color darkBlue_background4: "#1a1c23"
+
+    // Light Theme Colors
+    readonly property color light_windowBackground: "#fafafa"
+    readonly property color light_windowForeground: "#000000cc"
+    readonly property color light_titleBarBackground: "#ebebeb"
+    readonly property color light_componentBackground: "#ffffff"
+    readonly property color light_componentHoverBackground: "#f9f9f9"
+    readonly property color light_componentForeground: "#2c2c2c"
+    readonly property color light_primaryComponentBackground: "#3584e4"
+    readonly property color light_primaryComponentHoverBackground: "#4990e7"
+    readonly property color light_secondaryComponentBackground: "#e0e0e0"
+    readonly property color light_secondaryComponentHoverBackground: "#cccccc"
+    readonly property color light_tertiaryComponentBackground: "#999999"
+    readonly property color light_tertiaryComponentHoverBackground: "#949494"
+    readonly property color light_alternativePrimaryComponentBackground: "#ebebeb"
+    readonly property color light_alternativePrimaryComponentHoverBackground: "#dbdbdb"
+    readonly property color light_alternativeSecondaryComponentBackground: "#f0f0f0"
+    readonly property color light_alternativeSecondaryComponentHoverBackground: "#f3f3f3"
+    readonly property color light_destructiveBackground: "#e01b24"
+    readonly property color light_destructiveHoverBackground: "#e33139"
+    readonly property color light_destructiveForeground: "#ffffff"
+    readonly property color light_border: "#000000"
+    readonly property color light_successBackground: "#2ec27e"
+    readonly property color light_successForeground: "#ffffff"
+    readonly property color light_warningBackground: "#e5a50a"
+    readonly property color light_warningForeground: "#000000"
+    readonly property color light_yellowBackground: "#ffffff0d"
 
     // --- Logical Color Roles (used by QML components) ---
-    property color accentColor: currentTheme === "dark" ? dark_accentBg : light_accentBg
-    property color accentHover: currentTheme === "dark" ? "#1a5fb4" : "#1c71d8"
-    property color accentText: currentTheme === "dark" ? dark_accentFg : light_accentFg
-    property color destructiveColor: currentTheme === "dark" ? dark_destructiveBg : light_destructiveBg
-    property color destructiveText: currentTheme === "dark" ? dark_destructiveFg : light_destructiveFg
-    property color successColor: currentTheme === "dark" ? dark_successBg : light_successBg
-    property color successText: currentTheme === "dark" ? dark_successFg : light_successFg
-    property color warningColor: currentTheme === "dark" ? dark_warningBg : light_warningBg
-    property color warningText: currentTheme === "dark" ? dark_warningFg : light_warningFg
-    property color errorColor: currentTheme === "dark" ? dark_errorBg : light_errorBg
-    property color errorText: currentTheme === "dark" ? dark_errorFg : light_errorFg
-    property color windowBackground: currentTheme === "dark" ? dark_windowBg : light_windowBg
-    property color windowText: currentTheme === "dark" ? dark_windowFg : light_windowFg
-    property color panelBackground: currentTheme === "dark" ? dark_viewBg : light_viewBg
-    property color panelText: currentTheme === "dark" ? dark_viewFg : light_viewFg
-    property color headerBackground: currentTheme === "dark" ? dark_headerbarBg : light_headerbarBg
-    property color headerText: currentTheme === "dark" ? dark_headerbarFg : light_headerbarFg
-    property color sidebarBackground: currentTheme === "dark" ? dark_sidebarBg : light_sidebarBg
-    property color sidebarText: currentTheme === "dark" ? dark_sidebarFg : light_sidebarFg
-    property color cardBackground: currentTheme === "dark" ? dark_cardBg : light_cardBg
-    property color cardText: currentTheme === "dark" ? dark_cardFg : light_cardFg
-    property color dialogBackground: currentTheme === "dark" ? dark_dialogBg : light_dialogBg
-    property color dialogText: currentTheme === "dark" ? dark_dialogFg : light_dialogFg
-    property color popoverBackground: currentTheme === "dark" ? dark_popoverBg : light_popoverBg
-    property color popoverText: currentTheme === "dark" ? dark_popoverFg : light_popoverFg
-    property color thumbnailBackground: currentTheme === "dark" ? dark_thumbnailBg : light_thumbnailBg
-    property color thumbnailText: currentTheme === "dark" ? dark_thumbnailFg : light_thumbnailFg
-    property color borderColor: currentTheme === "dark" ? dark_border : light_border
-    
-    // Convenience aliases
-    property color primaryText: windowText
-    property color secondaryText: currentTheme === "dark" ? "#cccccc" : "#666666"
-    property color disabledText: currentTheme === "dark" ? "#808080" : "#999999"
-    property color buttonBackground: currentTheme === "dark" ? "#404040" : "#e0e0e0"
-    property color buttonHover: currentTheme === "dark" ? "#505050" : "#d0d0d0"
-    property color buttonPressed: currentTheme === "dark" ? "#606060" : "#c0c0c0"
-    property color buttonText: windowText
-    property color inputBackground: panelBackground
-    property color inputBorder: borderColor
-    property color inputText: windowText
-    property color placeholderText: secondaryText
-    property color selectionBackground: currentTheme === "dark" ? "#404040" : "#e0e0e0"
-    property color highlightBackground: currentTheme === "dark" ? "#333333" : "#f0f0f0"
-    property color hoverBackground: currentTheme === "dark" ? "#353535" : "#f5f5f5"
-    property color statusBarBackground: headerBackground
-    property color statusBarBorder: borderColor
+    property color windowBackground : currentTheme === "dark" ? dark_windowBackground : light_windowBackground
+    property color windowForeground : currentTheme === "dark" ? dark_windowForeground : light_windowForeground
+    property color titleBarBackground : currentTheme === "dark" ? dark_titleBarBackground : light_titleBarBackground
+    property color componentBackground : currentTheme === "dark" ? dark_componentBackground : light_componentBackground
+    property color componentHoverBackground : currentTheme === "dark" ? dark_componentHoverBackground : light_componentHoverBackground
+    property color componentForeground : currentTheme === "dark" ? dark_componentForeground : light_componentForeground
+    property color primaryComponentBackground : currentTheme === "dark" ? dark_primaryComponentBackground : light_primaryComponentBackground
+    property color primaryComponentHoverBackground : currentTheme === "dark" ? dark_primaryComponentHoverBackground : light_primaryComponentHoverBackground
+    property color secondaryComponentBackground : currentTheme === "dark" ? dark_secondaryComponentBackground : light_secondaryComponentBackground
+    property color secondaryComponentHoverBackground : currentTheme === "dark" ? dark_secondaryComponentHoverBackground : light_secondaryComponentHoverBackground
+    property color tertiaryComponentBackground : currentTheme === "dark" ? dark_tertiaryComponentBackground : light_tertiaryComponentBackground
+    property color tertiaryComponentHoverBackground : currentTheme === "dark" ? dark_tertiaryComponentHoverBackground : light_tertiaryComponentHoverBackground
+    property color alternativePrimaryComponentBackground : currentTheme === "dark" ? dark_alternativePrimaryComponentBackground : light_alternativePrimaryComponentBackground
+    property color alternativePrimaryComponentHoverBackground : currentTheme === "dark" ? dark_alternativePrimaryComponentHoverBackground : light_alternativePrimaryComponentHoverBackground
+    property color alternativeSecondaryComponentBackground : currentTheme === "dark" ? dark_alternativeSecondaryComponentBackground : light_alternativeSecondaryComponentBackground
+    property color alternativeSecondaryComponentHoverBackground : currentTheme === "dark" ? dark_alternativeSecondaryComponentHoverBackground : light_alternativeSecondaryComponentHoverBackground
+    property color destructiveBackground : currentTheme === "dark" ? dark_destructiveBackground : light_destructiveBackground
+    property color destructiveHoverBackground : currentTheme === "dark" ? dark_destructiveHoverBackground : light_destructiveHoverBackground
+    property color destructiveForeground : currentTheme === "dark" ? dark_destructiveForeground : light_destructiveForeground
+    property color border : currentTheme === "dark" ? dark_border : light_border
+    property color successBackground : currentTheme === "dark" ? dark_successBackground : light_successBackground
+    property color successForeground : currentTheme === "dark" ? dark_successForeground : light_successForeground
+    property color warningBackground : currentTheme === "dark" ? dark_warningBackground : light_warningBackground
+    property color warningForeground : currentTheme === "dark" ? dark_warningForeground : light_warningForeground
+    property color yellowBackground : currentTheme === "dark" ? dark_yellowBackground : light_yellowBackground
 
     // --- Theme switching with persistence ---
     function setTheme(theme) {
@@ -131,15 +112,15 @@ QtObject {
             settings.setValue("selectedTheme", "light");
         }
     }
-    
+
     function toggleTheme() {
         setTheme(currentTheme === "dark" ? "light" : "dark");
     }
-    
+
     function getCurrentTheme() {
         return currentTheme;
     }
-    
+
     // Initialize theme on component completion
     Component.onCompleted: {
         // Load saved theme or default to light

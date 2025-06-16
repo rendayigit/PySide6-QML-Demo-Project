@@ -25,10 +25,11 @@ RowLayout {
     CustomButton {
         id: runButton
         buttonText: root.isRunning ? "Hold" : "Run"
-        normalColor: root.isRunning ? ThemeManager.buttonBackground : ThemeManager.successColor
-        pressedColor: root.isRunning ? ThemeManager.buttonPressed : ThemeManager.successColor
-        borderColor: root.isRunning ? ThemeManager.borderColor : ThemeManager.successColor
-        textColor: ThemeManager.buttonText
+        normalColor: root.isRunning ? ThemeManager.warningBackground : ThemeManager.successBackground
+        hoveredColor: normalColor.darker(0.8)
+        pressedColor: normalColor.darker(1.2)
+        borderColor: ThemeManager.border
+        textColor: ThemeManager.warningForeground
         boldText: root.isRunning
         useLayoutAlignment: true
 

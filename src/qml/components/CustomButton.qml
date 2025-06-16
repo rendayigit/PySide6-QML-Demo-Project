@@ -13,16 +13,17 @@ Button {
     id: root
 
     // Text and styling properties
-    property string buttonText: ""
-    property color normalColor: ThemeManager.buttonBackground
-    property color pressedColor: ThemeManager.buttonPressed
-    property color borderColor: ThemeManager.borderColor
-    property color textColor: ThemeManager.buttonText
+    property string buttonText: "Button"
+    property color normalColor: ThemeManager.componentBackground
+    property color hoveredColor: ThemeManager.componentHoverBackground
+    property color pressedColor: ThemeManager.primaryComponentHoverBackground
+    property color borderColor: ThemeManager.border
+    property color textColor: ThemeManager.componentForeground
     property bool boldText: false
 
     // Size properties
     property int buttonWidth: 80
-    property int buttonHeight: 25
+    property int buttonHeight: 30
 
     // Layout properties (for control buttons)
     property bool useLayoutAlignment: false
@@ -33,7 +34,6 @@ Button {
     property int posY: 0
 
     // Set button properties
-    text: root.buttonText
     implicitWidth: root.buttonWidth
     implicitHeight: root.buttonHeight
 
@@ -47,14 +47,19 @@ Button {
     Layout.preferredHeight: root.useLayoutAlignment ? root.buttonHeight : undefined
 
     background: Rectangle {
-        color: parent.pressed ? root.pressedColor : root.normalColor
+        color: {
+            if (root.pressed) return root.pressedColor;
+            if (root.hovered) return root.hoveredColor;
+            return root.normalColor;
+        }
+
         radius: 4
         border.color: root.borderColor
         border.width: 1
     }
 
     contentItem: Text {
-        text: parent.text
+        text: root.buttonText
         color: root.textColor
         font.pixelSize: 12
         font.bold: root.boldText

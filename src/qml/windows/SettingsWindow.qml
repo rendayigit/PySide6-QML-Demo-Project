@@ -12,11 +12,16 @@ import "../services"
 Window {
     id: root
 
+    readonly property int min_width: 350
+    readonly property int min_height: 250
+
     title: "Settings"
-    width: 400
-    height: 300
-    minimumWidth: 350
-    minimumHeight: 250
+
+    width: min_width
+    height: min_height
+
+    minimumWidth: root.min_width
+    minimumHeight: root.min_height
 
     flags: Qt.Window | Qt.WindowCloseButtonHint | Qt.WindowMinimizeButtonHint
     modality: Qt.NonModal
@@ -31,11 +36,10 @@ Window {
     color: ThemeManager.windowBackground
 
     // Load theme setting from ThemeManager on open
-    onVisibilityChanged: {
-        if (visible) {
-            selectedTheme = ThemeManager.getCurrentTheme();
-            themeComboBox.currentIndex = themeComboBox.indexOfValue(selectedTheme);
-        }
+    Component.onCompleted: {
+        // Set initial theme based on ThemeManager
+        selectedTheme = ThemeManager.getCurrentTheme();
+        themeComboBox.currentIndex = themeComboBox.indexOfValue(selectedTheme);
     }
 
     // Main content
@@ -44,13 +48,13 @@ Window {
         anchors.margins: 20
         spacing: 15
 
+        // Theme selection row
         RowLayout {
-            anchors.fill: parent
-            anchors.margins: 10
+            Layout.fillWidth: true
             spacing: 10
 
             Text {
-                text: "Theme:"
+                text: "Theme: "
                 font.pixelSize: 12
                 color: ThemeManager.primaryText
             }
@@ -77,7 +81,9 @@ Window {
                 // Set initial selection
                 Component.onCompleted: {
                     currentIndex = indexOfValue(root.selectedTheme);
-                }                onActivated: function (index) {
+                }
+
+                onActivated: function (index) {
                     root.selectedTheme = model[index].value;
                 }
             }
@@ -116,16 +122,9 @@ Window {
 
             CustomButton {
                 buttonText: "Cancel"
-                buttonWidth: 80
-                buttonHeight: 30
-                normalColor: "#6b7280"
-                pressedColor: "#4b5563"
-                borderColor: "#374151"
-                textColor: "white"
 
                 onClicked: {
-                    root.settingsCanceled();
-                    root.visible = false;
+                    root.close();
                 }
             }
         }

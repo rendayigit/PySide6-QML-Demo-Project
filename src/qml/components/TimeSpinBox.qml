@@ -25,7 +25,7 @@ ColumnLayout {
         text: root.label
         font.pixelSize: 12
         font.bold: true
-        color: ThemeManager.primaryText
+        color: ThemeManager.componentForeground
     }
 
     // SpinBox
