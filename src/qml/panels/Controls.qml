@@ -42,10 +42,11 @@ RowLayout {
     CustomButton {
         id: resetButton
         buttonText: "Reset"
-        normalColor: ThemeManager.errorColor
-        pressedColor: ThemeManager.errorColor
-        borderColor: ThemeManager.errorColor
-        textColor: ThemeManager.buttonText
+        normalColor: ThemeManager.destructiveBackground
+        hoveredColor: ThemeManager.destructiveHoverBackground
+        pressedColor: normalColor.darker(1.2)
+        borderColor: ThemeManager.border
+        textColor: ThemeManager.destructiveForeground
         useLayoutAlignment: true
 
         onClicked: {
@@ -57,10 +58,6 @@ RowLayout {
     CustomButton {
         id: stepButton
         buttonText: "Step"
-        normalColor: ThemeManager.buttonBackground
-        pressedColor: ThemeManager.buttonPressed
-        borderColor: ThemeManager.borderColor
-        textColor: ThemeManager.buttonText
         useLayoutAlignment: true
 
         onClicked: {

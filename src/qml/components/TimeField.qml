@@ -35,7 +35,7 @@ ColumnLayout {
         font.letterSpacing: 0
         horizontalAlignment: TextInput.AlignHCenter
         background: Rectangle {
-            color: ThemeManager.secondaryComponentBackground
+            color: Qt.rgba(0.8, 0.8, 0.8, 0.3)
             border.color: ThemeManager.border
             border.width: 1
             radius: 3

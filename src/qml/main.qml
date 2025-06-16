@@ -149,9 +149,7 @@ ApplicationWindow {
         Rectangle {
             Layout.fillWidth: true
             height: 70
-            color: ThemeManager.windowBackground
-            border.color: ThemeManager.border
-            border.width: 1
+            color: ThemeManager.darkBlue_background2 // TODO: do not use darkBlue
 
             RowLayout {
                 anchors.fill: parent
