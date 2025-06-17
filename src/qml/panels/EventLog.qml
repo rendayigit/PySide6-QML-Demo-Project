@@ -12,7 +12,7 @@ import "../components"
  */
 Rectangle {
     id: root
-    color: ThemeManager.darkBlue_background2 // TODO: do not use darkBlue
+    color: ThemeManager.windowBackground
     border.color: ThemeManager.border
     border.width: 1
 
@@ -35,7 +35,7 @@ Rectangle {
         Rectangle {
             Layout.fillWidth: true
             height: 30
-            color: ThemeManager.darkBlue_background2 // TODO: do not use darkBlue
+            color: ThemeManager.windowBackground
             border.color: ThemeManager.border
             border.width: 1
 

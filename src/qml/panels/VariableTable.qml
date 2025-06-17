@@ -12,7 +12,7 @@ import "../services"
 Rectangle {
     id: root
     color: ThemeManager.windowBackground
-    border.color: ThemeManager.borderColor
+    border.color: ThemeManager.border
     border.width: 1
     
     // Properties
@@ -31,7 +31,7 @@ Rectangle {
             text: "Variables"
             font.pixelSize: 14
             font.bold: true
-            color: ThemeManager.primaryText
+            color: ThemeManager.componentForeground
         }
 
         // Variable table header with resizable columns
@@ -39,8 +39,8 @@ Rectangle {
             id: variableTableHeader
             Layout.fillWidth: true
             height: 30
-            color: ThemeManager.hoverBackground
-            border.color: ThemeManager.borderColor
+            color: ThemeManager.componentBackground
+            border.color: ThemeManager.border
             border.width: 1
 
             // Column width properties
@@ -67,7 +67,7 @@ Rectangle {
                         text: "Variable"
                         font.bold: true
                         font.pixelSize: 12
-                        color: ThemeManager.primaryText
+                        color: ThemeManager.componentForeground
                     }
                     
                     // Resize handle
@@ -76,7 +76,7 @@ Rectangle {
                         width: 3
                         height: parent.height
                         anchors.right: parent.right
-                        color: variableResizeArea.containsMouse ? ThemeManager.accentColor : ThemeManager.borderColor
+                        color: variableResizeArea.containsMouse ? ThemeManager.primaryComponentBackground : ThemeManager.border
                         
                         MouseArea {
                             id: variableResizeArea
@@ -117,7 +117,7 @@ Rectangle {
                         text: "Description"
                         font.bold: true
                         font.pixelSize: 12
-                        color: ThemeManager.primaryText
+                        color: ThemeManager.componentForeground
                     }
                     
                     // Resize handle
@@ -125,7 +125,7 @@ Rectangle {
                         width: 3
                         height: parent.height
                         anchors.right: parent.right
-                        color: descriptionResizeArea.containsMouse ? ThemeManager.accentColor : ThemeManager.borderColor
+                        color: descriptionResizeArea.containsMouse ? ThemeManager.primaryComponentBackground : ThemeManager.border
                         
                         MouseArea {
                             id: descriptionResizeArea
@@ -166,7 +166,7 @@ Rectangle {
                         text: "Value"
                         font.bold: true
                         font.pixelSize: 12
-                        color: ThemeManager.primaryText
+                        color: ThemeManager.componentForeground
                     }
                     
                     // Resize handle
@@ -174,8 +174,8 @@ Rectangle {
                         width: 3
                         height: parent.height
                         anchors.right: parent.right
-                        color: valueResizeArea.containsMouse ? ThemeManager.accentColor : ThemeManager.borderColor
-                        
+                        color: valueResizeArea.containsMouse ? ThemeManager.primaryComponentBackground : ThemeManager.border
+
                         MouseArea {
                             id: valueResizeArea
                             anchors.fill: parent
@@ -215,7 +215,7 @@ Rectangle {
                         text: "Type"
                         font.bold: true
                         font.pixelSize: 12
-                        color: ThemeManager.primaryText
+                        color: ThemeManager.componentForeground
                     }
                 }
             }
@@ -316,9 +316,9 @@ Rectangle {
                     height: Math.max(25, Math.max(variableText.contentHeight, Math.max(descriptionText.contentHeight, valueText.contentHeight)) + 20)
                     color: {
                         if (model.selected) {
-                            return ThemeManager.selectionBackground;
+                            return ThemeManager.primaryComponentBackground;
                         }
-                        return index % 2 ? ThemeManager.hoverBackground : ThemeManager.panelBackground;
+                        return index % 2 ? ThemeManager.componentBackground.lighter(1.1) : ThemeManager.componentBackground.darker(1.1);
                     }
 
                     MouseArea {
@@ -369,7 +369,7 @@ Rectangle {
                                 anchors.rightMargin: 5
                                 text: model.variablePath || model.variable || ""
                                 font.pixelSize: 11
-                                color: model.selected ? ThemeManager.primaryText : ThemeManager.primaryText
+                                color: ThemeManager.componentForeground
                                 wrapMode: Text.Wrap
                                 width: parent.width - 10
                             }
@@ -391,7 +391,7 @@ Rectangle {
                                 anchors.rightMargin: 5
                                 text: model.description || ""
                                 font.pixelSize: 11
-                                color: model.selected ? ThemeManager.primaryText : ThemeManager.primaryText
+                                color: ThemeManager.componentForeground
                                 wrapMode: Text.Wrap
                                 width: parent.width - 10
                             }
@@ -413,7 +413,7 @@ Rectangle {
                                 anchors.rightMargin: 5
                                 text: model.value || ""
                                 font.pixelSize: 11
-                                color: model.selected ? ThemeManager.primaryText : ThemeManager.primaryText
+                                color: ThemeManager.componentForeground
                                 wrapMode: Text.Wrap
                                 width: parent.width - 10
                             }
@@ -434,7 +434,7 @@ Rectangle {
                                 anchors.rightMargin: 5
                                 text: model.type || ""
                                 font.pixelSize: 11
-                                color: model.selected ? ThemeManager.primaryText : ThemeManager.secondaryText
+                                color: ThemeManager.componentForeground
                                 elide: Text.ElideRight
                             }
                         }

@@ -13,7 +13,7 @@ import "../services"
 Rectangle {
     id: root
     color: ThemeManager.windowBackground
-    border.color: ThemeManager.borderColor
+    border.color: ThemeManager.border
     border.width: 1
 
     // Properties
@@ -32,7 +32,7 @@ Rectangle {
             text: "Simulation Models"
             font.pixelSize: 14
             font.bold: true
-            color: ThemeManager.primaryText
+            color: ThemeManager.componentForeground
         }
 
         ScrollView {
@@ -119,7 +119,7 @@ Rectangle {
                     width: modelsTreeListView.width
                     height: model.visible !== false ? 25 : 0
                     visible: model.visible !== false
-                    color: mouseArea.containsMouse ? ThemeManager.hoverBackground : "transparent"
+                    color: mouseArea.containsMouse ? ThemeManager.componentHoverBackground : "transparent"
 
                     MouseArea {
                         id: mouseArea
@@ -162,7 +162,7 @@ Rectangle {
                                 return "  ";
                             }
                             font.pixelSize: 10
-                            color: ThemeManager.secondaryText
+                            color: ThemeManager.secondaryComponentForeground
                             Layout.preferredWidth: 15
                             Layout.alignment: Qt.AlignVCenter
                         }
@@ -171,7 +171,7 @@ Rectangle {
                         Text {
                             text: model.name
                             font.pixelSize: 12
-                            color: ThemeManager.primaryText
+                            color: ThemeManager.componentForeground
                             font.bold: model.level === 0
                             Layout.fillWidth: true
                             Layout.alignment: Qt.AlignVCenter

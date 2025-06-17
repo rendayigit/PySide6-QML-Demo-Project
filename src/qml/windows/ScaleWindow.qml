@@ -2,8 +2,8 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import QtQuick.Window
-import "../components" // Import CustomButton
-import "../services"   // Import ThemeManager
+import "../components"
+import "../services"
 
 /**
  * ScaleWindow - Simulation rate scale window component
@@ -41,7 +41,7 @@ Window {
                 text: "Scale:"
                 font.pixelSize: 12
                 font.bold: true
-                color: ThemeManager.primaryText
+                color: ThemeManager.componentForeground
                 Layout.alignment: Qt.AlignVCenter
             }
 
@@ -58,13 +58,13 @@ Window {
                 }
 
                 background: Rectangle {
-                    color: ThemeManager.inputBackground
-                    border.color: ThemeManager.inputBorder
+                    color: ThemeManager.primaryComponentBackground
+                    border.color: ThemeManager.border
                     border.width: 1
                     radius: 3
                 }
 
-                color: ThemeManager.inputText
+                color: ThemeManager.primaryComponentForeground
                 font.pixelSize: 12
                 horizontalAlignment: TextInput.AlignHCenter
 
@@ -93,12 +93,12 @@ Window {
                     width: scaleSlider.availableWidth
                     height: implicitHeight
                     radius: 2
-                    color: ThemeManager.hoverBackground
+                    color: ThemeManager.componentBackground
 
                     Rectangle {
                         width: scaleSlider.visualPosition * parent.width
                         height: parent.height
-                        color: ThemeManager.accentColor
+                        color: ThemeManager.primaryComponentBackground
                         radius: 2
                     }
                 }
@@ -109,8 +109,8 @@ Window {
                     implicitWidth: 18
                     implicitHeight: 18
                     radius: 9
-                    color: scaleSlider.pressed ? ThemeManager.accentHover : ThemeManager.accentColor
-                    border.color: ThemeManager.accentColor
+                    color: scaleSlider.pressed ? ThemeManager.primaryComponentPressedBackground : ThemeManager.primaryComponentBackground
+                    border.color: ThemeManager.componentBackground
                     border.width: 1
                 }
 
@@ -131,10 +131,10 @@ Window {
                 id: okayButton
 
                 buttonText: "Okay"
-                normalColor: ThemeManager.accentColor
-                pressedColor: ThemeManager.accentHover
-                borderColor: ThemeManager.accentColor
-                textColor: ThemeManager.primaryText
+                normalColor: ThemeManager.primaryComponentBackground
+                pressedColor: ThemeManager.primaryComponentPressedBackground
+                textColor: ThemeManager.primaryComponentForeground
+                borderColor: ThemeManager.border
                 boldText: true
                 useLayoutAlignment: false
                 posX: 0
@@ -142,7 +142,7 @@ Window {
 
                 onClicked: {
                     var scaleValue = parseFloat(scaleTextField.text);
-                    
+
                     if (isNaN(scaleValue) || scaleValue <= 0.0) {
                         console.log("Invalid scale value:", scaleTextField.text);
                         scaleTextField.text = "1.0";

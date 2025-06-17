@@ -1,8 +1,6 @@
 import QtQuick
-import QtQuick.Controls
 import QtQuick.Layouts
 import "../components"
-import "../services"
 
 /**
  * TimeDisplay - Time information display component

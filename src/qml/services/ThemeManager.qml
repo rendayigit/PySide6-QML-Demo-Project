@@ -26,7 +26,7 @@ QtObject {
     readonly property color dark_componentForeground: "#ffffff"
 
     readonly property color dark_primaryComponentBackground: "#3584e4"
-    readonly property color dark_primaryComponentForeground: "#ffffff"
+    readonly property color dark_primaryComponentForeground: "#242424"
 
     readonly property color dark_secondaryComponentBackground: "#6f6f6f"
     readonly property color dark_secondaryComponentForeground: "#ffffff"
@@ -70,7 +70,7 @@ QtObject {
     readonly property color light_componentForeground: "#2c2c2c"
 
     readonly property color light_primaryComponentBackground: "#3584e4"
-    readonly property color light_primaryComponentForeground: "#ffffff"
+    readonly property color light_primaryComponentForeground: "#242424"
 
     readonly property color light_secondaryComponentBackground: "#e0e0e0"
     readonly property color light_secondaryComponentForeground: "#000000"
@@ -112,8 +112,8 @@ QtObject {
 
     property color primaryComponentBackground : currentTheme === "dark" ? dark_primaryComponentBackground : light_primaryComponentBackground
     property color primaryComponentForeground : currentTheme === "dark" ? dark_primaryComponentForeground : light_primaryComponentForeground
-    property color primaryComponentHoverBackground : componentBackground.lighter(1.2)
-    property color primaryComponentPressedBackground : componentBackground.darker(1.2)
+    property color primaryComponentHoverBackground : primaryComponentBackground.lighter(1.2)
+    property color primaryComponentPressedBackground : primaryComponentBackground.darker(1.2)
 
     property color secondaryComponentBackground : currentTheme === "dark" ? dark_secondaryComponentBackground : light_secondaryComponentBackground
     property color secondaryComponentForeground : currentTheme === "dark" ? dark_secondaryComponentForeground : light_secondaryComponentForeground
