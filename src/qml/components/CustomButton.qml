@@ -16,9 +16,9 @@ Button {
     property string buttonText: "Button"
     property color normalColor: ThemeManager.componentBackground
     property color hoveredColor: ThemeManager.componentHoverBackground
-    property color pressedColor: ThemeManager.primaryComponentHoverBackground
-    property color borderColor: ThemeManager.border
+    property color pressedColor: ThemeManager.componentPressedBackground
     property color textColor: ThemeManager.componentForeground
+    property color borderColor: ThemeManager.border
     property bool boldText: false
 
     // Size properties
@@ -48,8 +48,10 @@ Button {
 
     background: Rectangle {
         color: {
-            if (root.pressed) return root.pressedColor;
-            if (root.hovered) return root.hoveredColor;
+            if (root.pressed)
+                return root.pressedColor;
+            if (root.hovered)
+                return root.hoveredColor;
             return root.normalColor;
         }
 

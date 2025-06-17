@@ -13,7 +13,7 @@ import "../components"
 Rectangle {
     id: root
     color: ThemeManager.darkBlue_background2 // TODO: do not use darkBlue
-    border.color: ThemeManager.borderColor
+    border.color: ThemeManager.border
     border.width: 1
 
     // Properties
@@ -28,7 +28,7 @@ Rectangle {
             text: "Event Logs"
             font.pixelSize: 14
             font.bold: true
-            color: ThemeManager.primaryText
+            color: ThemeManager.componentForeground
         }
 
         // Log table header
@@ -49,14 +49,15 @@ Rectangle {
                     Layout.preferredWidth: 70
                     font.bold: true
                     font.pixelSize: 12
-                    color: ThemeManager.primaryText
+                    color: ThemeManager.componentForeground
                 }
+
                 Text {
                     text: "Log"
                     Layout.fillWidth: true
                     font.bold: true
                     font.pixelSize: 12
-                    color: ThemeManager.primaryText
+                    color: ThemeManager.componentForeground
                 }
             }
         }
@@ -127,7 +128,7 @@ Rectangle {
                                 return ThemeManager.currentTheme === "dark" ? "#4a3c1f" : "#fff3cd";
                             if (model.level === "CRITICAL")
                                 return ThemeManager.currentTheme === "dark" ? "#660000" : "#ffdddd";
-                            return index % 2 ? ThemeManager.hoverBackground : ThemeManager.panelBackground;
+                            return index % 2 ? ThemeManager.windowBackground.lighter(1.1) : ThemeManager.windowBackground.darker(1.1);
                         }
 
                         RowLayout {
@@ -168,7 +169,7 @@ Rectangle {
                                 Layout.fillWidth: true
                                 text: model.log
                                 font.pixelSize: 11
-                                color: ThemeManager.primaryText
+                                color: ThemeManager.componentForeground
                                 wrapMode: Text.Wrap
                                 width: parent.width - 75 // Account for level badge width and margins
                             }
@@ -190,9 +191,9 @@ Rectangle {
                 font.bold: true
                 normalColor: ThemeManager.primaryComponentBackground
                 hoveredColor: ThemeManager.primaryComponentHoverBackground
-                pressedColor: normalColor.darker(1.2)
+                pressedColor: ThemeManager.primaryComponentPressedBackground
+                textColor: ThemeManager.primaryComponentForeground
                 borderColor: ThemeManager.border
-                textColor: ThemeManager.warningForeground
                 useLayoutAlignment: true
                 width: 40
                 height: 40

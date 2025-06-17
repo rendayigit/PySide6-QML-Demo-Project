@@ -26,10 +26,10 @@ RowLayout {
         id: runButton
         buttonText: root.isRunning ? "Hold" : "Run"
         normalColor: root.isRunning ? ThemeManager.warningBackground : ThemeManager.successBackground
-        hoveredColor: normalColor.darker(0.8)
-        pressedColor: normalColor.darker(1.2)
+        hoveredColor: root.isRunning ? ThemeManager.warningHoverBackground : ThemeManager.successHoverBackground
+        pressedColor: root.isRunning ? ThemeManager.warningPressedBackground : ThemeManager.successPressedBackground
+        textColor: root.isRunning ? ThemeManager.warningForeground : ThemeManager.successForeground
         borderColor: ThemeManager.border
-        textColor: ThemeManager.warningForeground
         boldText: root.isRunning
         useLayoutAlignment: true
 
@@ -44,9 +44,9 @@ RowLayout {
         buttonText: "Reset"
         normalColor: ThemeManager.destructiveBackground
         hoveredColor: ThemeManager.destructiveHoverBackground
-        pressedColor: normalColor.darker(1.2)
-        borderColor: ThemeManager.border
+        pressedColor: ThemeManager.destructivePressedBackground
         textColor: ThemeManager.destructiveForeground
+        borderColor: ThemeManager.border
         useLayoutAlignment: true
 
         onClicked: {
