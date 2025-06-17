@@ -44,7 +44,7 @@ QtObject {
     readonly property color dark_destructiveForeground: "#ffffff"
 
     readonly property color dark_successBackground: "#26a269"
-    readonly property color dark_successForeground: "#ffffff"
+    readonly property color dark_successForeground: "#242424"
 
     readonly property color dark_warningBackground: "#cd9309"
     readonly property color dark_warningForeground: "#000000"
@@ -52,7 +52,7 @@ QtObject {
     readonly property color dark_infoBackground: "#ffff0d"
     readonly property color dark_infoForeground: "#000000"
 
-    readonly property color dark_border: "#000040"
+    readonly property color dark_border: "#313131"
 
     readonly property color darkBlue_background1: "#303340" // TODO: Implement
     readonly property color darkBlue_background2: "#272a34" // TODO: Implement
@@ -88,7 +88,7 @@ QtObject {
     readonly property color light_destructiveForeground: "#ffffff"
 
     readonly property color light_successBackground: "#2ec27e"
-    readonly property color light_successForeground: "#ffffff"
+    readonly property color light_successForeground: "#242424"
 
     readonly property color light_warningBackground: "#e5a50a"
     readonly property color light_warningForeground: "#000000"

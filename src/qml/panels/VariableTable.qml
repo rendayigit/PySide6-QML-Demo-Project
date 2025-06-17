@@ -318,7 +318,7 @@ Rectangle {
                         if (model.selected) {
                             return ThemeManager.primaryComponentBackground;
                         }
-                        return index % 2 ? ThemeManager.componentBackground.lighter(1.1) : ThemeManager.componentBackground.darker(1.1);
+                        return index % 2 ? ThemeManager.windowBackground.lighter(1.1) : ThemeManager.windowBackground.darker(1.1);
                     }
 
                     MouseArea {

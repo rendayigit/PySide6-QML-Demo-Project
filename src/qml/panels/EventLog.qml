@@ -35,7 +35,7 @@ Rectangle {
         Rectangle {
             Layout.fillWidth: true
             height: 30
-            color: ThemeManager.windowBackground
+            color: ThemeManager.componentBackground
             border.color: ThemeManager.border
             border.width: 1
 

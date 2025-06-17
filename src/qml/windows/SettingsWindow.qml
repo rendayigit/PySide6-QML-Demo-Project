@@ -56,7 +56,7 @@ Window {
             Text {
                 text: "Theme: "
                 font.pixelSize: 12
-                color: ThemeManager.primaryText
+                color: ThemeManager.componentForeground
             }
 
             ComboBox {
