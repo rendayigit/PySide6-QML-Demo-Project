@@ -85,10 +85,11 @@ Window {
             CustomButton {
                 id: okayButton
                 buttonText: "Okay"
-                normalColor: "#ffcc00"
-                pressedColor: "#e6b800"
-                borderColor: "#d4af37"
-                textColor: "black"
+                normalColor: ThemeManager.primaryComponentBackground
+                hoveredColor: ThemeManager.primaryComponentHoverBackground
+                pressedColor: ThemeManager.primaryComponentPressedBackground
+                borderColor: ThemeManager.border
+                textColor: ThemeManager.primaryComponentForeground
                 boldText: true
                 useLayoutAlignment: false
                 posX: 0

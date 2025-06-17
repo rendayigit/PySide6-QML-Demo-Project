@@ -105,13 +105,14 @@ Window {
             }
 
             CustomButton {
-                buttonText: "OK"
+                buttonText: "Okay"
                 buttonWidth: 80
                 buttonHeight: 30
-                normalColor: "#3b82f6"
-                pressedColor: "#2563eb"
-                borderColor: "#1d4ed8"
-                textColor: "white"
+                normalColor: ThemeManager.primaryComponentBackground
+                hoveredColor: ThemeManager.primaryComponentHoverBackground
+                pressedColor: ThemeManager.primaryComponentPressedBackground
+                textColor: ThemeManager.primaryComponentForeground
+                borderColor: ThemeManager.border
                 boldText: true
 
                 onClicked: {

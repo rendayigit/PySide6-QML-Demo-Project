@@ -132,6 +132,7 @@ Window {
 
                 buttonText: "Okay"
                 normalColor: ThemeManager.primaryComponentBackground
+                hoveredColor: ThemeManager.primaryComponentHoverBackground
                 pressedColor: ThemeManager.primaryComponentPressedBackground
                 textColor: ThemeManager.primaryComponentForeground
                 borderColor: ThemeManager.border

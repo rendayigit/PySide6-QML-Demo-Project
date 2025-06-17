@@ -96,7 +96,7 @@ QtObject {
     readonly property color light_infoBackground: "#ffff0d"
     readonly property color light_infoForeground: "#000000"
 
-    readonly property color light_border: "#000012"
+    readonly property color light_border: "#b8b8b8"
 
     // --- Logical Color Roles (used by QML components) ---
     property color windowBackground : currentTheme === "dark" ? dark_windowBackground : light_windowBackground
