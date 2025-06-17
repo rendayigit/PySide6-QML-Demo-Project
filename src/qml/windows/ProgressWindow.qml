@@ -1,18 +1,22 @@
 import QtQuick
-import QtQuick.Controls
 import QtQuick.Layouts
 import QtQuick.Window
 import "../components"
 import "../services"
 
 Window {
-    id: progressWindow
+    id: root
+
+    readonly property int min_width: 520
+    readonly property int min_height: 200
+
     title: "Progress Simulation"
-    width: 520
-    height: 200
-    visible: false
-    modality: Qt.NonModal  // Allow interaction with main window
-    flags: Qt.Window | Qt.WindowTitleHint | Qt.WindowCloseButtonHint | Qt.WindowMinimizeButtonHint
+
+    width: min_width
+    height: min_height
+
+    minimumWidth: root.min_width
+    minimumHeight: root.min_height
 
     // Signals for window actions
     signal progressSimulationRequested(int totalMilliseconds)
@@ -105,7 +109,7 @@ Window {
                     // Convert all time components to total milliseconds
                     var totalMilliseconds = days * 86400000 + hours * 3600000 + minutes * 60000 + seconds * 1000 + milliseconds;
 
-                    progressWindow.progressSimulationRequested(totalMilliseconds);
+                    root.progressSimulationRequested(totalMilliseconds);
                 }
             }
 
@@ -116,7 +120,7 @@ Window {
                 posY: 0
 
                 onClicked: {
-                    progressWindow.windowCloseRequested();
+                    root.windowCloseRequested();
                 }
             }
         }

@@ -12,14 +12,18 @@ import "../services"
  * Uses signals for clean separation of concerns.
  */
 Window {
-    id: scaleWindow
+    id: root
+
+    readonly property int min_width: 450
+    readonly property int min_height: 150
 
     title: "Simulation Rate"
-    width: 450
-    height: 150
-    visible: false
-    modality: Qt.NonModal  // Allow interaction with main window
-    flags: Qt.Window | Qt.WindowTitleHint | Qt.WindowCloseButtonHint | Qt.WindowMinimizeButtonHint
+
+    width: min_width
+    height: min_height
+
+    minimumWidth: root.min_width
+    minimumHeight: root.min_height
 
     // Signals for window actions
     signal scaleSimulationRequested(real scaleValue)
@@ -152,7 +156,7 @@ Window {
                     }
 
                     console.log("Setting simulation rate scale to:", scaleValue);
-                    scaleWindow.scaleSimulationRequested(scaleValue);
+                    root.scaleSimulationRequested(scaleValue);
                 }
             }
 
@@ -163,7 +167,7 @@ Window {
                 posY: 0
 
                 onClicked: {
-                    scaleWindow.windowCloseRequested();
+                    root.windowCloseRequested();
                 }
             }
         }

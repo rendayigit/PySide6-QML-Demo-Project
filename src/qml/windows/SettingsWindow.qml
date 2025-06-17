@@ -23,9 +23,6 @@ Window {
     minimumWidth: root.min_width
     minimumHeight: root.min_height
 
-    flags: Qt.Window | Qt.WindowCloseButtonHint | Qt.WindowMinimizeButtonHint
-    modality: Qt.NonModal
-
     // Properties for settings
     property string selectedTheme: "light" // Default to light theme
 
