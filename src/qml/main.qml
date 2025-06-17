@@ -16,11 +16,19 @@ import "windows"
  * - Model tree, variable table, and event log panels
  */
 ApplicationWindow {
-    id: window
+    id: root
+
+    readonly property int min_width: 1200
+    readonly property int min_height: 700
+
+    title: "Galactron Simulation Control"
+
     visible: true
-    width: 1200
-    height: 700
-    title: "Galactron GUI - Simulator Control"
+    width: min_width
+    height: min_height
+
+    minimumWidth: root.min_width - 250
+    minimumHeight: root.min_height - 300
 
     // Simulation state properties
     property bool isRunning: false
@@ -40,15 +48,15 @@ ApplicationWindow {
 
         // Time and status updates
         function onSimulationTimeChanged(simTime) {
-            window.currentSimTime = simTime;
+            root.currentSimTime = simTime;
         }
 
         function onSimulationStatusChanged(isRunning) {
-            window.isRunning = isRunning;
+            root.isRunning = isRunning;
         }
 
         function onStatusTextChanged(statusText) {
-            window.statusText = statusText;
+            root.statusText = statusText;
         }
 
         // Event log updates
@@ -159,7 +167,7 @@ ApplicationWindow {
                 // Control Buttons
                 Controls {
                     id: controlButtons
-                    isRunning: window.isRunning
+                    isRunning: root.isRunning
 
                     onToggleSimulationRequested: {
                         simulationController.handleToggleSimulation();
@@ -247,7 +255,7 @@ ApplicationWindow {
                 anchors.left: parent.left
                 anchors.leftMargin: 10
                 anchors.verticalCenter: parent.verticalCenter
-                text: window.statusText
+                text: root.statusText
                 font.pixelSize: 12
                 color: ThemeManager.componentForeground
             }
