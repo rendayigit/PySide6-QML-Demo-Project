@@ -87,17 +87,12 @@ Window {
             spacing: 10
 
             CustomButton {
-                id: okayButton
                 buttonText: "Okay"
                 normalColor: ThemeManager.primaryComponentBackground
                 hoveredColor: ThemeManager.primaryComponentHoverBackground
                 pressedColor: ThemeManager.primaryComponentPressedBackground
                 borderColor: ThemeManager.border
                 textColor: ThemeManager.primaryComponentForeground
-                boldText: true
-                useLayoutAlignment: false
-                posX: 0
-                posY: 0
 
                 onClicked: {
                     var days = daysSpinBox.value;
@@ -115,9 +110,6 @@ Window {
 
             CustomButton {
                 buttonText: "Close"
-                useLayoutAlignment: false
-                posX: 0
-                posY: 0
 
                 onClicked: {
                     root.windowCloseRequested();

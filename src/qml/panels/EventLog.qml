@@ -73,17 +73,19 @@ Rectangle {
 
                 ListView {
                     id: eventLogsListView
+
                     model: ListModel {
                         id: eventLogsModel
                     }
 
                     // Track if user is at bottom and if auto-scroll is enabled
-                    property bool userAtBottom: true
+                    property bool userAtBottom: false
                     property bool autoScrollEnabled: true // Start with auto-scroll enabled
 
                     // Track when user scrolls manually
                     onContentYChanged: {
                         var atBottom = (contentY + height >= contentHeight - 5); // 5px tolerance
+
                         if (userAtBottom !== atBottom) {
                             userAtBottom = atBottom;
                             // Disable auto-scroll if user scrolls up manually
@@ -180,25 +182,23 @@ Rectangle {
 
             // Auto-scroll button (appears when not at bottom and not auto-scrolling)
             CustomButton {
-                id: autoScrollButton
-
                 anchors.bottom: parent.bottom
                 anchors.right: parent.right
                 anchors.margins: 10
 
                 buttonText: "↓"
-                font.pixelSize: 20
-                font.bold: true
+                pixelSize: 20
+                width: 40
+                height: 40
+                radius: 20
+
                 normalColor: ThemeManager.primaryComponentBackground
                 hoveredColor: ThemeManager.primaryComponentHoverBackground
                 pressedColor: ThemeManager.primaryComponentPressedBackground
                 textColor: ThemeManager.primaryComponentForeground
                 borderColor: ThemeManager.border
-                useLayoutAlignment: true
-                width: 40
-                height: 40
+
                 visible: !eventLogsListView.userAtBottom && !eventLogsListView.autoScrollEnabled
-                // radius: 20
 
                 onClicked: {
                     eventLogsListView.autoScrollEnabled = true;

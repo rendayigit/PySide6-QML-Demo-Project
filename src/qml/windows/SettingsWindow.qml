@@ -103,14 +103,11 @@ Window {
 
             CustomButton {
                 buttonText: "Okay"
-                buttonWidth: 80
-                buttonHeight: 30
                 normalColor: ThemeManager.primaryComponentBackground
                 hoveredColor: ThemeManager.primaryComponentHoverBackground
                 pressedColor: ThemeManager.primaryComponentPressedBackground
                 textColor: ThemeManager.primaryComponentForeground
                 borderColor: ThemeManager.border
-                boldText: true
 
                 onClicked: {
                     root.settingsApplied();

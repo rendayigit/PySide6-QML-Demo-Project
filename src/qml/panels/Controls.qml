@@ -31,7 +31,6 @@ RowLayout {
         textColor: root.isRunning ? ThemeManager.warningForeground : ThemeManager.successForeground
         borderColor: ThemeManager.border
         boldText: root.isRunning
-        useLayoutAlignment: true
 
         onClicked: {
             root.toggleSimulationRequested();
@@ -47,7 +46,6 @@ RowLayout {
         pressedColor: ThemeManager.destructivePressedBackground
         textColor: ThemeManager.destructiveForeground
         borderColor: ThemeManager.border
-        useLayoutAlignment: true
 
         onClicked: {
             root.resetSimulationRequested();
@@ -58,7 +56,6 @@ RowLayout {
     CustomButton {
         id: stepButton
         buttonText: "Step"
-        useLayoutAlignment: true
 
         onClicked: {
             root.stepSimulationRequested();

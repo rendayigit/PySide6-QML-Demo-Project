@@ -74,6 +74,7 @@ Window {
 
                 onTextChanged: {
                     var value = parseFloat(text);
+
                     if (!isNaN(value) && value >= 0.1 && value <= 10.0) {
                         scaleSlider.value = value * 10;
                     }
@@ -132,18 +133,12 @@ Window {
             spacing: 10
 
             CustomButton {
-                id: okayButton
-
                 buttonText: "Okay"
                 normalColor: ThemeManager.primaryComponentBackground
                 hoveredColor: ThemeManager.primaryComponentHoverBackground
                 pressedColor: ThemeManager.primaryComponentPressedBackground
                 textColor: ThemeManager.primaryComponentForeground
                 borderColor: ThemeManager.border
-                boldText: true
-                useLayoutAlignment: false
-                posX: 0
-                posY: 0
 
                 onClicked: {
                     var scaleValue = parseFloat(scaleTextField.text);
@@ -162,9 +157,6 @@ Window {
 
             CustomButton {
                 buttonText: "Close"
-                useLayoutAlignment: false
-                posX: 0
-                posY: 0
 
                 onClicked: {
                     root.windowCloseRequested();
