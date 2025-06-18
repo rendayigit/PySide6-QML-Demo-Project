@@ -4,6 +4,8 @@ import QtQuick.Layouts
 import "../services"
 import "../components"
 
+pragma ComponentBehavior: Bound
+
 /**
  * EventLog - Event logs display component
  *
@@ -15,6 +17,21 @@ Rectangle {
     color: ThemeManager.windowBackground
     border.color: ThemeManager.border
     border.width: 1
+
+    // Color constants for easy modification
+    readonly property color errorBadgeColor: "#dc3545"
+    readonly property color warningBadgeColor: "#ffc107"
+    readonly property color criticalBadgeColor: "#000000"
+    readonly property color infoBadgeColor: "#17a2b8"
+    readonly property color debugBadgeColor: "#6c757d"
+    readonly property color defaultBadgeColor: "#6c757d"
+    
+    readonly property color errorBackgroundDark: "#4a1f1f"
+    readonly property color errorBackgroundLight: "#ffe6e6"
+    readonly property color warningBackgroundDark: "#4a3c1f"
+    readonly property color warningBackgroundLight: "#fff3cd"
+    readonly property color criticalBackgroundDark: "#660000"
+    readonly property color criticalBackgroundLight: "#ffdddd"
 
     // Properties
     property alias model: eventLogsModel
@@ -34,7 +51,7 @@ Rectangle {
         // Log table header
         Rectangle {
             Layout.fillWidth: true
-            height: 30
+            Layout.preferredHeight: 30
             color: ThemeManager.componentBackground
             border.color: ThemeManager.border
             border.width: 1
@@ -121,15 +138,20 @@ Rectangle {
                     }
 
                     delegate: Rectangle {
+                        id: delegateItem
                         width: parent ? parent.width : 0
                         height: Math.max(40, logText.contentHeight + 20)
+
+                        required property var model
+                        required property int index
+
                         color: {
                             if (model.level === "ERROR")
-                                return ThemeManager.currentTheme === "dark" ? "#4a1f1f" : "#ffe6e6";
+                                return ThemeManager.currentTheme === "dark" ? root.errorBackgroundDark : root.errorBackgroundLight;
                             if (model.level === "WARNING")
-                                return ThemeManager.currentTheme === "dark" ? "#4a3c1f" : "#fff3cd";
+                                return ThemeManager.currentTheme === "dark" ? root.warningBackgroundDark : root.warningBackgroundLight;
                             if (model.level === "CRITICAL")
-                                return ThemeManager.currentTheme === "dark" ? "#660000" : "#ffdddd";
+                                return ThemeManager.currentTheme === "dark" ? root.criticalBackgroundDark : root.criticalBackgroundLight;
                             return index % 2 ? ThemeManager.windowBackground.lighter(1.1) : ThemeManager.windowBackground.darker(1.1);
                         }
 
@@ -141,25 +163,25 @@ Rectangle {
                             Rectangle {
                                 Layout.preferredWidth: 60
                                 Layout.alignment: Qt.AlignTop
-                                height: 25
+                                Layout.preferredHeight: 25
                                 color: {
-                                    if (model.level === "ERROR")
-                                        return "#dc3545";
-                                    if (model.level === "WARNING")
-                                        return "#ffc107";
-                                    if (model.level === "CRITICAL")
-                                        return "#000000";
-                                    if (model.level === "INFO")
-                                        return "#17a2b8";
-                                    if (model.level === "DEBUG")
-                                        return "#6c757d";
-                                    return "#6c757d";
+                                    if (delegateItem.model.level === "ERROR")
+                                        return root.errorBadgeColor;
+                                    if (delegateItem.model.level === "WARNING")
+                                        return root.warningBadgeColor;
+                                    if (delegateItem.model.level === "CRITICAL")
+                                        return root.criticalBadgeColor;
+                                    if (delegateItem.model.level === "INFO")
+                                        return root.infoBadgeColor;
+                                    if (delegateItem.model.level === "DEBUG")
+                                        return root.debugBadgeColor;
+                                    return root.defaultBadgeColor;
                                 }
                                 radius: 3
 
                                 Text {
                                     anchors.centerIn: parent
-                                    text: model.level
+                                    text: delegateItem.model.level
                                     color: "white"
                                     font.pixelSize: 10
                                     font.bold: true
@@ -169,11 +191,10 @@ Rectangle {
                             Text {
                                 id: logText
                                 Layout.fillWidth: true
-                                text: model.log
+                                text: delegateItem.model.log
                                 font.pixelSize: 11
                                 color: ThemeManager.componentForeground
                                 wrapMode: Text.Wrap
-                                width: parent.width - 75 // Account for level badge width and margins
                             }
                         }
                     }
