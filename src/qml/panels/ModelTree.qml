@@ -11,6 +11,7 @@ import "../services"
  */
 Rectangle {
     id: root
+
     color: ThemeManager.windowBackground
     border.color: ThemeManager.border
     border.width: 1
@@ -41,6 +42,7 @@ Rectangle {
 
             ListView {
                 id: modelsTreeListView
+                
                 model: ListModel {
                     id: modelsTreeModel
                 }

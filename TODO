@@ -5,3 +5,7 @@
 - Use simulator states for status bar
 - Sim should send certain data as it initializes
 - GUI should not give up after initializing and not finding sim
+- GUI should not give up if sim is closed then opened again while gui remains open
+- Progress simulation time shall show a progress bar or label indicationg progress
+- Sim rate window shall display correct rate at every window open
+- Use switcher pill for theme selection

@@ -19,7 +19,7 @@ Window {
     minimumHeight: root.min_height
 
     // Signals for window actions
-    signal progressSimulationRequested(int totalMilliseconds)
+    signal progressSimulationRequested(string totalMilliseconds)
     signal windowCloseRequested
 
     color: ThemeManager.windowBackground
@@ -104,7 +104,7 @@ Window {
                     // Convert all time components to total milliseconds
                     var totalMilliseconds = days * 86400000 + hours * 3600000 + minutes * 60000 + seconds * 1000 + milliseconds;
 
-                    root.progressSimulationRequested(totalMilliseconds);
+                    root.progressSimulationRequested(totalMilliseconds.toString());
                 }
             }
 

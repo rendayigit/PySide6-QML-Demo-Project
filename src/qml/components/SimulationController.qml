@@ -30,7 +30,7 @@ QtObject {
     }
 
     function handleProgressSimulation(totalMilliseconds) {
-        backendInstance.progress_simulation(totalMilliseconds.toString());
+        backendInstance.progress_simulation(totalMilliseconds);
     }
 
     function handleScaleSimulation(scaleValue) {
