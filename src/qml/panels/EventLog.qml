@@ -1,10 +1,9 @@
+pragma ComponentBehavior: Bound
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import "../services"
 import "../components"
-
-pragma ComponentBehavior: Bound
 
 /**
  * EventLog - Event logs display component
@@ -18,14 +17,23 @@ Rectangle {
     border.color: ThemeManager.border
     border.width: 1
 
-    // Color constants for easy modification
+    // Badge colors for all log levels
     readonly property color errorBadgeColor: "#dc3545"
     readonly property color warningBadgeColor: "#ffc107"
     readonly property color criticalBadgeColor: "#000000"
     readonly property color infoBadgeColor: "#17a2b8"
     readonly property color debugBadgeColor: "#6c757d"
     readonly property color defaultBadgeColor: "#6c757d"
-    
+
+    // Label text colors for all log levels
+    readonly property color errorBadgeTextColor: "white"
+    readonly property color warningBadgeTextColor: "black"
+    readonly property color criticalBadgeTextColor: "white"
+    readonly property color infoBadgeTextColor: "white"
+    readonly property color debugBadgeTextColor: "white"
+    readonly property color defaultBadgeTextColor: "white"
+
+    // Background colors for all log levels
     readonly property color errorBackgroundDark: "#4a1f1f"
     readonly property color errorBackgroundLight: "#ffe6e6"
     readonly property color warningBackgroundDark: "#4a3c1f"
@@ -162,8 +170,10 @@ Rectangle {
 
                             Rectangle {
                                 Layout.preferredWidth: 60
-                                Layout.alignment: Qt.AlignTop
                                 Layout.preferredHeight: 25
+                                Layout.alignment: Qt.AlignTop
+                                Layout.topMargin: 3
+
                                 color: {
                                     if (delegateItem.model.level === "ERROR")
                                         return root.errorBadgeColor;
@@ -182,7 +192,19 @@ Rectangle {
                                 Text {
                                     anchors.centerIn: parent
                                     text: delegateItem.model.level
-                                    color: "white"
+                                    color: {
+                                        if (delegateItem.model.level === "ERROR")
+                                            return root.errorBadgeTextColor;
+                                        if (delegateItem.model.level === "WARNING")
+                                            return root.warningBadgeTextColor;
+                                        if (delegateItem.model.level === "CRITICAL")
+                                            return root.criticalBadgeTextColor;
+                                        if (delegateItem.model.level === "INFO")
+                                            return root.infoBadgeTextColor;
+                                        if (delegateItem.model.level === "DEBUG")
+                                            return root.debugBadgeTextColor;
+                                        return root.defaultBadgeTextColor;
+                                    }
                                     font.pixelSize: 10
                                     font.bold: true
                                 }
