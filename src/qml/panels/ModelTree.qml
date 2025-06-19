@@ -1,3 +1,5 @@
+pragma ComponentBehavior: Bound
+
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -15,6 +17,13 @@ Rectangle {
     color: ThemeManager.windowBackground
     border.color: ThemeManager.border
     border.width: 1
+
+    // Configuration constants
+    readonly property int itemHeight: 25
+    readonly property int indentationStep: 20
+    readonly property int baseLeftMargin: 10
+    readonly property int rightMargin: 10
+    readonly property int iconWidth: 15
 
     // Properties
     property alias model: modelsTreeModel
@@ -42,7 +51,7 @@ Rectangle {
 
             ListView {
                 id: modelsTreeListView
-                
+
                 model: ListModel {
                     id: modelsTreeModel
                 }
@@ -53,19 +62,18 @@ Rectangle {
                     if (!item)
                         return;
 
-                    var isExpanded = item.expanded || false;
-                    modelsTreeModel.setProperty(index, "expanded", !isExpanded);
+                    var newExpandedState = !(item.expanded || false);
+                    modelsTreeModel.setProperty(index, "expanded", newExpandedState);
 
                     // Update visibility of children
-                    updateChildrenVisibility(index, !isExpanded);
+                    updateChildrenVisibility(index, newExpandedState);
                 }
 
                 // Helper function to update children visibility
                 function updateChildrenVisibility(parentIndex, parentExpanded) {
                     var parentItem = modelsTreeModel.get(parentIndex);
-                    if (!parentItem) {
+                    if (!parentItem)
                         return;
-                    }
 
                     var parentLevel = parentItem.level;
                     var parentPath = parentItem.fullPath;
@@ -117,32 +125,36 @@ Rectangle {
                 }
 
                 delegate: Rectangle {
+                    id: delegateItem
+
                     width: modelsTreeListView.width
-                    height: model.visible !== false ? 25 : 0
+                    height: model.visible !== false ? root.itemHeight : 0
                     visible: model.visible !== false
                     color: mouseArea.containsMouse ? ThemeManager.componentHoverBackground : "transparent"
+
+                    required property var model
+                    required property int index
 
                     MouseArea {
                         id: mouseArea
                         anchors.fill: parent
                         hoverEnabled: true
+
                         onClicked: {
-                            console.log("Selected:", model.name);
                             // Toggle expand/collapse if this item has children
-                            if (model.hasChildren) {
-                                modelsTreeListView.toggleExpanded(index);
+                            if (delegateItem.model.hasChildren) {
+                                modelsTreeListView.toggleExpanded(delegateItem.index);
                             }
                         }
+
                         onDoubleClicked: {
-                            if (model.hasChildren) {
+                            if (delegateItem.model.hasChildren) {
                                 // Double-click on parent: add all child variables recursively
-                                console.log("Adding all variables under:", model.fullPath);
-                                modelsTreeListView.addAllVariablesUnder(model.fullPath, index);
+                                modelsTreeListView.addAllVariablesUnder(delegateItem.model.fullPath, delegateItem.index);
                             } else {
                                 // Double-click on leaf: add single variable
-                                if (model.fullPath && model.fullPath !== "") {
-                                    console.log("Adding to watch:", model.fullPath);
-                                    root.variableWatchRequested(model.fullPath, model.name.trim());
+                                if (delegateItem.model.fullPath && delegateItem.model.fullPath !== "") {
+                                    root.variableWatchRequested(delegateItem.model.fullPath, delegateItem.model.name.trim());
                                 }
                             }
                         }
@@ -150,30 +162,32 @@ Rectangle {
 
                     RowLayout {
                         anchors.fill: parent
-                        anchors.leftMargin: 10 + (model.level * 20)
-                        anchors.rightMargin: 10
+                        anchors.leftMargin: root.baseLeftMargin + (delegateItem.model.level * root.indentationStep)
+                        anchors.rightMargin: root.rightMargin
                         spacing: 5
 
                         // Expand/collapse icon
                         Text {
                             text: {
-                                if (model.hasChildren) {
-                                    return model.expanded ? "▼" : "▶";
+                                if (delegateItem.model.hasChildren) {
+                                    return delegateItem.model.expanded ? "▼" : "▶";
                                 }
+
                                 return "  ";
                             }
+
                             font.pixelSize: 10
                             color: ThemeManager.secondaryComponentForeground
-                            Layout.preferredWidth: 15
+                            Layout.preferredWidth: root.iconWidth
                             Layout.alignment: Qt.AlignVCenter
                         }
 
                         // Node name
                         Text {
-                            text: model.name
+                            text: delegateItem.model.name
                             font.pixelSize: 12
                             color: ThemeManager.componentForeground
-                            font.bold: model.level === 0
+                            font.bold: delegateItem.model.level === 0
                             Layout.fillWidth: true
                             Layout.alignment: Qt.AlignVCenter
                         }
