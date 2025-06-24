@@ -1,3 +1,5 @@
+pragma ComponentBehavior: Bound
+
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -5,7 +7,7 @@ import "../services"
 
 /**
  * VariableTable - Variable display table component
- * 
+ *
  * This component displays variables with resizable columns include Variable, Description,
  * Value, and Type. It supports selection, context menu operations, and dynamic row heights.
  */
@@ -14,14 +16,14 @@ Rectangle {
     color: ThemeManager.windowBackground
     border.color: ThemeManager.border
     border.width: 1
-    
+
     // Properties
     property alias model: variablesModel
-    
+
     // Signals for communication with backend
-    signal clearTableRequested()
+    signal clearTableRequested
     signal removeVariablesRequested(var variablePaths)
-    
+
     ColumnLayout {
         anchors.fill: parent
         anchors.margins: 5
@@ -38,7 +40,7 @@ Rectangle {
         Rectangle {
             id: variableTableHeader
             Layout.fillWidth: true
-            height: 30
+            Layout.preferredHeight: 30
             color: ThemeManager.componentBackground
             border.color: ThemeManager.border
             border.width: 1
@@ -59,7 +61,7 @@ Rectangle {
                     width: variableTableHeader.variableColumnWidth
                     height: parent.height
                     color: "transparent"
-                    
+
                     Text {
                         anchors.left: parent.left
                         anchors.verticalCenter: parent.verticalCenter
@@ -69,35 +71,34 @@ Rectangle {
                         font.pixelSize: 12
                         color: ThemeManager.componentForeground
                     }
-                    
+
                     // Resize handle
                     Rectangle {
-                        id: variableResizeHandle
                         width: 3
                         height: parent.height
                         anchors.right: parent.right
                         color: variableResizeArea.containsMouse ? ThemeManager.primaryComponentBackground : ThemeManager.border
-                        
+
                         MouseArea {
                             id: variableResizeArea
                             anchors.fill: parent
                             anchors.margins: -2
                             hoverEnabled: true
                             cursorShape: Qt.SizeHorCursor
-                            
+
                             property real startX: 0
                             property real startWidth: 0
-                            
-                            onPressed: function(mouse) {
-                                startX = mouse.x
-                                startWidth = variableTableHeader.variableColumnWidth
+
+                            onPressed: function (mouse) {
+                                startX = mouse.x;
+                                startWidth = variableTableHeader.variableColumnWidth;
                             }
-                            
-                            onPositionChanged: function(mouse) {
+
+                            onPositionChanged: function (mouse) {
                                 if (pressed) {
-                                    var delta = mouse.x - startX
-                                    var newWidth = Math.max(50, startWidth + delta)
-                                    variableTableHeader.variableColumnWidth = Math.min(400, newWidth)
+                                    var delta = mouse.x - startX;
+                                    var newWidth = Math.max(50, startWidth + delta);
+                                    variableTableHeader.variableColumnWidth = Math.min(400, newWidth);
                                 }
                             }
                         }
@@ -109,7 +110,7 @@ Rectangle {
                     width: variableTableHeader.descriptionColumnWidth
                     height: parent.height
                     color: "transparent"
-                    
+
                     Text {
                         anchors.left: parent.left
                         anchors.verticalCenter: parent.verticalCenter
@@ -119,34 +120,34 @@ Rectangle {
                         font.pixelSize: 12
                         color: ThemeManager.componentForeground
                     }
-                    
+
                     // Resize handle
                     Rectangle {
                         width: 3
                         height: parent.height
                         anchors.right: parent.right
                         color: descriptionResizeArea.containsMouse ? ThemeManager.primaryComponentBackground : ThemeManager.border
-                        
+
                         MouseArea {
                             id: descriptionResizeArea
                             anchors.fill: parent
                             anchors.margins: -2
                             hoverEnabled: true
                             cursorShape: Qt.SizeHorCursor
-                            
+
                             property real startX: 0
                             property real startWidth: 0
-                            
-                            onPressed: function(mouse) {
-                                startX = mouse.x
-                                startWidth = variableTableHeader.descriptionColumnWidth
+
+                            onPressed: function (mouse) {
+                                startX = mouse.x;
+                                startWidth = variableTableHeader.descriptionColumnWidth;
                             }
-                            
-                            onPositionChanged: function(mouse) {
+
+                            onPositionChanged: function (mouse) {
                                 if (pressed) {
-                                    var delta = mouse.x - startX
-                                    var newWidth = Math.max(50, startWidth + delta)
-                                    variableTableHeader.descriptionColumnWidth = Math.min(400, newWidth)
+                                    var delta = mouse.x - startX;
+                                    var newWidth = Math.max(50, startWidth + delta);
+                                    variableTableHeader.descriptionColumnWidth = Math.min(400, newWidth);
                                 }
                             }
                         }
@@ -158,7 +159,7 @@ Rectangle {
                     width: variableTableHeader.valueColumnWidth
                     height: parent.height
                     color: "transparent"
-                    
+
                     Text {
                         anchors.left: parent.left
                         anchors.verticalCenter: parent.verticalCenter
@@ -168,7 +169,7 @@ Rectangle {
                         font.pixelSize: 12
                         color: ThemeManager.componentForeground
                     }
-                    
+
                     // Resize handle
                     Rectangle {
                         width: 3
@@ -182,20 +183,20 @@ Rectangle {
                             anchors.margins: -2
                             hoverEnabled: true
                             cursorShape: Qt.SizeHorCursor
-                            
+
                             property real startX: 0
                             property real startWidth: 0
-                            
-                            onPressed: function(mouse) {
-                                startX = mouse.x
-                                startWidth = variableTableHeader.valueColumnWidth
+
+                            onPressed: function (mouse) {
+                                startX = mouse.x;
+                                startWidth = variableTableHeader.valueColumnWidth;
                             }
-                            
-                            onPositionChanged: function(mouse) {
+
+                            onPositionChanged: function (mouse) {
                                 if (pressed) {
-                                    var delta = mouse.x - startX
-                                    var newWidth = Math.max(50, startWidth + delta)
-                                    variableTableHeader.valueColumnWidth = Math.min(300, newWidth)
+                                    var delta = mouse.x - startX;
+                                    var newWidth = Math.max(50, startWidth + delta);
+                                    variableTableHeader.valueColumnWidth = Math.min(300, newWidth);
                                 }
                             }
                         }
@@ -207,7 +208,7 @@ Rectangle {
                     width: variableTableHeader.typeColumnWidth
                     height: parent.height
                     color: "transparent"
-                    
+
                     Text {
                         anchors.left: parent.left
                         anchors.verticalCenter: parent.verticalCenter
@@ -234,19 +235,20 @@ Rectangle {
 
                 // Selection properties
                 property var selectedItems: []
-                
+
                 // Helper function to toggle selection
                 function toggleSelection(index) {
                     var item = variablesModel.get(index);
-                    if (!item) return;
-                    
+                    if (!item)
+                        return;
+
                     var isSelected = item.selected || false;
                     variablesModel.setProperty(index, "selected", !isSelected);
-                    
+
                     // Update selectedItems array
                     updateSelectedItems();
                 }
-                
+
                 // Helper function to clear all selections
                 function clearSelection() {
                     for (var i = 0; i < variablesModel.count; i++) {
@@ -254,7 +256,7 @@ Rectangle {
                     }
                     selectedItems = [];
                 }
-                
+
                 // Helper function to update selectedItems array
                 function updateSelectedItems() {
                     var selected = [];
@@ -275,9 +277,9 @@ Rectangle {
                 MouseArea {
                     anchors.fill: parent
                     acceptedButtons: Qt.RightButton
-                    onClicked: function(mouse) {
+                    onClicked: function (mouse) {
                         if (mouse.button === Qt.RightButton) {
-                            variableContextMenu.popup()
+                            variableContextMenu.popup();
                         }
                     }
                 }
@@ -312,35 +314,46 @@ Rectangle {
                 }
 
                 delegate: Rectangle {
+                    id: delegateRoot
+
+                    // Required properties to avoid unqualified access warnings
+                    required property int index
+                    required property var model
+                    required property bool selected
+                    required property string variablePath
+                    required property string description
+                    required property string value
+                    required property string type
+
                     width: parent ? parent.width : 0
-                    height: Math.max(25, Math.max(variableText.contentHeight, Math.max(descriptionText.contentHeight, valueText.contentHeight)) + 20)
+                    height: Math.max(25, Math.max(col1.textId.contentHeight, Math.max(col2.textId.contentHeight, col3.textId.contentHeight)) + 20)
                     color: {
-                        if (model.selected) {
+                        if (delegateRoot.selected) {
                             return ThemeManager.primaryComponentBackground;
                         }
-                        return index % 2 ? ThemeManager.windowBackground.lighter(1.1) : ThemeManager.windowBackground.darker(1.1);
+                        return delegateRoot.index % 2 ? ThemeManager.windowBackground.lighter(1.1) : ThemeManager.windowBackground.darker(1.1);
                     }
 
                     MouseArea {
                         anchors.fill: parent
                         acceptedButtons: Qt.LeftButton | Qt.RightButton
-                        onClicked: function(mouse) {
+                        onClicked: function (mouse) {
                             if (mouse.button === Qt.LeftButton) {
                                 // Handle selection on left click
                                 if (mouse.modifiers & Qt.ControlModifier) {
                                     // Ctrl+click: toggle selection
-                                    variablesListView.toggleSelection(index);
+                                    variablesListView.toggleSelection(delegateRoot.index);
                                 } else {
                                     // Normal click: clear all selections and select this one
                                     variablesListView.clearSelection();
-                                    variablesListView.toggleSelection(index);
+                                    variablesListView.toggleSelection(delegateRoot.index);
                                 }
                             } else if (mouse.button === Qt.RightButton) {
                                 // Right click: show context menu
                                 // If this item is not selected, select it first
-                                if (!model.selected) {
+                                if (!delegateRoot.selected) {
                                     variablesListView.clearSelection();
-                                    variablesListView.toggleSelection(index);
+                                    variablesListView.toggleSelection(delegateRoot.index);
                                 }
                                 variableContextMenu.popup();
                             }
@@ -353,94 +366,61 @@ Rectangle {
                         anchors.margins: 5
                         spacing: 0
 
-                        // Variable column
-                        Rectangle {
-                            width: variableTableHeader.variableColumnWidth
-                            height: parent.height
-                            color: "transparent"
-                            clip: true
-                            
-                            Text {
-                                id: variableText
-                                anchors.left: parent.left
-                                anchors.verticalCenter: parent.verticalCenter
-                                anchors.leftMargin: 5
-                                anchors.right: parent.right
-                                anchors.rightMargin: 5
-                                text: model.variablePath || model.variable || ""
-                                font.pixelSize: 11
-                                color: ThemeManager.componentForeground
-                                wrapMode: Text.Wrap
-                                width: parent.width - 10
-                            }
+                        DelegateColumn {
+                            id: col1
+                            text: delegateRoot.variablePath || ""
+                            columnWidth: variableTableHeader.variableColumnWidth
                         }
 
-                        // Description column
-                        Rectangle {
-                            width: variableTableHeader.descriptionColumnWidth
-                            height: parent.height
-                            color: "transparent"
-                            clip: true
-                            
-                            Text {
-                                id: descriptionText
-                                anchors.left: parent.left
-                                anchors.verticalCenter: parent.verticalCenter
-                                anchors.leftMargin: 5
-                                anchors.right: parent.right
-                                anchors.rightMargin: 5
-                                text: model.description || ""
-                                font.pixelSize: 11
-                                color: ThemeManager.componentForeground
-                                wrapMode: Text.Wrap
-                                width: parent.width - 10
-                            }
+                        DelegateColumn {
+                            id: col2
+                            text: delegateRoot.description || ""
+                            columnWidth: variableTableHeader.descriptionColumnWidth
                         }
 
-                        // Value column
-                        Rectangle {
-                            width: variableTableHeader.valueColumnWidth
-                            height: parent.height
-                            color: "transparent"
-                            clip: true
-                            
-                            Text {
-                                id: valueText
-                                anchors.left: parent.left
-                                anchors.verticalCenter: parent.verticalCenter
-                                anchors.leftMargin: 5
-                                anchors.right: parent.right
-                                anchors.rightMargin: 5
-                                text: model.value || ""
-                                font.pixelSize: 11
-                                color: ThemeManager.componentForeground
-                                wrapMode: Text.Wrap
-                                width: parent.width - 10
-                            }
+                        DelegateColumn {
+                            id: col3
+                            text: delegateRoot.value || ""
+                            columnWidth: variableTableHeader.valueColumnWidth
                         }
 
-                        // Type column
-                        Rectangle {
-                            width: variableTableHeader.typeColumnWidth
-                            height: parent.height
-                            color: "transparent"
-                            clip: true
-                            
-                            Text {
-                                anchors.left: parent.left
-                                anchors.verticalCenter: parent.verticalCenter
-                                anchors.leftMargin: 5
-                                anchors.right: parent.right
-                                anchors.rightMargin: 5
-                                text: model.type || ""
-                                font.pixelSize: 11
-                                color: ThemeManager.componentForeground
-                                elide: Text.ElideRight
-                            }
+                        DelegateColumn {
+                            id: col4
+                            text: delegateRoot.type || ""
+                            columnWidth: variableTableHeader.typeColumnWidth
+                            elideText: true
                         }
                     }
                 }
             }
+        }
+    }
+
+    // Reusable column component for delegate
+    component DelegateColumn: Rectangle {
+        property string text: ""
+        property real columnWidth: 100
+        property alias textId: columnText
+        property bool elideText: false
+
+        width: columnWidth
+        height: parent.height
+        color: "transparent"
+        clip: true
+
+        Text {
+            id: columnText
+            anchors.left: parent.left
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.leftMargin: 5
+            anchors.right: parent.right
+            anchors.rightMargin: 5
+            text: parent.text
+            font.pixelSize: 11
+            color: ThemeManager.componentForeground
+            wrapMode: parent.elideText ? Text.NoWrap : Text.Wrap
+            elide: parent.elideText ? Text.ElideRight : Text.ElideNone
+            width: parent.width - 10
         }
     }
 }
