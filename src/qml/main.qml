@@ -1,3 +1,5 @@
+pragma ComponentBehavior: Bound
+
 import QtQuick
 import QtQuick
 import QtQuick.Controls
@@ -87,9 +89,10 @@ ApplicationWindow {
             for (var i = 0; i < variableTable.model.count; i++) {
                 if (variableTable.model.get(i).variablePath === variablePath) {
                     // Update all properties of the variable
-                    variableTable.model.setProperty(i, "value", variableData.value);
-                    variableTable.model.setProperty(i, "type", variableData.type);
-                    variableTable.model.setProperty(i, "description", variableData.description);
+                    var data = variableData || {};
+                    variableTable.model.setProperty(i, "value", data.value || "");
+                    variableTable.model.setProperty(i, "type", data.type || "");
+                    variableTable.model.setProperty(i, "description", data.description || "");
                     break;
                 }
             }
@@ -114,38 +117,20 @@ ApplicationWindow {
     // Menu Bar Component
     menuBar: AppMenuBar {
         id: menuBar
-
-        onToggleSimulationRequested: {
-            simulationController.handleToggleSimulation();
-        }
-
-        onResetSimulationRequested: {
-            simulationController.handleResetSimulation();
-        }
-
-        onStepSimulationRequested: {
-            simulationController.handleStepSimulation();
-        }
-
-        onProgressWindowRequested: {
-            simulationController.handleOpenProgressWindow(progressWindow);
-        }
-
-        onScaleWindowRequested: {
-            simulationController.handleOpenScaleWindow(scaleWindow);
-        }
-
-        onSettingsRequested: {
-            simulationController.handleOpenSettingsWindow(settingsWindow);
-        }
-
-        onClearVariableTableRequested: {
-            simulationController.handleClearVariableTable();
-        }
-
-        onQuitRequested: {
-            simulationController.handleQuitApplication();
-        }
+        
+        // Simulation control handlers (grouped for clarity)
+        onToggleSimulationRequested: simulationController.handleToggleSimulation()
+        onResetSimulationRequested: simulationController.handleResetSimulation()
+        onStepSimulationRequested: simulationController.handleStepSimulation()
+        
+        // Window control handlers
+        onProgressWindowRequested: simulationController.handleOpenProgressWindow(progressWindow)
+        onScaleWindowRequested: simulationController.handleOpenScaleWindow(scaleWindow)
+        onSettingsRequested: simulationController.handleOpenSettingsWindow(settingsWindow)
+        
+        // Application control handlers
+        onClearVariableTableRequested: simulationController.handleClearVariableTable()
+        onQuitRequested: simulationController.handleQuitApplication()
     }
 
     // Main content layout
@@ -156,7 +141,7 @@ ApplicationWindow {
         // Control Panel with buttons and time displays
         Rectangle {
             Layout.fillWidth: true
-            height: 70
+            Layout.preferredHeight: 70
             color: ThemeManager.windowBackground
 
             RowLayout {
@@ -168,18 +153,11 @@ ApplicationWindow {
                 Controls {
                     id: controlButtons
                     isRunning: root.isRunning
-
-                    onToggleSimulationRequested: {
-                        simulationController.handleToggleSimulation();
-                    }
-
-                    onResetSimulationRequested: {
-                        simulationController.handleResetSimulation();
-                    }
-
-                    onStepSimulationRequested: {
-                        simulationController.handleStepSimulation();
-                    }
+                    
+                    // Simulation control handlers (same as menu bar for consistency)
+                    onToggleSimulationRequested: simulationController.handleToggleSimulation()
+                    onResetSimulationRequested: simulationController.handleResetSimulation()
+                    onStepSimulationRequested: simulationController.handleStepSimulation()
                 }
 
                 Item {
@@ -214,8 +192,8 @@ ApplicationWindow {
                     SplitView.minimumWidth: 200
                     SplitView.preferredWidth: 300
 
-                    onVariableWatchRequested: function (variablePath, variableName) {
-                        simulationController.handleAddVariableToWatch(variablePath, variableName);
+                    onVariableWatchRequested: function(variablePath, variableName) {
+                        simulationController.handleAddVariableToWatch(variablePath, variableName)
                     }
                 }
 
@@ -225,12 +203,9 @@ ApplicationWindow {
                     SplitView.fillWidth: true
                     SplitView.minimumWidth: 400
 
-                    onClearTableRequested: {
-                        simulationController.handleClearVariableTable();
-                    }
-
-                    onRemoveVariablesRequested: function (variablePaths) {
-                        simulationController.handleRemoveMultipleVariables(variablePaths);
+                    onClearTableRequested: simulationController.handleClearVariableTable()
+                    onRemoveVariablesRequested: function(variablePaths) {
+                        simulationController.handleRemoveMultipleVariables(variablePaths)
                     }
                 }
             }
@@ -246,7 +221,7 @@ ApplicationWindow {
         // Status Bar
         Rectangle {
             Layout.fillWidth: true
-            height: 30
+            Layout.preferredHeight: 30
             color: ThemeManager.titleBarBackground
             border.color: ThemeManager.border
             border.width: 1
@@ -265,26 +240,18 @@ ApplicationWindow {
     // Window Components
     ProgressWindow {
         id: progressWindow
-
-        onProgressSimulationRequested: function (totalMilliseconds) {
-            simulationController.handleProgressSimulation(totalMilliseconds);
+        onProgressSimulationRequested: function(totalMilliseconds) {
+            simulationController.handleProgressSimulation(totalMilliseconds)
         }
-
-        onWindowCloseRequested: {
-            simulationController.handleCloseWindow(progressWindow);
-        }
+        onWindowCloseRequested: simulationController.handleCloseWindow(progressWindow)
     }
 
     ScaleWindow {
         id: scaleWindow
-
-        onScaleSimulationRequested: function (scaleValue) {
-            simulationController.handleScaleSimulation(scaleValue);
+        onScaleSimulationRequested: function(scaleValue) {
+            simulationController.handleScaleSimulation(scaleValue)
         }
-
-        onWindowCloseRequested: {
-            simulationController.handleCloseWindow(scaleWindow);
-        }
+        onWindowCloseRequested: simulationController.handleCloseWindow(scaleWindow)
     }
 
     SettingsWindow {
