@@ -13,6 +13,7 @@ The application has a modular architecture:
 
 import sys
 import os
+import traceback
 from pathlib import Path
 from PySide6.QtGui import QGuiApplication
 from PySide6.QtQml import QQmlApplicationEngine
@@ -104,8 +105,6 @@ def main() -> int:
         return 0
     except Exception as e:
         print(f"Error: Failed to start application: {e}")
-        import traceback
-
         traceback.print_exc()
         return 1
 
