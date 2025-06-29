@@ -117,17 +117,18 @@ ApplicationWindow {
     // Menu Bar Component
     menuBar: AppMenuBar {
         id: menuBar
-        
+
         // Simulation control handlers (grouped for clarity)
         onToggleSimulationRequested: simulationController.handleToggleSimulation()
         onResetSimulationRequested: simulationController.handleResetSimulation()
         onStepSimulationRequested: simulationController.handleStepSimulation()
-        
+
         // Window control handlers
         onProgressWindowRequested: simulationController.handleOpenProgressWindow(progressWindow)
         onScaleWindowRequested: simulationController.handleOpenScaleWindow(scaleWindow)
         onSettingsRequested: simulationController.handleOpenSettingsWindow(settingsWindow)
-        
+        onPlotWindowRequested: openPlotWindow()
+
         // Application control handlers
         onClearVariableTableRequested: simulationController.handleClearVariableTable()
         onQuitRequested: simulationController.handleQuitApplication()
@@ -153,7 +154,7 @@ ApplicationWindow {
                 Controls {
                     id: controlButtons
                     isRunning: root.isRunning
-                    
+
                     // Simulation control handlers (same as menu bar for consistency)
                     onToggleSimulationRequested: simulationController.handleToggleSimulation()
                     onResetSimulationRequested: simulationController.handleResetSimulation()
@@ -192,8 +193,8 @@ ApplicationWindow {
                     SplitView.minimumWidth: 200
                     SplitView.preferredWidth: 300
 
-                    onVariableWatchRequested: function(variablePath, variableName) {
-                        simulationController.handleAddVariableToWatch(variablePath, variableName)
+                    onVariableWatchRequested: function (variablePath, variableName) {
+                        simulationController.handleAddVariableToWatch(variablePath, variableName);
                     }
                 }
 
@@ -204,8 +205,11 @@ ApplicationWindow {
                     SplitView.minimumWidth: 400
 
                     onClearTableRequested: simulationController.handleClearVariableTable()
-                    onRemoveVariablesRequested: function(variablePaths) {
-                        simulationController.handleRemoveMultipleVariables(variablePaths)
+                    onRemoveVariablesRequested: function (variablePaths) {
+                        simulationController.handleRemoveMultipleVariables(variablePaths);
+                    }
+                    onPlotVariablesRequested: function (variablePaths) {
+                        handlePlotVariables(variablePaths);
                     }
                 }
             }
@@ -240,16 +244,16 @@ ApplicationWindow {
     // Window Components
     ProgressWindow {
         id: progressWindow
-        onProgressSimulationRequested: function(totalMilliseconds) {
-            simulationController.handleProgressSimulation(totalMilliseconds)
+        onProgressSimulationRequested: function (totalMilliseconds) {
+            simulationController.handleProgressSimulation(totalMilliseconds);
         }
         onWindowCloseRequested: simulationController.handleCloseWindow(progressWindow)
     }
 
     ScaleWindow {
         id: scaleWindow
-        onScaleSimulationRequested: function(scaleValue) {
-            simulationController.handleScaleSimulation(scaleValue)
+        onScaleSimulationRequested: function (scaleValue) {
+            simulationController.handleScaleSimulation(scaleValue);
         }
         onWindowCloseRequested: simulationController.handleCloseWindow(scaleWindow)
     }
@@ -261,6 +265,11 @@ ApplicationWindow {
             console.log("Settings applied - Theme:", settingsWindow.selectedTheme);
             // Apply theme through ThemeManager
             ThemeManager.setTheme(settingsWindow.selectedTheme);
+
+            // Update plot themes
+            if (backend && backend.plotting) {
+                backend.plotting.set_theme(settingsWindow.selectedTheme);
+            }
         }
 
         onSettingsCanceled: {
@@ -268,5 +277,33 @@ ApplicationWindow {
             // Reset to current theme
             settingsWindow.selectedTheme = ThemeManager.getCurrentTheme();
         }
+    }
+
+    PlotWindow {
+        id: plotWindow
+        backendInstance: backend
+    }
+
+    // Initialize plot themes when component is completed
+    Component.onCompleted: {
+        // Set initial plot theme to match current theme
+        if (backend && backend.plotting) {
+            backend.plotting.set_theme(ThemeManager.getCurrentTheme());
+        }
+    }
+
+    // Plotting functions
+    function handlePlotVariables(variablePaths) {
+        console.log("Creating plot for variables:", variablePaths);
+        if (backend && backend.plotting) {
+            var plotId = backend.plotting.create_plot(variablePaths, "", "Time", "Value");
+            console.log("Created plot with ID:", plotId);
+        }
+    }
+
+    function openPlotWindow() {
+        plotWindow.show();
+        plotWindow.raise();
+        plotWindow.requestActivate();
     }
 }

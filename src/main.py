@@ -15,7 +15,7 @@ import sys
 import os
 import traceback
 from pathlib import Path
-from PySide6.QtGui import QGuiApplication
+from PySide6.QtWidgets import QApplication
 from PySide6.QtQml import QQmlApplicationEngine
 from PySide6.QtCore import QUrl
 
@@ -53,7 +53,7 @@ def main() -> int:
     """
     try:
         # Create Qt application
-        app = QGuiApplication(sys.argv)
+        app = QApplication(sys.argv)
         app.setApplicationName(APP_NAME)
         app.setApplicationVersion(APP_VERSION)
         app.setOrganizationName(ORG_NAME)

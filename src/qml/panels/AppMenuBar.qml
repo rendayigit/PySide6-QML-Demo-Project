@@ -27,6 +27,7 @@ MenuBar {
     signal clearVariableTableRequested
     signal helpManualRequested  // TODO: Implement
     signal aboutRequested // TODO: Implement
+    signal plotWindowRequested
 
     // Keyboard shortcuts
     Shortcut {
@@ -138,6 +139,12 @@ MenuBar {
             text: "&Plot Selected\tCtrl+P" //TODO: Name too long
             onTriggered: {
                 root.plotSelectedVariablesRequested();
+            }
+        }
+        MenuItem {
+            text: "Plot Manager"
+            onTriggered: {
+                root.plotWindowRequested();
             }
         }
         MenuSeparator {}

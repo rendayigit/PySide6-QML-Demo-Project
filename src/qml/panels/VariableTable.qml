@@ -23,6 +23,7 @@ Rectangle {
     // Signals for communication with backend
     signal clearTableRequested
     signal removeVariablesRequested(var variablePaths)
+    signal plotVariablesRequested(var variablePaths)
 
     ColumnLayout {
         anchors.fill: parent
@@ -286,6 +287,25 @@ Rectangle {
 
                 Menu {
                     id: variableContextMenu
+
+                    MenuItem {
+                        text: "Plot Selection (" + variablesListView.selectedItems.length + ")"
+                        enabled: variablesListView.selectedItems.length > 0
+                        onTriggered: {
+                            console.log("Plot Selection from context menu");
+                            if (variablesListView.selectedItems.length > 0) {
+                                // Collect paths to plot
+                                var pathsToPlot = [];
+                                for (var i = 0; i < variablesListView.selectedItems.length; i++) {
+                                    pathsToPlot.push(variablesListView.selectedItems[i].variablePath);
+                                }
+                                root.plotVariablesRequested(pathsToPlot);
+                            }
+                        }
+                    }
+
+                    MenuSeparator {}
+
                     MenuItem {
                         text: "Clear Table"
                         onTriggered: {

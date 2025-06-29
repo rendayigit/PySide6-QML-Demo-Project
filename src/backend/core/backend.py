@@ -12,6 +12,7 @@ from .data_manager import DataManager
 from .json_formatter import JSONFormatter
 from ..communication.subscriber import ZMQSubscriber
 from ..communication.commanding import SimulationCommander
+from ..plotting import PlottingBackend
 
 
 class Backend(QObject):
@@ -59,6 +60,9 @@ class Backend(QObject):
         self._subscriber: Optional[ZMQSubscriber] = None
         self._commander: Optional[SimulationCommander] = None
 
+        # Initialize plotting backend
+        self._plotting = PlottingBackend()
+
         # Connect data manager signals to backend signals
         self._connect_data_manager_signals()
 
@@ -104,12 +108,24 @@ class Backend(QObject):
         """Current status text"""
         return self._status_text
 
+    @Property(QObject, constant=True)
+    def plotting(self) -> QObject:
+        """Access to plotting backend"""
+        return self._plotting
+
     # Property setters
     def set_simulation_time(self, value: str) -> None:
         """Set simulation time and emit change signal"""
         if self._simulation_time != value:
             self._simulation_time = value
             self.simulationTimeChanged.emit(value)
+
+            # Update plotting system with time
+            try:
+                time_float = float(value)
+                self._plotting.update_simulation_time(time_float)
+            except (ValueError, TypeError):
+                pass  # Skip non-numeric time values
 
     def set_mission_time(self, value: str) -> None:
         """Set mission time and emit change signal"""
@@ -230,8 +246,14 @@ class Backend(QObject):
         self.variableAdded.emit(variable_data)
 
     def _on_variable_updated(self, variable_path: str, variable_data) -> None:
-        """Forward variable updated signal to QML"""
+        """Forward variable updated signal to QML and update plotting"""
         self.variableUpdated.emit(variable_path, variable_data)
+
+        # Update plotting system with new variable value
+        if hasattr(variable_data, "value"):
+            self._plotting.update_variable_value(variable_path, variable_data.value)
+        elif isinstance(variable_data, dict) and "value" in variable_data:
+            self._plotting.update_variable_value(variable_path, variable_data["value"])
 
     def _on_variable_removed(self, variable_path: str) -> None:
         """Forward variable removed signal to QML"""
@@ -337,7 +359,7 @@ class Backend(QObject):
         try:
             # Convert string to int for commander
             milliseconds_int = int(total_milliseconds)
-            
+
             commander = self.get_commanding_instance()
             response = commander.progress_simulation(milliseconds_int)
 
@@ -420,3 +442,8 @@ class Backend(QObject):
             self._commander = None
 
         print("Backend cleanup completed")
+
+    @Slot(str)
+    def set_plot_theme(self, theme: str):
+        """Set theme for all plots"""
+        self._plotting.set_theme(theme)
