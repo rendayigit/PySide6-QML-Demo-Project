@@ -15,7 +15,7 @@ import "../services"
 Window {
     id: root
 
-    readonly property int min_width: 450
+    readonly property int min_width: 600
     readonly property int min_height: 300
 
     // Backend instance property
@@ -23,7 +23,7 @@ Window {
 
     title: "Plot Manager"
 
-    width: 600  // Start with a wider default width
+    width: min_width
     height: min_height
 
     minimumWidth: root.min_width
@@ -72,6 +72,11 @@ Window {
 
                     ListView {
                         id: plotsListView
+
+                        flickDeceleration: 0  // Disable flick deceleration
+                        maximumFlickVelocity: 0  // Disable flick velocity
+                        boundsBehavior: Flickable.StopAtBounds  // Stop bouncing at boundaries
+
                         model: ListModel {
                             id: plotsModel
                         }
@@ -161,21 +166,6 @@ Window {
                     }
                 }
             }
-
-            Item {
-                Layout.fillWidth: true
-            }
-        }
-
-        // Spacer
-        Item {
-            Layout.fillHeight: true
-        }
-
-        // Bottom buttons
-        RowLayout {
-            Layout.fillWidth: true
-            spacing: 10
 
             Item {
                 Layout.fillWidth: true
