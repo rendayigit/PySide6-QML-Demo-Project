@@ -416,6 +416,17 @@ Rectangle {
         }
     }
 
+    // Function to get selected variable paths for menu bar access
+    function getSelectedVariablePaths() {
+        var selectedPaths = [];
+        if (variablesListView.selectedItems) {
+            for (var i = 0; i < variablesListView.selectedItems.length; i++) {
+                selectedPaths.push(variablesListView.selectedItems[i].variablePath);
+            }
+        }
+        return selectedPaths;
+    }
+
     // Reusable column component for delegate
     component DelegateColumn: Rectangle {
         property string text: ""

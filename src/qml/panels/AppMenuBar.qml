@@ -13,15 +13,15 @@ MenuBar {
     // Signal properties for communication with main window
     signal simulatorControlsRequested  // TODO: Implement
     signal toggleSimulationRequested
-    signal resetSimulationRequested  // TODO: Implement
+    signal resetSimulationRequested
     signal stepSimulationRequested
     signal progressWindowRequested
     signal storeSimulationRequested  // TODO: Implement
     signal restoreSimulationRequested  // TODO: Implement
     signal scaleWindowRequested
-    signal settingsRequested  // TODO: Implement
+    signal settingsRequested
     signal quitRequested
-    signal plotSelectedVariablesRequested  // TODO: Implement
+    signal plotSelectedVariablesRequested
     signal saveVariablesRequested  // TODO: Implement
     signal loadVariablesRequested  // TODO: Implement
     signal clearVariableTableRequested

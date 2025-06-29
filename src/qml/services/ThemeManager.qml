@@ -54,11 +54,6 @@ QtObject {
 
     readonly property color dark_border: "#313131"
 
-    readonly property color darkBlue_background1: "#303340" // TODO: Implement
-    readonly property color darkBlue_background2: "#272a34" // TODO: Implement
-    readonly property color darkBlue_background3: "#23252e" // TODO: Implement
-    readonly property color darkBlue_background4: "#1a1c23" // TODO: Implement
-
     // Light Theme Colors
     readonly property color light_windowBackground: "#fafafa"
     readonly property color light_windowForeground: "#000000"

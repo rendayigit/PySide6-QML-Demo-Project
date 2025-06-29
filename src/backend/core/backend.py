@@ -346,6 +346,26 @@ class Backend(QObject):
             return False
 
     @Slot(result=bool)
+    def reset_simulation(self) -> bool:
+        """QML-callable method to reset the simulation"""
+        try:
+            commander = self.get_commanding_instance()
+            response = commander.reset_simulation()
+
+            print(f"RESET command successful: {response}")
+            self.send_event_log("INFO", "RESET command sent to engine")
+
+            # Request status update after command
+            self.verify_simulation_status()
+            return True
+
+        except Exception as e:
+            error_msg = f"RESET command failed: {e}"
+            print(error_msg)
+            self.send_event_log("ERROR", error_msg)
+            return False
+
+    @Slot(result=bool)
     def toggle_simulation(self) -> bool:
         """QML-callable method to toggle simulation run/hold state"""
         if self._is_running:

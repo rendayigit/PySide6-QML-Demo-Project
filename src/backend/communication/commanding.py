@@ -123,6 +123,15 @@ class SimulationCommander(QObject):
         """
         return self.send_command({"command": "STEP"})
 
+    def reset_simulation(self) -> Union[str, Dict, None]:
+        """
+        Send RESET command to reset the simulation
+
+        Returns:
+            Engine response or None if error occurred
+        """
+        return self.send_command({"command": "RESET"})
+
     def progress_simulation(self, milliseconds: int) -> Union[str, Dict, None]:
         """
         Send PROGRESS command to advance simulation by specified time

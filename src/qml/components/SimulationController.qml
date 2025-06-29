@@ -19,30 +19,45 @@ QtObject {
 
     // Simulation Control Functions
     function handleToggleSimulation() {
-        backendInstance.toggle_simulation();
+        if (backendInstance) {
+            backendInstance.toggle_simulation();
+        }
     }
 
-    function handleResetSimulation() { // TODO: Implement
+    function handleResetSimulation() {
+        if (backendInstance) {
+            backendInstance.reset_simulation();
+        }
     }
 
     function handleStepSimulation() {
-        backendInstance.step_simulation();
+        if (backendInstance) {
+            backendInstance.step_simulation();
+        }
     }
 
     function handleProgressSimulation(totalMilliseconds) {
-        backendInstance.progress_simulation(totalMilliseconds);
+        if (backendInstance) {
+            backendInstance.progress_simulation(totalMilliseconds);
+        }
     }
 
     function handleScaleSimulation(scaleValue) {
-        backendInstance.set_simulation_rate(scaleValue);
+        if (backendInstance) {
+            backendInstance.set_simulation_rate(scaleValue);
+        }
     }
 
     function handleAddVariableToWatch(variablePath, variableName) {
-        backendInstance.add_variable_to_watch(variablePath, variableName);
+        if (backendInstance) {
+            backendInstance.add_variable_to_watch(variablePath, variableName);
+        }
     }
 
     function handleRemoveVariableFromWatch(variablePath) {
-        backendInstance.remove_variable_from_watch(variablePath);
+        if (backendInstance) {
+            backendInstance.remove_variable_from_watch(variablePath);
+        }
     }
 
     function handleRemoveMultipleVariables(variablePaths) {
@@ -52,7 +67,9 @@ QtObject {
     }
 
     function handleClearVariableTable() {
-        backendInstance.clear_variable_table();
+        if (backendInstance) {
+            backendInstance.clear_variable_table();
+        }
     }
 
     function handleOpenProgressWindow(windowRef) {

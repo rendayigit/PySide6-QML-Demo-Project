@@ -129,6 +129,17 @@ ApplicationWindow {
         onSettingsRequested: simulationController.handleOpenSettingsWindow(settingsWindow)
         onPlotWindowRequested: openPlotWindow()
 
+        // Variable plotting handler
+        onPlotSelectedVariablesRequested: {
+            // Get selected variables from the variable table and plot them
+            var selectedPaths = variableTable.getSelectedVariablePaths();
+            if (selectedPaths.length > 0) {
+                root.handlePlotVariables(selectedPaths);
+            } else {
+                console.log("No variables selected for plotting");
+            }
+        }
+
         // Application control handlers
         onClearVariableTableRequested: simulationController.handleClearVariableTable()
         onQuitRequested: simulationController.handleQuitApplication()
