@@ -1,5 +1,5 @@
 import QtQuick
-import QtQuick.Controls
+import "../services"
 
 /**
  * Switcher - Generic binary toggle switcher component
@@ -17,17 +17,12 @@ Item {
     property bool isRightSelected: false
     property string leftText: "Option 1"
     property string rightText: "Option 2"
-    
+
     // Color customization
-    property string backgroundColor: "#e5e7eb"
-    property string borderColor: "#d1d5db"
-    property string selectedIndicatorColor: "#f3f4f6"
-    property string selectedIndicatorBorder: "#d1d5db"
-    property string selectedIndicatorColorRight: "#374151"
-    property string selectedIndicatorBorderRight: "#1f2937"
-    property string selectedTextColor: "#374151"
-    property string unselectedTextColor: "#9ca3af"
-    property string selectedTextColorRight: "#f3f4f6"
+    // Themed colors
+    property color backgroundColor: ThemeManager.alternativePrimaryComponentBackground
+    property color indicatorColor: ThemeManager.primaryComponentBackground
+    property color textColor: ThemeManager.alternativePrimaryComponentForeground
 
     // Signals
     signal optionToggled(bool isRightSelected)
@@ -38,8 +33,6 @@ Item {
         anchors.fill: parent
         radius: height / 2
         color: root.backgroundColor
-        border.color: root.borderColor
-        border.width: 1
 
         // Animated sliding indicator
         Rectangle {
@@ -47,9 +40,7 @@ Item {
             width: parent.width / 2
             height: parent.height - 4
             radius: height / 2
-            color: root.isRightSelected ? root.selectedIndicatorColorRight : root.selectedIndicatorColor
-            border.color: root.isRightSelected ? root.selectedIndicatorBorderRight : root.selectedIndicatorBorder
-            border.width: 1
+            color: root.indicatorColor
             y: 2
 
             Behavior on x {
@@ -60,14 +51,18 @@ Item {
             }
 
             Behavior on color {
-                ColorAnimation { duration: 200 }
+                ColorAnimation {
+                    duration: 200
+                }
             }
 
             Behavior on border.color {
-                ColorAnimation { duration: 200 }
+                ColorAnimation {
+                    duration: 200
+                }
             }
 
-            x: root.isRightSelected ? parent.width / 2 : 2
+            x: root.isRightSelected ? parent.width / 2 - 2 : 2
         }
 
         // Left option text
@@ -75,14 +70,15 @@ Item {
             id: leftLabel
             text: root.leftText
             font.pixelSize: 11
-            font.bold: !root.isRightSelected
-            color: root.isRightSelected ? root.unselectedTextColor : root.selectedTextColor
+            color: root.textColor
             anchors.left: parent.left
-            anchors.leftMargin: 8
+            anchors.leftMargin: root.width / 5 - 5
             anchors.verticalCenter: parent.verticalCenter
 
             Behavior on color {
-                ColorAnimation { duration: 200 }
+                ColorAnimation {
+                    duration: 200
+                }
             }
         }
 
@@ -91,14 +87,15 @@ Item {
             id: rightLabel
             text: root.rightText
             font.pixelSize: 11
-            font.bold: root.isRightSelected
-            color: root.isRightSelected ? root.selectedTextColorRight : root.unselectedTextColor
+            color: root.textColor
             anchors.right: parent.right
-            anchors.rightMargin: 8
+            anchors.rightMargin: root.width / 5 - 5
             anchors.verticalCenter: parent.verticalCenter
 
             Behavior on color {
-                ColorAnimation { duration: 200 }
+                ColorAnimation {
+                    duration: 200
+                }
             }
         }
 

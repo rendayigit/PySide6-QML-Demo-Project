@@ -36,7 +36,7 @@ Window {
     Component.onCompleted: {
         // Set initial theme based on ThemeManager
         selectedTheme = ThemeManager.getCurrentTheme();
-        themeComboBox.currentIndex = themeComboBox.indexOfValue(selectedTheme);
+        themeSwitcher.isRightSelected = selectedTheme === "dark";
     }
 
     // Main content
@@ -56,32 +56,18 @@ Window {
                 color: ThemeManager.componentForeground
             }
 
-            ComboBox {
-                id: themeComboBox
-                Layout.fillWidth: true
+            Switcher {
+                id: themeSwitcher
+
+                Layout.preferredWidth: 150
                 Layout.preferredHeight: 30
 
-                model: [
-                    {
-                        text: "Light Theme",
-                        value: "light"
-                    },
-                    {
-                        text: "Dark Theme",
-                        value: "dark"
-                    }
-                ]
+                leftText: "Light"
+                rightText: "Dark"
+                isRightSelected: root.selectedTheme === "dark"
 
-                textRole: "text"
-                valueRole: "value"
-
-                // Set initial selection
-                Component.onCompleted: {
-                    currentIndex = indexOfValue(root.selectedTheme);
-                }
-
-                onActivated: function (index) {
-                    root.selectedTheme = model[index].value;
+                onOptionToggled: function (isRightSelected) {
+                    root.selectedTheme = isRightSelected ? "dark" : "light";
                 }
             }
         }
