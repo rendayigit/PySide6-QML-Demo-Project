@@ -8,3 +8,4 @@
 - GUI should not give up if sim is closed then opened again while gui remains open
 - Progress simulation time shall show a progress bar or label indicationg progress
 - Sim rate window shall display correct rate at every window open
+- Create main readme and link sub readmes to main readme
