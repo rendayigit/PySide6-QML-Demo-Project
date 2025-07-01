@@ -95,6 +95,8 @@ class GenericPlotter(QWidget):
         self.plot_widget.setLabel("bottom", xlabel)
         self.plot_widget.setLabel("left", ylabel)
         self.plot_widget.showGrid(x=True, y=True, alpha=0.3)
+        # Disable context menu
+        self.plot_widget.setMenuEnabled(False)
 
         # Add legend with better positioning - top-right with small offset from edges
         # The legend will still be inside the plot area but positioned to minimize interference
