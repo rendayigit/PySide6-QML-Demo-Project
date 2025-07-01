@@ -294,11 +294,8 @@ Rectangle {
                         onTriggered: {
                             console.log("Plot Selection from context menu");
                             if (variablesListView.selectedItems.length > 0) {
-                                // Collect paths to plot
-                                var pathsToPlot = [];
-                                for (var i = 0; i < variablesListView.selectedItems.length; i++) {
-                                    pathsToPlot.push(variablesListView.selectedItems[i].variablePath);
-                                }
+                                // Use helper function to collect paths to plot
+                                var pathsToPlot = root.getSelectedVariablePaths();
                                 root.plotVariablesRequested(pathsToPlot);
                             }
                         }
@@ -320,11 +317,8 @@ Rectangle {
                         onTriggered: {
                             console.log("Remove Selection from context menu");
                             if (variablesListView.selectedItems.length > 0) {
-                                // Collect paths to remove
-                                var pathsToRemove = [];
-                                for (var i = 0; i < variablesListView.selectedItems.length; i++) {
-                                    pathsToRemove.push(variablesListView.selectedItems[i].variablePath);
-                                }
+                                // Use helper function to collect paths to remove
+                                var pathsToRemove = root.getSelectedVariablePaths();
                                 root.removeVariablesRequested(pathsToRemove);
                                 // Clear selection after removal
                                 variablesListView.clearSelection();
