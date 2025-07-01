@@ -95,7 +95,12 @@ class GenericPlotter(QWidget):
         self.plot_widget.setLabel("bottom", xlabel)
         self.plot_widget.setLabel("left", ylabel)
         self.plot_widget.showGrid(x=True, y=True, alpha=0.3)
-        self.plot_widget.addLegend()
+
+        # Add legend with better positioning - top-right with small offset from edges
+        # The legend will still be inside the plot area but positioned to minimize interference
+        legend = self.plot_widget.addLegend(offset=(-10, 10))
+        # Make legend background semi-transparent so it doesn't completely block the plot
+        legend.setParentItem(self.plot_widget.getPlotItem())
 
         # Enable mouse interaction
         self.plot_widget.enableAutoRange(enable=True)
@@ -105,6 +110,36 @@ class GenericPlotter(QWidget):
         self._apply_theme()
 
         self.main_layout.addWidget(self.plot_widget)
+
+    def _adjust_window_size(self):
+        """Adjust window size based on number of variables to accommodate legend"""
+        num_variables = len(self.plot_data)
+
+        # Base dimensions
+        base_width = 800
+        base_height = 600
+
+        # Calculate additional width needed for legend
+        # Estimate ~15 pixels per character in variable names, plus padding
+        max_name_length = 0
+        if self.plot_data:
+            max_name_length = max(len(data.display_name) for data in self.plot_data.values())
+
+        # Add extra width for legend if we have many variables or long names
+        legend_width_needed = max(0, max_name_length * 8 + 100)  # 8 pixels per char + padding
+        extra_width = min(legend_width_needed, 300)  # Cap at 300 pixels
+
+        # Increase height if we have many variables
+        extra_height = max(0, (num_variables - 5) * 20)  # 20 pixels per extra variable
+        extra_height = min(extra_height, 200)  # Cap at 200 pixels
+
+        new_width = base_width + extra_width
+        new_height = base_height + extra_height
+
+        # Only resize if the new size is significantly different
+        current_size = self.size()
+        if abs(current_size.width() - new_width) > 50 or abs(current_size.height() - new_height) > 50:
+            self.resize(new_width, new_height)
 
     def add_variable(self, variable_path: str, display_name: Optional[str] = None) -> bool:
         """
@@ -133,6 +168,9 @@ class GenericPlotter(QWidget):
         self.plot_lines[variable_path] = line
         self.color_index += 1
 
+        # Adjust window size to accommodate new variable
+        self._adjust_window_size()
+
         return True
 
     def remove_variable(self, variable_path: str) -> bool:
@@ -154,6 +192,9 @@ class GenericPlotter(QWidget):
         # Clean up data
         del self.plot_data[variable_path]
         del self.plot_lines[variable_path]
+
+        # Adjust window size after removing variable
+        self._adjust_window_size()
 
         return True
 
