@@ -1,5 +1,5 @@
 """
-Plotting System - ariable plotting functionality
+Plotting System - variable plotting functionality
 
 This module provides a plotting system for visualizing variables
 with support for multiple variables, real-time updates, and proper
@@ -28,7 +28,7 @@ class PlotData:
 
 class GenericPlotter(QWidget):
     """
-    Robust generic plotter for real-time variable visualization
+    Generic plotter for real-time variable visualization
 
     Features:
     - Multiple variable support with automatic color assignment
@@ -99,7 +99,7 @@ class GenericPlotter(QWidget):
 
         # Enable mouse interaction
         self.plot_widget.enableAutoRange(enable=True)
-        self.plot_widget.setMouseEnabled(x=True, y=True)
+        self.plot_widget.setMouseEnabled(x=False, y=False)
 
         # Apply initial theme
         self._apply_theme()
@@ -254,12 +254,10 @@ class GenericPlotter(QWidget):
             # Dark theme colors
             bg_color = "#242424"
             fg_color = "#ffffff"
-            grid_color = "#313131"
         else:
             # Light theme colors
             bg_color = "#fafafa"
             fg_color = "#000000"
-            grid_color = "#b8b8b8"
 
         # Set plot widget background
         self.plot_widget.setBackground(bg_color)
@@ -398,7 +396,7 @@ class PlotManager(QObject):
     def get_plot_info_list(self) -> List[Dict[str, str]]:
         """Get list of plots with their IDs and titles"""
         plot_info = []
-        for plot_id in self.plots.keys():
+        for plot_id in self.plots:
             title = self.plot_titles.get(plot_id, f"Plot {plot_id}")
             plot_info.append({"plot_id": plot_id, "title": title})
         return plot_info

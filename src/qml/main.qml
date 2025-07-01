@@ -127,7 +127,7 @@ ApplicationWindow {
         onProgressWindowRequested: simulationController.handleOpenProgressWindow(progressWindow)
         onScaleWindowRequested: simulationController.handleOpenScaleWindow(scaleWindow)
         onSettingsRequested: simulationController.handleOpenSettingsWindow(settingsWindow)
-        onPlotWindowRequested: openPlotWindow()
+        onPlotWindowRequested: root.openPlotWindow()
 
         // Variable plotting handler
         onPlotSelectedVariablesRequested: {
@@ -220,7 +220,7 @@ ApplicationWindow {
                         simulationController.handleRemoveMultipleVariables(variablePaths);
                     }
                     onPlotVariablesRequested: function (variablePaths) {
-                        handlePlotVariables(variablePaths);
+                        root.handlePlotVariables(variablePaths);
                     }
                 }
             }

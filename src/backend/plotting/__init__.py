@@ -6,7 +6,7 @@ providing seamless data flow from variables to plots.
 """
 
 from typing import Dict, Any, Optional
-from PySide6.QtCore import QObject, Signal, Slot, QTimer, Property
+from PySide6.QtCore import QObject, Signal, Slot, Property
 from .plotter import PlotManager
 
 
